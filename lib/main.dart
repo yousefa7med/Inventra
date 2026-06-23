@@ -7,7 +7,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  configureDependencies();
+ await GetIt.instance<CacheHelper>().init();
   runApp(
     BlocProvider(
       create: (context) => AppCubit()..init(),
@@ -34,7 +38,7 @@ class Inventra extends StatelessWidget {
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
               themeMode: AppCubit.get(context).getTheme(),
-              initialRoute:AppRoutes.mainView ,
+              initialRoute: AppRoutes.mainView,
               onGenerateRoute: AppRouter.generateRoute,
             );
           },
