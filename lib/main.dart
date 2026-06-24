@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   configureDependencies();
- await GetIt.instance<CacheHelper>().init();
+  await GetIt.instance<CacheHelper>().init();
   runApp(
     BlocProvider(
       create: (context) => AppCubit()..init(),
@@ -33,6 +34,17 @@ class Inventra extends StatelessWidget {
         return BlocBuilder<AppCubit, AppState>(
           builder: (context, state) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
+
+              locale: const Locale('ar'),
+
+              supportedLocales: const [Locale('ar')],
+
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
               themeAnimationCurve: Curves.easeInOut,
               themeAnimationDuration: const Duration(milliseconds: 100),
               theme: AppTheme.lightTheme,
