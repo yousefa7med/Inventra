@@ -29,8 +29,8 @@ abstract class AppTheme {
       ),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.white,
+      backgroundColor: Color(0xFFF9F9F9),
+      foregroundColor: AppColors.primary
     ),
 
 
@@ -50,8 +50,8 @@ abstract class AppTheme {
       ),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.primary,
-      foregroundColor: Colors.black,
+  backgroundColor: Color(0xFFF9F9F9),
+      foregroundColor: AppColors.primary
     ),
 
 

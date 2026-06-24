@@ -12,20 +12,18 @@ class CostumAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      foregroundColor: AppColors.primary,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
             Assets.imagesSvgLogo,
             width: 32.r,
-            colorFilter: ColorFilter.mode(
+            colorFilter: const ColorFilter.mode(
               AppColors.primary,
               BlendMode.modulate,
             ),
           ),
-          Gap(8),
+          const Gap(8),
           Text(title, style: AppTextStyle.bold18),
         ],
       ),
