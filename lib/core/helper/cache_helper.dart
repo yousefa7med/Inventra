@@ -30,3 +30,17 @@ class CacheHelper {
   Future<bool> removeData(String key) async =>
       await sharedPreferences.remove(key);
 }
+
+// class ObjectBoxServices {
+//   late final Store store;
+//   late final Box<TripDetailsModel> detailsBox;
+//   late final Box<RouteModel> routeBox;
+//   late final Box<StationModel> stationsBox;
+
+//   Future<void> init() async {
+//     store = await openStore();
+//     detailsBox = store.box<TripDetailsModel>();
+//     routeBox = store.box<RouteModel>();
+//     stationsBox = store.box<StationModel>();
+//   }
+// }
