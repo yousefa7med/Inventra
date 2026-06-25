@@ -1,4 +1,5 @@
 import 'package:Inventra/core/models/customer_model.dart';
+import 'package:Inventra/core/models/product_model.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -6,8 +7,9 @@ class InvoiceModel {
   @Id()
   int id = 0;
   final DateTime date;
-  final double discount;
+  final double? discount;
  late ToOne<CustomerModel> customer;
+ late ToMany<ProductModel> products;
 
-  InvoiceModel({required this.date, required this.discount});
+  InvoiceModel({required this.date,  this.discount});
 }

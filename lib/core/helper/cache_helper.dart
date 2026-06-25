@@ -1,3 +1,9 @@
+import 'package:Inventra/core/models/customer_model.dart';
+import 'package:Inventra/core/models/invoice_model.dart';
+import 'package:Inventra/core/models/product_model.dart';
+import 'package:Inventra/core/models/supplier_model.dart';
+import 'package:Inventra/objectbox.g.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheHelper {
@@ -31,16 +37,18 @@ class CacheHelper {
       await sharedPreferences.remove(key);
 }
 
-// class ObjectBoxServices {
-//   late final Store store;
-//   late final Box<TripDetailsModel> detailsBox;
-//   late final Box<RouteModel> routeBox;
-//   late final Box<StationModel> stationsBox;
+class ObjectBoxServices {
+  late final Store store;
+  late final Box<ProductModel> prductsBox;
+  late final Box<SupplierModel> suppliersBox;
+  late final Box<InvoiceModel> invoicesBox;
+  late final Box<CustomerModel> customersBox;
 
-//   Future<void> init() async {
-//     store = await openStore();
-//     detailsBox = store.box<TripDetailsModel>();
-//     routeBox = store.box<RouteModel>();
-//     stationsBox = store.box<StationModel>();
-//   }
-// }
+  Future<void> init() async {
+    store = await openStore();
+    prductsBox = store.box<ProductModel>();
+    suppliersBox = store.box<SupplierModel>();
+    invoicesBox = store.box<InvoiceModel>();
+    customersBox = store.box<CustomerModel>();
+  }
+}

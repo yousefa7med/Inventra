@@ -6,14 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
-class CostumAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CostumAppBar({super.key, required this.title});
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({super.key, required this.title});
   final String title;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
             Assets.imagesSvgLogo,

@@ -18,7 +18,7 @@ class MainView extends StatelessWidget {
       navBarBuilder: (navBarConfig) => Style8BottomNavBar(
         navBarConfig: navBarConfig,
         height: 58,
-        navBarDecoration: NavBarDecoration(
+        navBarDecoration: const NavBarDecoration(
           // color: isDark(context) ? AppColors.darkSurface : Colors.white,
           color: Colors.white,
         ),
@@ -32,13 +32,13 @@ class MainView extends StatelessWidget {
 
 List<PersistentTabConfig> _tabs(BuildContext context) => [
   PersistentTabConfig(
-    screen: DashboardView(),
+    screen: const DashboardView(),
     item: ItemConfig(
       icon: const Icon(Icons.dashboard_outlined),
       title: "لوحة التحكم",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: TextStyle(fontFamily: "Cairo"),
+      textStyle: const TextStyle(fontFamily: "Cairo"),
     ),
   ),
   PersistentTabConfig(
@@ -48,7 +48,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       title: "عمليات",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: TextStyle(fontFamily: "Cairo"),
+      textStyle: const TextStyle(fontFamily: "Cairo"),
     ),
   ),
   PersistentTabConfig(
@@ -58,7 +58,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       title: "المخزن",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: TextStyle(fontFamily: "Cairo"),
+      textStyle: const TextStyle(fontFamily: "Cairo"),
     ),
   ),
   PersistentTabConfig(
@@ -68,7 +68,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       title: "مصاريف",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: TextStyle(fontFamily: "Cairo"),
+      textStyle: const TextStyle(fontFamily: "Cairo"),
     ),
   ),
   // PersistentTabConfig(
@@ -88,7 +88,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       title: "الاعدادات",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: TextStyle(fontFamily: "Cairo"),
+      textStyle: const TextStyle(fontFamily: "Cairo"),
     ),
   ),
 ];

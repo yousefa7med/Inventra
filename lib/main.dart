@@ -13,6 +13,7 @@ Future<void> main() async {
 
   configureDependencies();
   await GetIt.instance<CacheHelper>().init();
+  await GetIt.instance<ObjectBoxServices>().init();
   runApp(
     BlocProvider(
       create: (context) => AppCubit()..init(),
@@ -49,7 +50,8 @@ class Inventra extends StatelessWidget {
               themeAnimationDuration: const Duration(milliseconds: 100),
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
-              themeMode: AppCubit.get(context).getTheme(),
+              // themeMode: AppCubit.get(context).getTheme(),
+              themeMode: ThemeMode.light,
               initialRoute: AppRoutes.mainView,
               onGenerateRoute: AppRouter.generateRoute,
             );
@@ -62,4 +64,5 @@ class Inventra extends StatelessWidget {
 
 void configureDependencies() {
   GetIt.instance.registerSingleton<CacheHelper>(CacheHelper());
+  GetIt.instance.registerSingleton<ObjectBoxServices>(ObjectBoxServices());
 }

@@ -56,13 +56,19 @@ final _entities = <obx_int.ModelEntity>[
         relationTarget: 'CustomerModel',
       ),
     ],
-    relations: <obx_int.ModelRelation>[],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(3, 8285162342199049270),
+        name: 'products',
+        targetId: const obx_int.IdUid(3, 4994923357143891925),
+      ),
+    ],
     backlinks: <obx_int.ModelBacklink>[],
   ),
   obx_int.ModelEntity(
     id: const obx_int.IdUid(3, 4994923357143891925),
     name: 'ProductModel',
-    lastPropertyId: const obx_int.IdUid(8, 5460954541701112104),
+    lastPropertyId: const obx_int.IdUid(9, 8478365876763667420),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -108,8 +114,8 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(8, 5460954541701112104),
-        name: 'barCode',
+        id: const obx_int.IdUid(9, 8478365876763667420),
+        name: 'barcode',
         type: 9,
         flags: 0,
       ),
@@ -244,7 +250,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     entities: _entities,
     lastEntityId: const obx_int.IdUid(5, 1634032733595615740),
     lastIndexId: const obx_int.IdUid(1, 6785356890388700040),
-    lastRelationId: const obx_int.IdUid(1, 6520020354248853420),
+    lastRelationId: const obx_int.IdUid(3, 8285162342199049270),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [6496767718804955308],
     retiredIndexUids: const [],
@@ -253,8 +259,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       4230590313682093606,
       6883808037235374245,
       1479675135453961272,
+      5460954541701112104,
     ],
-    retiredRelationUids: const [],
+    retiredRelationUids: const [5744165664349237965],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
     version: 1,
@@ -264,7 +271,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     InvoiceModel: obx_int.EntityDefinition<InvoiceModel>(
       model: _entities[0],
       toOneRelations: (InvoiceModel object) => [object.customer],
-      toManyRelations: (InvoiceModel object) => {},
+      toManyRelations: (InvoiceModel object) => {
+        obx_int.RelInfo<InvoiceModel>.toMany(3, object.id): object.products,
+      },
       getId: (InvoiceModel object) => object.id,
       setId: (InvoiceModel object, int id) {
         object.id = id;
@@ -284,11 +293,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final dateParam = DateTime.fromMillisecondsSinceEpoch(
           const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0),
         );
-        final discountParam = const fb.Float64Reader().vTableGet(
+        final discountParam = const fb.Float64Reader().vTableGetNullable(
           buffer,
           rootOffset,
           8,
-          0,
         );
         final object = InvoiceModel(date: dateParam, discount: discountParam)
           ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
@@ -299,6 +307,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
           0,
         );
         object.customer.attach(store);
+        obx_int.InternalToManyAccess.setRelInfo<InvoiceModel>(
+          object.products,
+          store,
+          obx_int.RelInfo<InvoiceModel>.toMany(3, object.id),
+        );
         return object;
       },
     ),
@@ -312,9 +325,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (ProductModel object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
-        final imgPathOffset = fbb.writeString(object.imgPath);
-        final barCodeOffset = fbb.writeString(object.barCode);
-        fbb.startTable(9);
+        final imgPathOffset = object.imgPath == null
+            ? null
+            : fbb.writeString(object.imgPath!);
+        final barcodeOffset = object.barcode == null
+            ? null
+            : fbb.writeString(object.barcode!);
+        fbb.startTable(10);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, nameOffset);
         fbb.addOffset(2, imgPathOffset);
@@ -322,7 +339,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addFloat64(4, object.buyingPrice);
         fbb.addFloat64(5, object.saleingPrice);
         fbb.addFloat64(6, object.wholesalePrice);
-        fbb.addOffset(7, barCodeOffset);
+        fbb.addOffset(8, barcodeOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -334,7 +351,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 6, '');
         final imgPathParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 8, '');
+        ).vTableGetNullable(buffer, rootOffset, 8);
         final quantityParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
@@ -359,9 +376,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           16,
           0,
         );
-        final barCodeParam = const fb.StringReader(
+        final barcodeParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 18, '');
+        ).vTableGetNullable(buffer, rootOffset, 20);
         final object = ProductModel(
           name: nameParam,
           imgPath: imgPathParam,
@@ -369,7 +386,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           buyingPrice: buyingPriceParam,
           saleingPrice: saleingPriceParam,
           wholesalePrice: wholesalePriceParam,
-          barCode: barCodeParam,
+          barcode: barcodeParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
         return object;
@@ -385,7 +402,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (SupplierModel object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
-        final storeAddOffset = fbb.writeString(object.storeAdd);
+        final storeAddOffset = object.storeAdd == null
+            ? null
+            : fbb.writeString(object.storeAdd!);
         final storeNameOffset = fbb.writeString(object.storeName);
         final phoneNumOffset = fbb.writeString(object.phoneNum);
         fbb.startTable(6);
@@ -405,7 +424,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 6, '');
         final storeAddParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 8, '');
+        ).vTableGetNullable(buffer, rootOffset, 8);
         final storeNameParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 10, '');
@@ -434,7 +453,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (CustomerModel object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
-        final addressOffset = fbb.writeString(object.address);
+        final addressOffset = object.address == null
+            ? null
+            : fbb.writeString(object.address!);
         final phoneNumOffset = fbb.writeString(object.phoneNum);
         fbb.startTable(5);
         fbb.addInt64(0, object.id);
@@ -452,7 +473,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 6, '');
         final addressParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 8, '');
+        ).vTableGetNullable(buffer, rootOffset, 8);
         final phoneNumParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 10, '');
@@ -495,6 +516,11 @@ class InvoiceModel_ {
   static final customer = obx.QueryRelationToOne<InvoiceModel, CustomerModel>(
     _entities[0].properties[3],
   );
+
+  /// see [InvoiceModel.products]
+  static final products = obx.QueryRelationToMany<InvoiceModel, ProductModel>(
+    _entities[0].relations[0],
+  );
 }
 
 /// [ProductModel] entity fields to define ObjectBox queries.
@@ -534,8 +560,8 @@ class ProductModel_ {
     _entities[1].properties[6],
   );
 
-  /// See [ProductModel.barCode].
-  static final barCode = obx.QueryStringProperty<ProductModel>(
+  /// See [ProductModel.barcode].
+  static final barcode = obx.QueryStringProperty<ProductModel>(
     _entities[1].properties[7],
   );
 }

@@ -13,7 +13,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CostumAppBar(title: "لوحة التحكم"),
+      appBar: const CustomAppBar(title: "لوحة التحكم"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -74,6 +74,7 @@ class DashboardView extends StatelessWidget {
                     title: "اضافة منتج",
                     onPressed: () {
                       AppNavigation.pushName(
+                        rootNavigator: true,
                         context: context,
                         route: AppRoutes.addproductView,
                       );
@@ -83,7 +84,7 @@ class DashboardView extends StatelessWidget {
                     iconBackgronud: AppColors.lightRed,
                   ),
                   DashboardListCard(
-                    title: "اضافة زبون",
+                    title: "اضافة عميل",
                     onPressed: () {
                       AppNavigation.pushName(
                         context: context,

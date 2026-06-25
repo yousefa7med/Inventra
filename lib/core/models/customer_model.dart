@@ -7,7 +7,7 @@ class CustomerModel {
   int id = 0;
 
   final String name;
-  final String address;
+  final String? address;
   final String phoneNum;
 
   late ToMany<InvoiceModel> invoices;

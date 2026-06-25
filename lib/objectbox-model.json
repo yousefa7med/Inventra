@@ -33,11 +33,17 @@
           "relationTarget": "CustomerModel"
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "3:8285162342199049270",
+          "name": "products",
+          "targetId": "3:4994923357143891925"
+        }
+      ]
     },
     {
       "id": "3:4994923357143891925",
-      "lastPropertyId": "8:5460954541701112104",
+      "lastPropertyId": "9:8478365876763667420",
       "name": "ProductModel",
       "properties": [
         {
@@ -77,8 +83,8 @@
           "type": 8
         },
         {
-          "id": "8:5460954541701112104",
-          "name": "barCode",
+          "id": "9:8478365876763667420",
+          "name": "barcode",
           "type": 9
         }
       ],
@@ -156,7 +162,7 @@
   ],
   "lastEntityId": "5:1634032733595615740",
   "lastIndexId": "1:6785356890388700040",
-  "lastRelationId": "1:6520020354248853420",
+  "lastRelationId": "3:8285162342199049270",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
@@ -168,8 +174,11 @@
     5377542499523323171,
     4230590313682093606,
     6883808037235374245,
-    1479675135453961272
+    1479675135453961272,
+    5460954541701112104
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    5744165664349237965
+  ],
   "version": 1
 }
