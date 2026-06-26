@@ -13,7 +13,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "لوحة التحكم"),
+      appBar: const CustomAppBar(title: "لوحة التحكم", showDrawerButton: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -1,4 +1,5 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
+import 'package:Inventra/core/utilities/app_global_keys.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utilities/assets.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,32 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key, required this.title});
+  const CustomAppBar({
+    super.key,
+    required this.title,
+    this.showDrawerButton = false,
+  });
+
   final String title;
+  final bool showDrawerButton;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: showDrawerButton
+          ? IconButton(
+              icon: Icon(
+                Icons.menu_rounded,
+                size: 24.r,
+                color: AppColors.primary,
+              ),
+              onPressed: () {
+                AppGlobalKeys.mainScaffold.currentState?.openDrawer();
+              },
+            )
+          : null,
+
       title: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
             Assets.imagesSvgLogo,
@@ -31,6 +51,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(56);
+  Size get preferredSize => Size.fromHeight(56.h);
 }

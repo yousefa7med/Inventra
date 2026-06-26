@@ -1,3 +1,5 @@
+import 'package:Inventra/core/utilities/app_global_keys.dart';
+import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 
 class OperationsView extends StatelessWidget {
@@ -5,8 +7,15 @@ class OperationsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child:  Text('OperationsView')),
+    return Scaffold(
+      body: Center(
+        child: AppButton(
+          onPressed: () {
+            AppGlobalKeys.mainScaffold.currentState?.openDrawer();
+          },
+          child: const Icon(Icons.abc_outlined),
+        ),
+      ),
     );
   }
 }
