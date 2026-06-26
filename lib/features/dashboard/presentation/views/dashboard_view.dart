@@ -64,6 +64,7 @@ class DashboardView extends StatelessWidget {
                       AppNavigation.pushName(
                         context: context,
                         route: AppRoutes.addInvoiceView,
+                        rootNavigator: true,
                       );
                     },
                     icon: Icons.shop,
@@ -87,6 +88,8 @@ class DashboardView extends StatelessWidget {
                     title: "اضافة عميل",
                     onPressed: () {
                       AppNavigation.pushName(
+                        rootNavigator: true,
+
                         context: context,
                         route: AppRoutes.addcustomerView,
                       );
@@ -99,6 +102,8 @@ class DashboardView extends StatelessWidget {
                     title: "اضافة مورد",
                     onPressed: () {
                       AppNavigation.pushName(
+                        rootNavigator: true,
+
                         context: context,
                         route: AppRoutes.addsupplierView,
                       );

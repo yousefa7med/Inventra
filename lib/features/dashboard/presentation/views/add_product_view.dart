@@ -174,12 +174,13 @@ class _AddProductViewState extends State<AddProductView> {
                           textInputAction: TextInputAction.done,
                           suffixText: 'ج.م',
                           validator: (value) {
-                            if (value == null || value.isEmpty)
+                            if (value == null || value.isEmpty) {
                               return "ادخل سعر البيع";
+                            }
                             final price = double.tryParse(value);
-                            if (price == null || price <= 0)
+                            if (price == null || price <= 0) {
                               return "رقم غير صحيح";
-
+                            }
                             // مقارنة مع الشراء والجملة
                             final buyingPrice =
                                 double.tryParse(bPriceController.text) ?? 0;
@@ -198,12 +199,12 @@ class _AddProductViewState extends State<AddProductView> {
                       ),
                     ],
                   ),
-                  const Gap(16),
+                  Gap(32.h),
                   AppButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         final product = ProductModel(
-                          name: nameController.text,
+                          name: nameController.text.trim(),
                           quantity: int.tryParse(quantatyController.text) ?? 0,
                           buyingPrice:
                               double.tryParse(bPriceController.text) ?? 0,

@@ -11,9 +11,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  configureDependencies();
-  await GetIt.instance<CacheHelper>().init();
-  await GetIt.instance<ObjectBoxServices>().init();
+  await configureDependencies();
+
   runApp(
     BlocProvider(
       create: (context) => AppCubit()..init(),
@@ -62,7 +61,14 @@ class Inventra extends StatelessWidget {
   }
 }
 
-void configureDependencies() {
-  GetIt.instance.registerSingleton<CacheHelper>(CacheHelper());
-  GetIt.instance.registerSingleton<ObjectBoxServices>(ObjectBoxServices());
+Future<void> configureDependencies() async {
+  // 1. كاش هيلبر
+  final cacheHelper = CacheHelper();
+  await cacheHelper.init();
+  GetIt.instance.registerSingleton<CacheHelper>(cacheHelper);
+
+  // 2. أوبجكت بوكس سيرفيس (يتم عمل init قبل التسجيل لضمان إن الـ Store فتح)
+  final objectBoxServices = ObjectBoxServices();
+  await objectBoxServices.init();
+  GetIt.instance.registerSingleton<ObjectBoxServices>(objectBoxServices);
 }

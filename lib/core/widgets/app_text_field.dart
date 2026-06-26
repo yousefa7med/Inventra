@@ -9,19 +9,21 @@ class AppTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.keyboardType,
-    this.textInputAction, this.suffixIcon, this.suffixText,
+    this.textInputAction,
+    this.suffixIcon,
+    this.suffixText, this.prefixIcon,
   });
   final String? label;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
-  final Widget? suffixIcon; // 👈 إضافة أيقونة في النهاية
-  final String? suffixText; // 👈 إضافة نص العملة مثلاً
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final String? suffixText;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       validator: validator,
@@ -29,6 +31,7 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
         suffixText: suffixText,
+        prefixIcon: prefixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(width: 1),
