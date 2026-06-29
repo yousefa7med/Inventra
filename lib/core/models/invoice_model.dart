@@ -8,8 +8,8 @@ class InvoiceModel {
   int id = 0;
   final DateTime date;
   final double? discount;
- late ToOne<CustomerModel> customer;
- late ToMany<ProductModel> products;
+ final ToOne<CustomerModel> customer=ToOne<CustomerModel>();
+ final ToMany<ProductModel> products=ToMany<ProductModel>();
 
   InvoiceModel({required this.date,  this.discount});
 }

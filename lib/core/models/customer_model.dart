@@ -10,7 +10,8 @@ class CustomerModel {
   final String? address;
   final String phoneNum;
 
-  late ToMany<InvoiceModel> invoices;
+  final ToMany<InvoiceModel> invoices=ToMany<InvoiceModel>();
+  
 
   CustomerModel({
     required this.name,

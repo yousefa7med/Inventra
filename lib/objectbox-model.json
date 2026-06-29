@@ -4,30 +4,65 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "2:1276594663308789271",
-      "lastPropertyId": "4:7266889188059557236",
-      "name": "InvoiceModel",
+      "id": "1:3646577009968859733",
+      "lastPropertyId": "4:1680508232643319698",
+      "name": "CustomerModel",
       "properties": [
         {
-          "id": "1:8236654922086660569",
+          "id": "1:5419869652825786947",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:1478784154898671141",
+          "id": "2:7814431750215687518",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:5317472476628541971",
+          "name": "address",
+          "type": 9
+        },
+        {
+          "id": "4:1680508232643319698",
+          "name": "phoneNum",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:3753544365006744927",
+          "name": "invoices",
+          "targetId": "2:2948232401728359273"
+        }
+      ]
+    },
+    {
+      "id": "2:2948232401728359273",
+      "lastPropertyId": "4:8405683130097609519",
+      "name": "InvoiceModel",
+      "properties": [
+        {
+          "id": "1:3393848890467771654",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3731205580372484516",
           "name": "date",
           "type": 10
         },
         {
-          "id": "3:6810401488571194711",
+          "id": "3:3066903527176320447",
           "name": "discount",
           "type": 8
         },
         {
-          "id": "4:7266889188059557236",
+          "id": "4:8405683130097609519",
           "name": "customerId",
-          "indexId": "1:6785356890388700040",
+          "indexId": "1:8885529498930186519",
           "type": 11,
           "flags": 520,
           "relationTarget": "CustomerModel"
@@ -35,55 +70,55 @@
       ],
       "relations": [
         {
-          "id": "3:8285162342199049270",
+          "id": "2:5728792254496778029",
           "name": "products",
-          "targetId": "3:4994923357143891925"
+          "targetId": "3:2846715648813121699"
         }
       ]
     },
     {
-      "id": "3:4994923357143891925",
-      "lastPropertyId": "9:8478365876763667420",
+      "id": "3:2846715648813121699",
+      "lastPropertyId": "8:473435022963740084",
       "name": "ProductModel",
       "properties": [
         {
-          "id": "1:4237033166438420724",
+          "id": "1:5530179059139268917",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:3272995123380301104",
+          "id": "2:8956334820413808860",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:2978518655761932239",
+          "id": "3:8516473315917158705",
           "name": "imgPath",
           "type": 9
         },
         {
-          "id": "4:3619214903314657515",
+          "id": "4:5470649284311037469",
           "name": "quantity",
           "type": 6
         },
         {
-          "id": "5:1089478170632229906",
+          "id": "5:5938780534378834032",
           "name": "buyingPrice",
           "type": 8
         },
         {
-          "id": "6:3782837562990242550",
+          "id": "6:5132901558028203289",
           "name": "saleingPrice",
           "type": 8
         },
         {
-          "id": "7:3835863970226262337",
+          "id": "7:438339966545709795",
           "name": "wholesalePrice",
           "type": 8
         },
         {
-          "id": "9:8478365876763667420",
+          "id": "8:473435022963740084",
           "name": "barcode",
           "type": 9
         }
@@ -91,94 +126,49 @@
       "relations": []
     },
     {
-      "id": "4:783840927190999926",
-      "lastPropertyId": "5:3511302903263425113",
+      "id": "4:6948065547312459977",
+      "lastPropertyId": "5:8639198006438732853",
       "name": "SupplierModel",
       "properties": [
         {
-          "id": "1:7148167846214085927",
+          "id": "1:5269360974321721219",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:2513083801854724206",
+          "id": "2:464684925107364937",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:8709564943397619488",
+          "id": "3:3573208824668787828",
           "name": "storeAdd",
           "type": 9
         },
         {
-          "id": "4:6963550307710833231",
+          "id": "4:7770495514305858613",
           "name": "storeName",
           "type": 9
         },
         {
-          "id": "5:3511302903263425113",
+          "id": "5:8639198006438732853",
           "name": "phoneNum",
           "type": 9
         }
       ],
       "relations": []
-    },
-    {
-      "id": "5:1634032733595615740",
-      "lastPropertyId": "4:6467277375473153351",
-      "name": "CustomerModel",
-      "properties": [
-        {
-          "id": "1:1852976534403239224",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:6056505571447369849",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:1137766993165029932",
-          "name": "address",
-          "type": 9
-        },
-        {
-          "id": "4:6467277375473153351",
-          "name": "phoneNum",
-          "type": 9
-        }
-      ],
-      "relations": [
-        {
-          "id": "1:6520020354248853420",
-          "name": "invoices",
-          "targetId": "2:1276594663308789271"
-        }
-      ]
     }
   ],
-  "lastEntityId": "5:1634032733595615740",
-  "lastIndexId": "1:6785356890388700040",
-  "lastRelationId": "3:8285162342199049270",
+  "lastEntityId": "4:6948065547312459977",
+  "lastIndexId": "1:8885529498930186519",
+  "lastRelationId": "2:5728792254496778029",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [
-    6496767718804955308
-  ],
+  "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [
-    5377542499523323171,
-    4230590313682093606,
-    6883808037235374245,
-    1479675135453961272,
-    5460954541701112104
-  ],
-  "retiredRelationUids": [
-    5744165664349237965
-  ],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
   "version": 1
 }

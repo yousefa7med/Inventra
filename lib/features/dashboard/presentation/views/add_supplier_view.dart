@@ -1,4 +1,5 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
@@ -158,6 +159,11 @@ class _AddSupplierViewState extends State<AddSupplierView> {
                         );
 
                         addSupplier(supplier);
+                          showSnackBar(
+                          context,
+                          "تم اضافة المورد بنجاح",
+                          color: AppColors.success,
+                        );
                         AppNavigation.pop(context: context);
                       }
                     },

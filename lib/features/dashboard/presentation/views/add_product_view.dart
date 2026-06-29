@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
@@ -11,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 class AddProductView extends StatefulWidget {
   const AddProductView({super.key});
@@ -21,7 +27,8 @@ class AddProductView extends StatefulWidget {
 
 class _AddProductViewState extends State<AddProductView> {
   final _formKey = GlobalKey<FormState>();
-
+  final picker = ImagePicker();
+  XFile? image;
   late final TextEditingController barcodeController;
   late final TextEditingController nameController;
   late final TextEditingController quantatyController;
@@ -68,7 +75,20 @@ class _AddProductViewState extends State<AddProductView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Gap(24),
-                  const AddImage(),
+                  image == null
+                      ? AddProductImageWidget(
+                          onTap: () async {
+                            image = await picker.pickImage(
+                              source: ImageSource.camera,
+                              maxHeight: 500,
+                              maxWidth: 500,
+                            );
+                            if (image != null) {
+                              setState(() {});
+                            }
+                          },
+                        )
+                      : ProductImage(imagePath: image!.path),
                   const Gap(32),
 
                   AppTextField(
@@ -201,8 +221,13 @@ class _AddProductViewState extends State<AddProductView> {
                   ),
                   Gap(32.h),
                   AppButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
+                        String? imagePath;
+                        if (image != null) {
+                          imagePath = await saveProductImage(image!);
+                        }
+
                         final product = ProductModel(
                           name: nameController.text.trim(),
                           quantity: int.tryParse(quantatyController.text) ?? 0,
@@ -213,9 +238,15 @@ class _AddProductViewState extends State<AddProductView> {
                           wholesalePrice:
                               double.tryParse(wPriceController.text) ?? 0,
                           barcode: barcodeController.text,
+                          imgPath: imagePath,
                         );
 
                         addProduct(product);
+                        showSnackBar(
+                          context,
+                          "تم اضافة المنتج بنجاح",
+                          color: AppColors.success,
+                        );
                         AppNavigation.pop(context: context);
                       }
                     },
@@ -232,5 +263,18 @@ class _AddProductViewState extends State<AddProductView> {
 
   void addProduct(ProductModel product) {
     GetIt.instance<ObjectBoxServices>().prductsBox.put(product);
+  }
+
+  Future<String?> saveProductImage(XFile pickedImage) async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    String fileName =
+        'prod_${DateTime.now().millisecondsSinceEpoch}${p.extension(pickedImage.path)}';
+
+    String newPath = p.join(directory.path, fileName);
+
+    File localImage = await File(pickedImage.path).copy(newPath);
+
+    return localImage.path;
   }
 }

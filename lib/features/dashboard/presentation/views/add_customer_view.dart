@@ -1,4 +1,5 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
@@ -51,6 +52,7 @@ class _AddCustomerViewState extends State<AddCustomerView> {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0.w),
             child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               key: _formKey,
               child: Column(
                 children: [
@@ -123,6 +125,11 @@ class _AddCustomerViewState extends State<AddCustomerView> {
                           phoneNum: phoneController.text.trim(),
                         );
                         addCustomer(customer);
+                        showSnackBar(
+                          context,
+                          "تم اضافة العميل بنجاح",
+                          color: AppColors.success,
+                        );
                         AppNavigation.pop(context: context);
                       }
                     },
@@ -133,11 +140,11 @@ class _AddCustomerViewState extends State<AddCustomerView> {
             ),
           ),
         ),
-      ),
+      ),    
     );
   }
 
   void addCustomer(CustomerModel customer) {
-    GetIt.instance<ObjectBoxServices>().customersBox.put(customer);
+GetIt.instance<ObjectBoxServices>().customersBox.put(customer);
   }
 }
