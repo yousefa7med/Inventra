@@ -12,14 +12,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.showDrawerButton = false,
+    this.actions,
   });
 
   final String title;
   final bool showDrawerButton;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      actions: actions,
       leading: showDrawerButton
           ? IconButton(
               icon: Icon(

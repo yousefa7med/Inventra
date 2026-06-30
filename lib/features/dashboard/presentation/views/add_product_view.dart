@@ -201,7 +201,6 @@ class _AddProductViewState extends State<AddProductView> {
                             if (price == null || price <= 0) {
                               return "رقم غير صحيح";
                             }
-                            // مقارنة مع الشراء والجملة
                             final buyingPrice =
                                 double.tryParse(bPriceController.text) ?? 0;
                             final wholesalePrice =
@@ -262,7 +261,7 @@ class _AddProductViewState extends State<AddProductView> {
   }
 
   void addProduct(ProductModel product) {
-    GetIt.instance<ObjectBoxServices>().prductsBox.put(product);
+    GetIt.instance<ObjectBoxServices>().productsBox.put(product);
   }
 
   Future<String?> saveProductImage(XFile pickedImage) async {

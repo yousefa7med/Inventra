@@ -4,10 +4,12 @@ import 'package:Inventra/core/utilities/app_global_keys.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:Inventra/features/expenses/presentation/views/expenses_view.dart';
+import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/operations/presentation/views/operations_view.dart';
 import 'package:Inventra/features/inventory/presentation/views/inventory_view.dart';
 import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
@@ -29,7 +31,7 @@ class MainView extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-
+        stateManagement: false,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
       ),
@@ -59,7 +61,10 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
     ),
   ),
   PersistentTabConfig(
-    screen: const InventoryView(),
+    screen: BlocProvider(
+      create: (context) => ProductCubit()..loadProducts(),
+      child: const InventoryView(),
+    ),
     item: ItemConfig(
       icon: const Icon(Icons.inventory_2_outlined),
       title: "المخزن",

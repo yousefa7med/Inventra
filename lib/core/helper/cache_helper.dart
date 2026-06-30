@@ -7,7 +7,7 @@ import 'package:objectbox/objectbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheHelper {
-  static late SharedPreferences sharedPreferences;
+static late SharedPreferences sharedPreferences;
   CacheHelper._internal();
   static final CacheHelper _instance = CacheHelper._internal();
   factory CacheHelper() => _instance;
@@ -39,14 +39,14 @@ class CacheHelper {
 
 class ObjectBoxServices {
   late final Store store;
-  late final Box<ProductModel> prductsBox;
+  late final Box<ProductModel> productsBox;
   late final Box<SupplierModel> suppliersBox;
   late final Box<InvoiceModel> invoicesBox;
   late final Box<CustomerModel> customersBox;
 
   Future<void> init() async {
     store = await openStore();
-    prductsBox = store.box<ProductModel>();
+    productsBox = store.box<ProductModel>();
     suppliersBox = store.box<SupplierModel>();
     invoicesBox = store.box<InvoiceModel>();
     customersBox = store.box<CustomerModel>();

@@ -11,7 +11,8 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.textInputAction,
     this.suffixIcon,
-    this.suffixText, this.prefixIcon,
+    this.suffixText,
+    this.prefixIcon, this.onChanged,
   });
   final String? label;
   final TextEditingController? controller;
@@ -21,9 +22,11 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? suffixText;
+ final void Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: onChanged,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
       validator: validator,
