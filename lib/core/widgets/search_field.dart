@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +28,22 @@ class _SearchFieldState extends State<SearchField> {
       prefixIcon: const Icon(Icons.search, color: AppColors.primary),
       suffixIcon: widget.searchController.text.isNotEmpty
           ? IconButton(
-              icon: const Icon(Icons.clear, color: Colors.grey),
-              onPressed: widget.clearFunction,
+              icon: const Icon(Icons.clear, color: AppColors.grey),
+              onPressed: () {
+                widget.clearFunction();
+                setState(() {
+                  prevIsEmpty = true;
+                });
+              },
             )
           : null,
       onChanged: (q) {
         if ((prevIsEmpty && q.isNotEmpty) || (!prevIsEmpty && q.isEmpty)) {
-          setState(() {});
+          setState(() {
+            prevIsEmpty = q.isEmpty;
+          });
+        } else {
+          prevIsEmpty = q.isEmpty;
         }
         widget.searchFunction(q);
       },

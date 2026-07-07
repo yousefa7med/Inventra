@@ -17,14 +17,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-class AddProductView extends StatefulWidget {
-  const AddProductView({super.key});
-
+class EditProductView extends StatefulWidget {
+  const EditProductView({super.key, required this.product});
+  final ProductModel product;
   @override
-  State<AddProductView> createState() => _AddProductViewState();
+  State<EditProductView> createState() => _EditProductViewState();
 }
 
-class _AddProductViewState extends State<AddProductView> {
+class _EditProductViewState extends State<EditProductView> {
   final _formKey = GlobalKey<FormState>();
   final picker = ImagePicker();
   XFile? image;
@@ -34,15 +34,25 @@ class _AddProductViewState extends State<AddProductView> {
   late final TextEditingController bPriceController;
   late final TextEditingController wPriceController;
   late final TextEditingController sPriceController;
+  String? imgPath;
 
   @override
   void initState() {
-    barcodeController = TextEditingController();
-    nameController = TextEditingController();
-    quantatyController = TextEditingController();
-    bPriceController = TextEditingController();
-    wPriceController = TextEditingController();
-    sPriceController = TextEditingController();
+    barcodeController = TextEditingController(text: widget.product.barcode);
+    nameController = TextEditingController(text: widget.product.name);
+    quantatyController = TextEditingController(
+      text: widget.product.quantity.toString(),
+    );
+    bPriceController = TextEditingController(
+      text: widget.product.buyingPrice.toString(),
+    );
+    wPriceController = TextEditingController(
+      text: widget.product.wholesalePrice.toString(),
+    );
+    sPriceController = TextEditingController(
+      text: widget.product.saleingPrice.toString(),
+    );
+    imgPath = widget.product.imgPath;
     super.initState();
   }
 
@@ -62,26 +72,25 @@ class _AddProductViewState extends State<AddProductView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'إضافة منتج'),
+        appBar: const CustomAppBar(title: 'تعديل المنتج'),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Form(
               key: _formKey,
-              autovalidateMode:
-                  AutovalidateMode.onUserInteraction, // تحسين الـ UX
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Gap(24),
-                  image == null
+                  imgPath == null
                       ? AddProductImageWidget(
                           onTap: () async {
                             await pickImage();
                           },
                         )
                       : ProductImage(
-                          imagePath: image!.path,
+                          imagePath: imgPath!,
                           onTap: () async {
                             await pickImage();
                           },
@@ -172,11 +181,10 @@ class _AddProductViewState extends State<AddProductView> {
                             if (price == null || price <= 0) {
                               return "رقم غير صحيح";
                             }
-                            // مقارنة مع سعر الشراء
                             final buyingPrice =
                                 double.tryParse(bPriceController.text) ?? 0;
                             if (price <= buyingPrice) {
-                              return "يجب أن يكون أكبر من سعرالشراء";
+                              return "يجب أن يكون أكبر من سعر الشراء";
                             }
                             return null;
                           },
@@ -219,12 +227,19 @@ class _AddProductViewState extends State<AddProductView> {
                   AppButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        String? imagePath;
                         if (image != null) {
-                          imagePath = await saveProductImage(image!);
+                          if (widget.product.imgPath != null &&
+                              widget.product.imgPath!.isNotEmpty) {
+                            final file = File(widget.product.imgPath!);
+                            if (await file.exists()) {
+                              file.delete();
+                            }
+                          }
+
+                          imgPath = await saveProductImage(image!);
                         }
 
-                        final product = ProductModel(
+                        final newProduct = ProductModel(
                           name: nameController.text.trim(),
                           quantity: int.tryParse(quantatyController.text) ?? 0,
                           buyingPrice:
@@ -234,28 +249,17 @@ class _AddProductViewState extends State<AddProductView> {
                           wholesalePrice:
                               double.tryParse(wPriceController.text) ?? 0,
                           barcode: barcodeController.text,
-                          imgPath: imagePath,
+                          imgPath: imgPath,
                         );
+                        newProduct.id = widget.product.id;
 
-                        // Check barcode uniqueness
                         final cubit = ProductCubit.get(context);
-                        final barcode = product.barcode?.trim() ?? '';
-                        if (barcode.isNotEmpty &&
-                            !cubit.isBarcodeUnique(barcode)) {
-                          showSnackBar(
-                            context,
-                            'الباركود مستخدم بالفعل لمنتج آخر',
-                            color: AppColors.error,
-                          );
-                          return;
-                        }
-
                         try {
-                          await cubit.addProduct(product);
+                          await cubit.updateProduct(newProduct);
                           if (!context.mounted) return;
                           showSnackBar(
                             context,
-                            "تم إضافة المنتج بنجاح",
+                            "تم تعديل المنتج بنجاح",
                             color: AppColors.success,
                           );
                           AppNavigation.pop(context: context);
@@ -263,13 +267,13 @@ class _AddProductViewState extends State<AddProductView> {
                           if (!context.mounted) return;
                           showSnackBar(
                             context,
-                            'فشل إضافة المنتج: $e',
+                            'فشل تعديل المنتج: $e',
                             color: AppColors.error,
                           );
                         }
                       }
                     },
-                    child: Text("إضافة المنتج", style: AppTextStyle.medium16),
+                    child: Text("تعديل المنتج", style: AppTextStyle.medium16),
                   ),
                 ],
               ),
@@ -287,7 +291,9 @@ class _AddProductViewState extends State<AddProductView> {
       maxWidth: 500,
     );
     if (image != null) {
-      setState(() {});
+      setState(() {
+        imgPath = image!.path;
+      });
     }
   }
 

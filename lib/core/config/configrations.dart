@@ -1,12 +1,18 @@
 import 'dart:developer';
 
+import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/transitions/page_route_builder_method.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_customer_view.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_invoice_view.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_product_view.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_supplier_view.dart';
+import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/inventory/presentation/views/edit_product_view.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
@@ -28,7 +34,10 @@ class AppRouter {
         return pageRouteBuilderMethod(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const AddProductView(),
+              BlocProvider.value(
+                value: GetIt.instance<ProductCubit>(),
+                child: const AddProductView(),
+              ),
         );
       case AppRoutes.addcustomerView:
         return pageRouteBuilderMethod(
@@ -41,6 +50,16 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               const AddSupplierView(),
+        );
+      case AppRoutes.editproductView:
+        final product = settings.arguments as ProductModel;
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BlocProvider.value(
+                value: GetIt.instance<ProductCubit>(),
+                child: EditProductView(product: product),
+              ),
         );
 
       default:
@@ -58,5 +77,6 @@ abstract class AppRoutes {
   static const String addInvoiceView = '/addInvoiceView';
   static const String addsupplierView = '/addsupplierView';
   static const String addproductView = '/addproductView';
+  static const String editproductView = '/editproductView';
   static const String addcustomerView = '/addcustomerView';
 }

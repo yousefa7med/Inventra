@@ -27,7 +27,7 @@ class AddProductImageWidget extends StatelessWidget {
           child: CircleAvatar(
             radius: 16.r,
             backgroundColor: AppColors.primary,
-            child: Icon(Icons.add, size: 18.r, color: Colors.white),
+            child: Icon(Icons.add, size: 18.r, color: AppColors.white),
           ),
         ),
       ],
@@ -36,20 +36,36 @@ class AddProductImageWidget extends StatelessWidget {
 }
 
 class ProductImage extends StatelessWidget {
-  const ProductImage({super.key, required this.imagePath});
+  const ProductImage({super.key, required this.imagePath, this.onTap});
   final String imagePath;
+  final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      width: 150,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: FileImage(File(imagePath)),
-          fit: BoxFit.fill,
+    return Stack(
+      alignment: Alignment.bottomRight,
+
+      children: [
+        Container(
+          height: 150,
+          width: 150,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: FileImage(File(imagePath)),
+              fit: BoxFit.fill,
+            ),
+            borderRadius: BorderRadius.circular(100),
+          ),
         ),
-        borderRadius: BorderRadius.circular(100),
-      ),
+        // Positioned(child: child)
+        InkWell(
+          onTap: onTap,
+          child: CircleAvatar(
+            radius: 16.r,
+            backgroundColor: AppColors.primary,
+            child: Icon(Icons.edit, size: 18.r, color: AppColors.white),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class AppTextStyle {
-  // <========================= Regular style ==============================>
+  // <========================= Nav Bar style ==============================>
+  static const TextStyle navBar = TextStyle(fontFamily: "Cairo");
 
+  // <========================= Regular style ==============================>
   static TextStyle regular14 = TextStyle(
     fontFamily: "Cairo",
     fontWeight: FontWeight.normal,

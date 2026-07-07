@@ -1,3 +1,4 @@
+import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +9,11 @@ bool isDark(BuildContext context) {
 void showSnackBar(BuildContext context, String message, {Color? color}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      backgroundColor: color ?? const Color(0xff323232),
+      backgroundColor: color ?? AppColors.snackBarDefault,
       duration: const Duration(seconds: 2),
       content: Text(
         message,
-        style: AppTextStyle.medium14.copyWith(color: Colors.white),
+        style: AppTextStyle.medium14.copyWith(color: AppColors.white),
         textAlign: TextAlign.center,
       ),
       behavior: SnackBarBehavior.floating,

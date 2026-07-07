@@ -1,3 +1,4 @@
+import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -24,7 +25,7 @@ class DashboardListCard extends StatelessWidget {
         onTap: onPressed,
         borderRadius: BorderRadius.circular(16),
         child: Card(
-          color: Colors.white,
+          color: AppColors.white,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -41,7 +42,7 @@ class DashboardListCard extends StatelessWidget {
                 const Gap(16),
                 Text(title, style: AppTextStyle.bold16),
                 const Spacer(),
-                const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                const Icon(Icons.arrow_forward_ios, color: AppColors.grey),
               ],
             ),
           ),

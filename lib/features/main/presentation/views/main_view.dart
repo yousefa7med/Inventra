@@ -11,7 +11,7 @@ import 'package:Inventra/features/settings/presentation/views/settings_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get_it/get_it.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class MainView extends StatelessWidget {
@@ -27,11 +27,10 @@ class MainView extends StatelessWidget {
           navBarConfig: navBarConfig,
           height: 58,
           navBarDecoration: const NavBarDecoration(
-            // color: isDark(context) ? AppColors.darkSurface : Colors.white,
-            color: Colors.white,
+            // color: isDark(context) ? AppColors.darkSurface : AppColors.white,
+            color: AppColors.white,
           ),
         ),
-        stateManagement: false,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
       ),
@@ -46,8 +45,10 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       icon: const Icon(Icons.dashboard_outlined),
       title: "لوحة التحكم",
       activeForegroundColor: AppColors.primary,
-      inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: const TextStyle(fontFamily: "Cairo"),
+      inactiveForegroundColor: isDark(context)
+          ? AppColors.white70
+          : AppColors.grey,
+      textStyle: AppTextStyle.navBar,
     ),
   ),
   PersistentTabConfig(
@@ -56,21 +57,25 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       icon: const Icon(Icons.history_sharp),
       title: "عمليات",
       activeForegroundColor: AppColors.primary,
-      inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: const TextStyle(fontFamily: "Cairo"),
+      inactiveForegroundColor: isDark(context)
+          ? AppColors.white70
+          : AppColors.grey,
+      textStyle: AppTextStyle.navBar,
     ),
   ),
   PersistentTabConfig(
-    screen: BlocProvider(
-      create: (context) => ProductCubit()..loadProducts(),
+    screen: BlocProvider.value(
+      value: GetIt.instance<ProductCubit>()..loadProducts(),
       child: const InventoryView(),
     ),
     item: ItemConfig(
       icon: const Icon(Icons.inventory_2_outlined),
       title: "المخزن",
       activeForegroundColor: AppColors.primary,
-      inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: const TextStyle(fontFamily: "Cairo"),
+      inactiveForegroundColor: isDark(context)
+          ? AppColors.white70
+          : AppColors.grey,
+      textStyle: AppTextStyle.navBar,
     ),
   ),
   PersistentTabConfig(
@@ -79,8 +84,10 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       icon: const Icon(Icons.paid_outlined),
       title: "مصاريف",
       activeForegroundColor: AppColors.primary,
-      inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: const TextStyle(fontFamily: "Cairo"),
+      inactiveForegroundColor: isDark(context)
+          ? AppColors.white70
+          : AppColors.grey,
+      textStyle: AppTextStyle.navBar,
     ),
   ),
   // PersistentTabConfig(
@@ -89,8 +96,8 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
   //     icon: const Icon(Icons.account_balance_outlined),
   //     title: "الخزنة",
   //     activeForegroundColor: AppColors.primary,
-  //     inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-  //     textStyle: TextStyle(fontFamily: "Cairo"),
+  //     inactiveForegroundColor: isDark(context) ? AppColors.white70 : AppColors.grey,
+  //     textStyle: AppTextStyle.navBar,
   //   ),
   // ),
   PersistentTabConfig(
@@ -99,8 +106,10 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       icon: const Icon(Icons.settings_outlined),
       title: "الاعدادات",
       activeForegroundColor: AppColors.primary,
-      inactiveForegroundColor: isDark(context) ? Colors.white70 : Colors.grey,
-      textStyle: const TextStyle(fontFamily: "Cairo"),
+      inactiveForegroundColor: isDark(context)
+          ? AppColors.white70
+          : AppColors.grey,
+      textStyle: AppTextStyle.navBar,
     ),
   ),
 ];
@@ -133,7 +142,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             currentAccountPicture: CircleAvatar(
               radius: 36.r,
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.white,
               child: CircleAvatar(
                 radius: 33.r,
                 backgroundImage: const NetworkImage(
@@ -143,11 +152,11 @@ class CustomDrawer extends StatelessWidget {
             ),
             accountName: Text(
               'يوسف أحمد',
-              style: AppTextStyle.medium16.copyWith(color: Colors.white),
+              style: AppTextStyle.medium16.copyWith(color: AppColors.white),
             ),
             accountEmail: Text(
               'youssef.ahmed@inventra.com',
-              style: AppTextStyle.regular14.copyWith(color: Colors.white70),
+              style: AppTextStyle.regular14.copyWith(color: AppColors.white70),
             ),
           ),
 
@@ -229,7 +238,7 @@ class CustomDrawer extends StatelessWidget {
       trailing: const Icon(
         Icons.arrow_forward_ios_rounded,
         size: 14,
-        color: Colors.grey,
+        color: AppColors.grey,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
       onTap: onTap,

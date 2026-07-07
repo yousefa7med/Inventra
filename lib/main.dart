@@ -1,7 +1,9 @@
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/controller/controllers/app_cubit/app_cubit.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/observer.dart';
 import 'package:Inventra/core/utilities/app_theme.dart';
+import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await configureDependencies();
+  Bloc.observer = AppBlocObserver();
 
   runApp(
     BlocProvider(
@@ -62,13 +65,17 @@ class Inventra extends StatelessWidget {
 }
 
 Future<void> configureDependencies() async {
-  // 1. كاش هيلبر
+  // 1. CacheHelper
   final cacheHelper = CacheHelper();
   await cacheHelper.init();
   GetIt.instance.registerSingleton<CacheHelper>(cacheHelper);
 
-  // 2. أوبجكت بوكس سيرفيس (يتم عمل init قبل التسجيل لضمان إن الـ Store فتح)
+  // 2. ObjectBoxServices
   final objectBoxServices = ObjectBoxServices();
   await objectBoxServices.init();
   GetIt.instance.registerSingleton<ObjectBoxServices>(objectBoxServices);
+
+  // 3. Cubits (LazySingletons for app-wide state)
+  GetIt.instance.registerLazySingleton<AppCubit>(() => AppCubit());
+  GetIt.instance.registerLazySingleton<ProductCubit>(() => ProductCubit());
 }

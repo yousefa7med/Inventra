@@ -68,7 +68,7 @@ class DashboardView extends StatelessWidget {
                       );
                     },
                     icon: Icons.shop,
-                    iconColor: Colors.white,
+                    iconColor: AppColors.white,
                     iconBackgronud: AppColors.secondary,
                   ),
                   DashboardListCard(
@@ -81,7 +81,7 @@ class DashboardView extends StatelessWidget {
                       );
                     },
                     icon: Icons.shop,
-                    iconColor: const Color.fromARGB(255, 150, 0, 0),
+                    iconColor: AppColors.darkRed,
                     iconBackgronud: AppColors.lightRed,
                   ),
                   DashboardListCard(
@@ -95,7 +95,7 @@ class DashboardView extends StatelessWidget {
                       );
                     },
                     icon: Icons.shop,
-                    iconColor: Colors.white,
+                    iconColor: AppColors.white,
                     iconBackgronud: AppColors.secondary,
                   ),
                   DashboardListCard(
@@ -109,7 +109,7 @@ class DashboardView extends StatelessWidget {
                       );
                     },
                     icon: Icons.shop,
-                    iconColor: const Color.fromARGB(255, 150, 0, 0),
+                    iconColor: AppColors.darkRed,
                     iconBackgronud: AppColors.lightRed,
                   ),
                 ],

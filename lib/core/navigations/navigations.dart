@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 abstract class AppNavigation {
-  static void pushName({
+  static Future<Object?> pushName({
     required BuildContext context,
     required String route,
     Object? argument,
     bool rootNavigator = false,
   }) {
-    Navigator.of(
+    return Navigator.of(
       context,
       rootNavigator: rootNavigator,
-    ).pushNamed(route, arguments: argument);
+    ).pushNamed<Object?>(route, arguments: argument);
   }
 
   static void pushWithReplacement({
