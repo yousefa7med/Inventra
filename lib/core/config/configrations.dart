@@ -9,6 +9,8 @@ import 'package:Inventra/features/dashboard/presentation/views/add_supplier_view
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/inventory/presentation/views/edit_product_view.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
+import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
+import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -61,6 +63,16 @@ class AppRouter {
                 child: EditProductView(product: product),
               ),
         );
+ 
+      case AppRoutes.addExpenseView:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BlocProvider.value(
+                value: GetIt.instance<SafeCubit>(),
+                child: const AddExpenseView(),
+              ),
+        );
 
       default:
         return pageRouteBuilderMethod(
@@ -79,4 +91,5 @@ abstract class AppRoutes {
   static const String addproductView = '/addproductView';
   static const String editproductView = '/editproductView';
   static const String addcustomerView = '/addcustomerView';
+  static const String addExpenseView = '/addExpenseView';
 }

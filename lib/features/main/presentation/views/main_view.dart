@@ -3,10 +3,11 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_global_keys.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
-import 'package:Inventra/features/expenses/presentation/views/expenses_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/operations/presentation/views/operations_view.dart';
 import 'package:Inventra/features/inventory/presentation/views/inventory_view.dart';
+import 'package:Inventra/features/safe/presentation/views/safe_view.dart';
+import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class MainView extends StatelessWidget {
     return Scaffold(
       key: AppGlobalKeys.mainScaffold,
       drawer: const CustomDrawer(),
+      resizeToAvoidBottomInset: false,
       body: PersistentTabView(
         tabs: _tabs(context),
         navBarBuilder: (navBarConfig) => Style8BottomNavBar(
@@ -32,7 +34,6 @@ class MainView extends StatelessWidget {
           ),
         ),
         handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
       ),
     );
   }
@@ -79,10 +80,13 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
     ),
   ),
   PersistentTabConfig(
-    screen: const ExpensesView(),
+    screen: BlocProvider.value(
+      value: GetIt.instance<SafeCubit>()..load(),
+      child: const SafeView(),
+    ),
     item: ItemConfig(
-      icon: const Icon(Icons.paid_outlined),
-      title: "مصاريف",
+      icon: const Icon(Icons.account_balance_wallet_outlined),
+      title: "الخزنة",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context)
           ? AppColors.white70

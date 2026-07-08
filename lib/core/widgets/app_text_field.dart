@@ -12,9 +12,13 @@ class AppTextField extends StatelessWidget {
     this.textInputAction,
     this.suffixIcon,
     this.suffixText,
-    this.prefixIcon, this.onChanged,
+    this.prefixIcon,
+    this.onChanged,
+    this.hintText,
+    this.focusNode,
   });
   final String? label;
+  final String? hintText;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
@@ -22,7 +26,8 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? suffixText;
- final void Function(String)? onChanged;
+  final void Function(String)? onChanged;
+  final FocusNode? focusNode;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -31,6 +36,7 @@ class AppTextField extends StatelessWidget {
       textInputAction: textInputAction,
       validator: validator,
       controller: controller,
+      focusNode: focusNode,
       decoration: InputDecoration(
         suffixIcon: suffixIcon,
         suffixText: suffixText,
@@ -53,6 +59,7 @@ class AppTextField extends StatelessWidget {
         ),
         labelText: label,
         labelStyle: AppTextStyle.regular14,
+        hintText: hintText,
       ),
     );
   }

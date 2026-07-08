@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/helper/app_dialog.dart';
@@ -36,6 +35,7 @@ class _InventoryViewState extends State<InventoryView> {
 
   @override
   void dispose() {
+    timer?.cancel();
     searchController.dispose();
     super.dispose();
   }
@@ -56,6 +56,7 @@ class _InventoryViewState extends State<InventoryView> {
               const Gap(16),
 
               SearchField(
+                hintText: "ابحث باسم المنتج أو الباركود...",
                 searchController: searchController,
                 searchFunction: (query) {
                   if (timer?.isActive ?? false) {
@@ -75,7 +76,6 @@ class _InventoryViewState extends State<InventoryView> {
               // 5. عرض المنتجات باستخدام ListView
               BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
-                  print(state);
                   if (state is ProductLoading) {
                     return const Expanded(
                       child: Center(child: CircularProgressIndicator()),
@@ -159,7 +159,9 @@ class _InventoryViewState extends State<InventoryView> {
                       ),
                     );
                   }
-                  return const Expanded(child: Center(child: Text("ssdada")));
+                  return const Expanded(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
                 },
               ),
               const Gap(16),

@@ -4,6 +4,8 @@ import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/observer.dart';
 import 'package:Inventra/core/utilities/app_theme.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
+import 'package:Inventra/features/safe/data/repositories/safe_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -75,7 +77,12 @@ Future<void> configureDependencies() async {
   await objectBoxServices.init();
   GetIt.instance.registerSingleton<ObjectBoxServices>(objectBoxServices);
 
-  // 3. Cubits (LazySingletons for app-wide state)
+  // 3. Repositories
+  final safeRepository = SafeRepositoryImpl(objectBoxServices);
+  GetIt.instance.registerLazySingleton<SafeRepositoryImpl>(() => safeRepository);
+
+  // 4. Cubits (LazySingletons for app-wide state)
   GetIt.instance.registerLazySingleton<AppCubit>(() => AppCubit());
   GetIt.instance.registerLazySingleton<ProductCubit>(() => ProductCubit());
+  GetIt.instance.registerLazySingleton<SafeCubit>(() => SafeCubit(safeRepository));
 }

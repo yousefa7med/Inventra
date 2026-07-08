@@ -2,12 +2,14 @@ import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
+import 'package:Inventra/core/models/expense.dart';
+import 'package:Inventra/core/models/safe_balance.dart';
+import 'package:Inventra/core/models/balance_audit_entry.dart';
 import 'package:Inventra/objectbox.g.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheHelper {
-static late SharedPreferences sharedPreferences;
+  static late SharedPreferences sharedPreferences;
   CacheHelper._internal();
   static final CacheHelper _instance = CacheHelper._internal();
   factory CacheHelper() => _instance;
@@ -43,6 +45,9 @@ class ObjectBoxServices {
   late final Box<SupplierModel> suppliersBox;
   late final Box<InvoiceModel> invoicesBox;
   late final Box<CustomerModel> customersBox;
+  late final Box<ExpenseModel> expensesBox;
+  late final Box<SafeBalance> safeBalanceBox;
+  late final Box<BalanceAuditEntry> balanceAuditEntryBox;
 
   Future<void> init() async {
     store = await openStore();
@@ -50,5 +55,8 @@ class ObjectBoxServices {
     suppliersBox = store.box<SupplierModel>();
     invoicesBox = store.box<InvoiceModel>();
     customersBox = store.box<CustomerModel>();
+    expensesBox = store.box<ExpenseModel>();
+    safeBalanceBox = store.box<SafeBalance>();
+    balanceAuditEntryBox = store.box<BalanceAuditEntry>();
   }
 }

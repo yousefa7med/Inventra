@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 
+import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -40,13 +40,14 @@ class ProductCubit extends Cubit<ProductState> {
     if (query.isEmpty) {
       _filteredProducts = List.from(_allProducts);
     } else {
+      final normalizedQuery = query.normalizeArabic();
       _filteredProducts = _allProducts.where((product) {
-        final nameMatch = product.name.toLowerCase().contains(
-          query.toLowerCase(),
+        final nameMatch = product.name.normalizeArabic().contains(
+          normalizedQuery,
         );
         if (product.barcode != null) {
-          final barcodeMatch = product.barcode!.toLowerCase().contains(
-            query.toLowerCase(),
+          final barcodeMatch = product.barcode!.normalizeArabic().contains(
+            normalizedQuery,
           );
           return nameMatch || barcodeMatch;
         }
@@ -127,7 +128,5 @@ class ProductCubit extends Cubit<ProductState> {
     );
   }
 
-  void p() {
-    log("message");
-  }
+
 }

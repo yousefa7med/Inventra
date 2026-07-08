@@ -78,13 +78,18 @@ lib/
 ## Critical Conventions
 - **Import alias**: `package:Inventra/...` (capital I)
 - **DI**: Register in `main.dart:configureDependencies()` via `GetIt`
-- **Routing**: Use `AppNavigation.pushName()` / `pushReplacementNamed()` / `pushAndRemoveUntil()`
+- **Routing**: Use `AppNavigation.pushName()` / `pushReplacementNamed()` / `pushAndRemoveUntil()` — NEVER use `Navigator.of(context)` directly
+- **Snackbars**: Use `showSnackBar(context, message)` from `core/helper/functions.dart` — NEVER use `ScaffoldMessenger.of(context).showSnackBar()` directly
 - **Theme**: Access via `AppTheme.lightTheme` / `AppTheme.darkTheme`
 - **BLoC**: Feature cubits in `features/*/controller/cubit/`
 - **Models**: ObjectBox entities in `core/models/*.dart` with `@Entity()`
 - **Drawer Navigation**: Use `AppNavigation.pushName(context, AppRoutes.drawerRouteName)`
 - **Colors**: NEVER hardcode colors. Use `AppColors` class only. If a color is missing, add it to `AppColors` first, then use it everywhere.
 - **TextStyles**: NEVER hardcode `TextStyle()`. Use `AppTextStyle` class only. If a style is missing, add it to `AppTextStyle` first, then use it everywhere.
+- **TextFields**: NEVER use raw `TextFormField`/`TextField`. Use `AppTextField` from `core/widgets/app_text_field.dart` only.
+- **Buttons**: NEVER use raw `ElevatedButton` in `SizedBox`. Use `AppButton` from `core/widgets/app_button.dart` for full-width buttons only.
+- **Widgets**: NEVER use inline `Widget Function()` builders or `_build*()` methods. Extract into proper widget classes — feature-specific in `features/*/presentation/widgets/`, common in `core/widgets/`.
+- **BlocBuilder States**: In `BlocBuilder`, each state body (e.g., `SafeLoading`, `SafeError`, `SafeLoaded`) MUST be a separate widget class (e.g., `SafeLoadingBody`, `SafeErrorBody`, `SafeLoadedBody`).
 
 ## State Management Details
 - Uses `flutter_bloc` ^9.1.1 with Cubit pattern (not Bloc)
@@ -108,6 +113,7 @@ lib/
 - Initial route: `AppRoutes.mainView` ('/')
 - Navigation helpers in `AppNavigation` class (`navigations.dart`)
 - Drawer routes use same `AppRouter.generateRoute()` pattern
+- **Snackbar helper**: `showSnackBar(context, message, {color})` in `core/helper/functions.dart`
 
 ## Theming
 - Light/dark themes in `AppTheme` class (`app_theme.dart`)
