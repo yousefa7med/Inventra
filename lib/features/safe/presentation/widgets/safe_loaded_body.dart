@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:Inventra/core/widgets/empty_state.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';

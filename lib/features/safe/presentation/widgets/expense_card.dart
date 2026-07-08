@@ -52,6 +52,7 @@ class ExpenseCard extends StatelessWidget {
                   Text(
                     DateFormat('dd/MM/yyyy - hh:mm a').format(expense.date),
                     style: AppTextStyle.regular14.copyWith(
+                      fontSize: 12.sp,
                       color: AppColors.grey,
                     ),
                   ),

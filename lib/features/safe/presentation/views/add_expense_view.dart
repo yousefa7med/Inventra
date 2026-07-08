@@ -1,3 +1,4 @@
+import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Inventra/core/helper/functions.dart';
@@ -64,10 +65,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('إضافة مصروف', style: AppTextStyle.medium20),
-        centerTitle: true,
-      ),
+      appBar: const CustomAppBar(title: 'إضافة مصروف'),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -83,6 +81,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
+                textInputAction: TextInputAction.next,
                 label: 'مثال: 150.50',
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -105,6 +104,8 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
               Text('الملاحظة', style: AppTextStyle.regular18),
               const SizedBox(height: 8),
               AppTextField(
+                textInputAction: TextInputAction.done,
+
                 controller: _noteController,
                 label: 'مثال: مصاريف نقل',
                 validator: (value) {
