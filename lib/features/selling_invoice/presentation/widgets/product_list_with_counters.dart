@@ -6,34 +6,6 @@ import 'package:Inventra/features/selling_invoice/presentation/widgets/product_c
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductListWithCounters extends StatelessWidget {
-  const ProductListWithCounters({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SellInvoiceCubit, SellInvoiceState>(
-      builder: (context, state) {
-        if (context.read<SellInvoiceCubit>().products.isEmpty &&
-            state is! SellInvoiceLoading) {
-          return const EmptyState(
-            icon: Icons.production_quantity_limits_outlined,
-            message: AppStrings.noProductsFound,
-          );
-        }
-
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          itemCount: context.read<SellInvoiceCubit>().products.length,
-          itemBuilder: (context, index) {
-            return ProductCardWithCounter(
-              product: context.read<SellInvoiceCubit>().products[index],
-            );
-          },
-        );
-      },
-    );
-  }
-}
 
 class ProductListWithCountersSliver extends StatelessWidget {
   const ProductListWithCountersSliver({super.key});

@@ -22,6 +22,8 @@ class SellingInvoiceView extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: BlocListener<SellInvoiceCubit, SellInvoiceState>(
+        listenWhen: (prev, curr) =>
+            curr is SellInvoiceError || curr is SellInvoiceConfirmed,
         listener: (context, state) {
           if (state is SellInvoiceError) {
             showSnackBar(context, state.message, color: AppColors.error);

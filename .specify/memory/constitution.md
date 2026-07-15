@@ -1,5 +1,25 @@
 <!--
 ## Sync Impact Report
+- **Version change**: 1.8.0 → 1.9.0 (MINOR — added BlocListener listenWhen optimization requirement to Principles IV & VIII)
+- **Modified principles**: 
+  - IV. Performance & Resource Efficiency (added explicit BlocListener listenWhen guidance)
+  - VIII. Custom Widget Architecture (expanded BlocListener requirements to include listenWhen)
+- **Added sections**: None
+- **Removed sections**: None
+- **Templates requiring updates**: ⚠ pending — `.specify/templates/plan-template.md`, `.specify/templates/spec-template.md`, `.specify/templates/tasks-template.md` if they reference principle numbers
+- **Follow-up TODOs**: None
+
+## Previous Sync Impact Report
+- **Version change**: 1.7.0 → 1.8.0 (MINOR — added BlocBuilder buildWhen optimization requirement to Principles IV & VIII)
+- **Modified principles**: 
+  - IV. Performance & Resource Efficiency (added explicit BlocBuilder buildWhen guidance)
+  - VIII. Custom Widget Architecture (expanded BlocBuilder requirements to include buildWhen)
+- **Added sections**: None
+- **Removed sections**: None
+- **Templates requiring updates**: ⚠ pending — `.specify/templates/plan-template.md`, `.specify/templates/spec-template.md`, `.specify/templates/tasks-template.md` if they reference principle numbers
+- **Follow-up TODOs**: None
+
+## Previous Sync Impact Report
 - **Version change**: 1.6.0 → 1.7.0 (MINOR — added new principle IX: Component Theme Consistency)
 - **Modified principles**: 
   - VIII. Custom Widget Architecture (renumbered from VIII to VIII)
@@ -8,19 +28,6 @@
 - **Removed sections**: None
 - **Templates requiring updates**: ⚠ pending — `.specify/templates/plan-template.md`, `.specify/templates/spec-template.md`, `.specify/templates/tasks-template.md` if they reference principle numbers
 - **Follow-up TODOs**: None
-
-## Previous Sync Impact Report
-- **Version change**: 1.5.0 → 1.6.0
-- **Modified principles**:
-  - II. Test-First Discipline → REMOVED (no longer mandatory)
-  - All subsequent principles renumbered (III→II, IV→III, V→IV, VI→V, VII→VI, VIII→VII, IX→VIII)
-- **Added sections**: none
-- **Removed sections**: Test-First Discipline (II)
-- **Templates requiring updates**:
-  - .specify/templates/plan-template.md — ⚠ pending
-  - .specify/templates/spec-template.md — ⚠ pending
-  - .specify/templates/tasks-template.md — ⚠ pending
-- **Follow-up TODOs**: none
 -->
 
 # Inventra Constitution
@@ -41,6 +48,10 @@ NEVER hardcode colors or TextStyles in widgets. All colors MUST use the `AppColo
 ### IV. Performance & Resource Efficiency
 App startup (cold) MUST stay ≤2s on mid-range Android (Snapdragon 680 / 4GB RAM). Frame drops (jank) MUST stay <5% during scroll-heavy screens (inventory lists, dashboards). ObjectBox queries MUST use indexes and `query()` with `watch()` for reactive UI—no `getAll()` in build methods. Images MUST use `flutter_svg` for icons, `image_picker` with `maxWidth: 800` compression. Memory leaks from BLoC streams, `StreamController`, or `ImageCache` are BLOCKING issues—profile with `flutter run --profile --trace-startup` before merge.
 
+**BlocBuilder Optimization**: ALL `BlocBuilder` widgets MUST use `buildWhen` to prevent unnecessary rebuilds. Only rebuild when the state actually affects the UI. The `buildWhen` predicate MUST compare previous and current state and return `true` only when the relevant state properties changed. This is mandatory for list views, scrollable content, and any high-frequency state updates.
+
+**BlocListener Optimization**: ALL `BlocListener` widgets MUST use `listenWhen` to prevent unnecessary listener callbacks. Only invoke the listener when the state change requires a side effect (navigation, showing snackbar, showing dialog, etc.). The `listenWhen` predicate MUST compare previous and current state and return `true` only when the relevant state properties changed that require the side effect. This is mandatory for high-frequency state updates to avoid redundant navigation, duplicate snackbars, or repeated dialog displays.
+
 ### V. Architectural Simplicity & YAGNI
 Prefer SIMPLE solutions: BLoC Cubits over full Blocs, feature folders over micro-packages, `GetIt` singletons over code-gen DI. NO external backend—ObjectBox is the ONLY persistence. NO code generation beyond ObjectBox (`build_runner`). NO feature flags, A/B testing, or analytics unless explicitly spec'd. Every new dependency MUST be justified in PR description with `flutter pub add` rationale. Remove dead code ruthlessly—`dart analyze --fatal-infos` enforces.
 
@@ -51,7 +62,7 @@ ALL navigation MUST use `AppNavigation` methods (`pushName`, `pushWithReplacemen
 ALL text input fields MUST use `AppTextField` from `core/widgets/app_text_field.dart` exclusively. Raw `TextFormField` or `TextField` with manual `InputDecoration` is FORBIDDEN. ALL full-width action buttons MUST use `AppButton` from `core/widgets/app_button.dart` exclusively. Raw `ElevatedButton` wrapped in `SizedBox` is FORBIDDEN. If a needed variant is missing, extend the shared widget FIRST, then use it everywhere. This ensures uniform input styling, consistent button sizing, and a single point of maintenance for form elements.
 
 ### VIII. Custom Widget Architecture (NON-NEGOTIABLE)
-NEVER use inline `Widget Function()` builders or private `_build*()` methods for reusable UI sections. ALL distinct UI components MUST be extracted into proper `StatelessWidget` or `StatefulWidget` classes. Feature-specific widgets go in `features/<name>/presentation/widgets/`. Common/reusable widgets go in `core/widgets/`. Each widget file MUST contain a single public widget class. In `BlocBuilder`, each state body (e.g., `SafeLoading`, `SafeError`, `SafeLoaded`) MUST be a separate widget class (e.g., `SafeLoadingBody`, `SafeErrorBody`, `SafeLoadedBody`). This ensures testability, reusability, clear separation of concerns, and prevents view files from exceeding 300 lines.
+NEVER use inline `Widget Function()` builders or private `_build*()` methods for reusable UI sections. ALL distinct UI components MUST be extracted into proper `StatelessWidget` or `StatefulWidget` classes. Feature-specific widgets go in `features/<name>/presentation/widgets/`. Common/reusable widgets go in `core/widgets/`. Each widget file MUST contain a single public widget class. In `BlocBuilder`, each state body (e.g., `SafeLoading`, `SafeError`, `SafeLoaded`) MUST be a separate widget class (e.g., `SafeLoadingBody`, `SafeErrorBody`, `SafeLoadedBody`) AND the builder MUST use `buildWhen` to limit rebuilds to only when relevant state properties change. In `BlocListener`, the listener MUST use `listenWhen` to limit callbacks to only when relevant state properties change that require side effects (navigation, snackbars, dialogs). This ensures testability, reusability, clear separation of concerns, prevents view files from exceeding 300 lines, and avoids redundant side-effect executions.
 
 ### IX. Component Theme Consistency (NON-NEGOTIABLE)
 NEVER hardcode `BoxDecoration`, `InputDecoration`, `ButtonStyle`, `MenuStyle`, `DropdownMenuThemeData`, `CardTheme`, or similar widget themes in custom widgets. ALL component-level themes MUST be defined centrally in `AppTheme` (component themes: `elevatedButtonTheme`, `inputDecorationTheme`, `dropdownMenuTheme`, `cardTheme`, `dialogTheme`, etc.) and accessed via `Theme.of(context)` or `AppTheme.lightTheme/darkTheme`. If a component theme is missing, add it to `AppTheme` FIRST, then reference it everywhere. This ensures visual consistency, centralized maintenance, and single source of truth for all widget styling.
@@ -87,4 +98,4 @@ This Constitution supersedes all ad-hoc practices, team conventions, and prior a
 
 All PR reviews MUST verify compliance with Core Principles I–VIII and Quality Gates. Complexity (new deps, patterns, files >300 LOC) MUST be justified in PR description. Runtime guidance lives in `AGENTS.md`—keep both docs in sync.
 
-**Version**: 1.7.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-10
+**Version**: 1.9.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-15
