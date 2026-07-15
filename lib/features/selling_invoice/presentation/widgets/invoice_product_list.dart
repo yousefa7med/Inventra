@@ -38,12 +38,15 @@ class SliverInvoiceProductList extends StatelessWidget {
           );
         }
 
-        return SliverList.separated(
-          itemCount: cubit.items.length,
-          separatorBuilder: (_, _) => const Gap(8),
-          itemBuilder: (context, index) {
-            return InvoiceItemTile(item: cubit.items[index], index: index);
-          },
+        return SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          sliver: SliverList.separated(
+            itemCount: cubit.items.length,
+            separatorBuilder: (_, _) => const Gap(8),
+            itemBuilder: (context, index) {
+              return InvoiceItemTile(item: cubit.items[index], index: index);
+            },
+          ),
         );
       },
     );
