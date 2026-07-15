@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/sell_invoice_item_model.dart';
@@ -50,8 +51,9 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
   @override
   Future<void> loadProducts(String search) async {
     try {
+      final searchText = search.trim().normalizeArabic();
       emit(const SellInvoiceProductLoading());
-      _products = _repository.searchProducts(search);
+      _products = _repository.searchProducts(searchText);
       emit(const SellInvoiceProductSuccessed());
     } catch (e) {
       emit(SellInvoiceError('Failed to load products: $e'));

@@ -145,7 +145,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
   @override
   void setSearchFilter(String? text) {
-    _searchText = text?.trim();
+    _searchText = text?.trim().normalizeArabic();
     if (_searchText?.isEmpty ?? true) {
       _searchText = null;
     }
