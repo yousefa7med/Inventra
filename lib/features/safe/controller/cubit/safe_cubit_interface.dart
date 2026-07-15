@@ -1,4 +1,4 @@
-import 'package:Inventra/core/models/expense.dart';
+import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/utils/result.dart';
 
 abstract class SafeCubitInterface {

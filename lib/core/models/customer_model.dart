@@ -1,4 +1,4 @@
-import 'package:Inventra/core/models/invoice_model.dart';
+import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -10,8 +10,7 @@ class CustomerModel {
   final String? address;
   final String phoneNum;
 
-  final ToMany<InvoiceModel> invoices=ToMany<InvoiceModel>();
-  
+  final ToMany<SellingInvoiceModel> invoices = ToMany<SellingInvoiceModel>();
 
   CustomerModel({
     required this.name,

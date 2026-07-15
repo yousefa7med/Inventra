@@ -1,0 +1,85 @@
+import 'package:Inventra/core/config/configrations.dart';
+import 'package:Inventra/core/constants/app_strings.dart';
+import 'package:Inventra/core/helper/functions.dart';
+import 'package:Inventra/core/navigations/navigations.dart';
+import 'package:Inventra/core/utilities/app_colors.dart';
+import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/widgets/app_button.dart';
+import 'package:Inventra/core/widgets/custom_app_bar.dart';
+import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
+import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
+import 'package:Inventra/features/selling_invoice/presentation/widgets/customer_dropdown_menu.dart';
+import 'package:Inventra/features/selling_invoice/presentation/widgets/invoice_product_list.dart';
+import 'package:Inventra/features/selling_invoice/presentation/widgets/invoice_totals_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+
+class SellingInvoiceView extends StatelessWidget {
+  const SellingInvoiceView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: const CustomAppBar(title: AppStrings.invoiceFormTitle),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CustomerDropdownMenu(),
+                const Gap(16),
+                const InvoiceProductList(),
+                const Gap(16),
+                const InvoiceTotalsCard(),
+                const Gap(16),
+
+                BlocListener<SellInvoiceCubit, SellInvoiceState>(
+                  listener: (context, state) {
+                    if (state is SellInvoiceError) {
+                      showSnackBar(
+                        context,
+                        state.message,
+                        color: AppColors.error,
+                      );
+                    } else if (state is SellInvoiceConfirmed) {
+                      showSnackBar(
+                        context,
+                        "تم اضافة الفاتورة بنجاح",
+                        color: AppColors.success,
+                      );
+                    }
+                  },
+                  child: AppButton(
+                    onPressed: () async {
+                      if (context
+                          .read<SellInvoiceCubit>()
+                          .validateSellInvoice()) {
+                        await context.read<SellInvoiceCubit>().confirmInvoice();
+                        AppNavigation.pop(context: context);
+                      }
+                    },
+                    child: const Text(
+                      AppStrings.confirmInvoice,
+                      style: AppTextStyle.navBar,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => AppNavigation.pushName(
+            context: context,
+            route: AppRoutes.addProductToInvoice,
+          ),
+          child: const Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+}

@@ -1,8 +1,8 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
-import 'package:Inventra/core/models/balance_audit_entry.dart';
+import 'package:Inventra/core/models/balance_audit_entry_model.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
-import 'package:Inventra/core/models/expense.dart';
-import 'package:Inventra/core/models/safe_balance.dart';
+import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
@@ -12,16 +12,16 @@ class SafeRepositoryImpl implements SafeRepository {
   SafeRepositoryImpl(this._objectBox);
 
   @override
-  SafeBalance getBalance() {
+  SafeBalanceModel getBalance() {
     final balance = _objectBox.safeBalanceBox.get(1);
     if (balance != null) return balance;
-    return SafeBalance(currentAmount: 0, lastUpdated: DateTime.now());
+    return SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
   }
 
   @override
   void updateBalance(double newAmount) {
     final balance = getBalance();
-    balance.currentAmount = newAmount;
+    balance.currentBalance = newAmount;
     balance.lastUpdated = DateTime.now();
     _objectBox.safeBalanceBox.put(balance);
   }
@@ -31,7 +31,7 @@ class SafeRepositoryImpl implements SafeRepository {
   //   final existing = _objectBox.safeBalanceBox.get(1);
   //   if (existing == null) {
   //     _objectBox.safeBalanceBox.put(
-  //       SafeBalance(currentAmount: initialAmount, lastUpdated: DateTime.now()),
+  //       SafeBalanceModel(currentAmount: initialAmount, lastUpdated: DateTime.now()),
   //     );
   //   }
   // }
@@ -90,7 +90,7 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  List<BalanceAuditEntry> getAuditEntries({BalanceChangeType? type}) {
+  List<BalanceAuditEntryModel> getAuditEntries({BalanceChangeType? type}) {
     var entries = _objectBox.balanceAuditEntryBox.getAll();
     entries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
@@ -102,15 +102,15 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  void addAuditEntry(BalanceAuditEntry entry) {
+  void addAuditEntry(BalanceAuditEntryModel entry) {
     _objectBox.balanceAuditEntryBox.put(entry);
   }
 
   @override
-  Stream<List<BalanceAuditEntry>> watchAuditEntries() {
+  Stream<List<BalanceAuditEntryModel>> watchAuditEntries() {
     return _objectBox.balanceAuditEntryBox
         .query()
-        .order(BalanceAuditEntry_.timestamp, flags: Order.descending)
+        .order(BalanceAuditEntryModel_.timestamp, flags: Order.descending)
         .watch(triggerImmediately: true)
         .map((query) => query.find());
   }

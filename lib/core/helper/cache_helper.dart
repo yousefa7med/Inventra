@@ -1,10 +1,11 @@
 import 'package:Inventra/core/models/customer_model.dart';
-import 'package:Inventra/core/models/invoice_model.dart';
+import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
-import 'package:Inventra/core/models/expense.dart';
-import 'package:Inventra/core/models/safe_balance.dart';
-import 'package:Inventra/core/models/balance_audit_entry.dart';
+import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
+import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/sell_invoice_item_model.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,20 +44,22 @@ class ObjectBoxServices {
   late final Store store;
   late final Box<ProductModel> productsBox;
   late final Box<SupplierModel> suppliersBox;
-  late final Box<InvoiceModel> invoicesBox;
+  late final Box<SellingInvoiceModel> invoicesBox;
   late final Box<CustomerModel> customersBox;
   late final Box<ExpenseModel> expensesBox;
-  late final Box<SafeBalance> safeBalanceBox;
-  late final Box<BalanceAuditEntry> balanceAuditEntryBox;
+  late final Box<SafeBalanceModel> safeBalanceBox;
+  late final Box<BalanceAuditEntryModel> balanceAuditEntryBox;
+  late final Box<SellInvoiceItemModel> sellInvoiceItemsBox;
 
   Future<void> init() async {
     store = await openStore();
     productsBox = store.box<ProductModel>();
     suppliersBox = store.box<SupplierModel>();
-    invoicesBox = store.box<InvoiceModel>();
+    invoicesBox = store.box<SellingInvoiceModel>();
     customersBox = store.box<CustomerModel>();
     expensesBox = store.box<ExpenseModel>();
-    safeBalanceBox = store.box<SafeBalance>();
-    balanceAuditEntryBox = store.box<BalanceAuditEntry>();
+    safeBalanceBox = store.box<SafeBalanceModel>();
+    balanceAuditEntryBox = store.box<BalanceAuditEntryModel>();
+    sellInvoiceItemsBox = store.box<SellInvoiceItemModel>();
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_global_keys.dart';
@@ -24,6 +26,16 @@ class MainView extends StatelessWidget {
       drawer: const CustomDrawer(),
       resizeToAvoidBottomInset: false,
       body: PersistentTabView(
+        onTabChanged: (value) {
+          if (value == 2) {
+            GetIt.instance<ProductCubit>().loadProducts();
+          }
+          if (value == 3) {
+            GetIt.instance<SafeCubit>().load();
+          }
+          log(value.toString());
+        },
+        stateManagement: false,
         tabs: _tabs(context),
         navBarBuilder: (navBarConfig) => Style8BottomNavBar(
           navBarConfig: navBarConfig,

@@ -63,7 +63,7 @@ class DashboardView extends StatelessWidget {
                     onPressed: () {
                       AppNavigation.pushName(
                         context: context,
-                        route: AppRoutes.addInvoiceView,
+                        route: AppRoutes.sellingInvoiceView,
                         rootNavigator: true,
                       );
                     },

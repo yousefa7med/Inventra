@@ -30,11 +30,31 @@ abstract class AppTheme {
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFFF9F9F9),
-      foregroundColor: AppColors.primary
+      foregroundColor: AppColors.primary,
     ),
-
-
-    
+    dropdownMenuTheme: DropdownMenuThemeData(
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.surface,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.greyMedium300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.greyMedium300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        hintStyle: const TextStyle(color: AppColors.greyMedium500),
+      ),
+    ),
   );
 
   // <=========================Dark Theme==============================>
@@ -50,10 +70,8 @@ abstract class AppTheme {
       ),
     ),
     appBarTheme: const AppBarTheme(
-  backgroundColor: Color(0xFFF9F9F9),
-      foregroundColor: AppColors.primary
+      backgroundColor: Color(0xFFF9F9F9),
+      foregroundColor: AppColors.primary,
     ),
-
-
   );
 }

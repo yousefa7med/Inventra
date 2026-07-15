@@ -1,4 +1,4 @@
-import 'package:Inventra/core/models/expense.dart';
+import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:flutter/material.dart';

@@ -3,14 +3,14 @@ import 'package:objectbox/objectbox.dart';
 @Entity()
 class ExpenseModel {
   @Id()
-  int id = 0;
+   int id = 0;
 
   @Index()
-  DateTime date;
+ final  DateTime date;
 
-  double value;
+ final  double value;
 
-  String note;
+  final String note;
 
   ExpenseModel({required this.date, required this.value, required this.note});
 }

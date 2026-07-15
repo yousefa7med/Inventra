@@ -11,7 +11,7 @@ class AppColors {
   static const Color red = Color(0xFFBa1a1a);
   static const Color lightBlue = Color(0xFF5872C5);
   static const Color lightRed = Color(0xFFFFDAD6);
-  static const Color serface = Color(0xFFF9F9F9);
+  static const Color surface = Color(0xFFF9F9F9);
 
   // Neutrals
   static const Color white = Color(0xFFFFFFFF);
@@ -22,6 +22,8 @@ class AppColors {
 
   // Grey shades
   static const Color greyLight100 = Color(0xFFF5F5F5);
+  static const Color greyMedium200 = Color(0xFFEEEEEE);
+  static const Color greyMedium300 = Color(0xFFE0E0E0);
   static const Color greyMedium400 = Color(0xFFBDBDBD);
   static const Color greyMedium500 = Color(0xFF9E9E9E);
 

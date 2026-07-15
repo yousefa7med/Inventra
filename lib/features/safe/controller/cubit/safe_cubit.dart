@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
-import 'package:Inventra/core/models/balance_audit_entry.dart';
+import 'package:Inventra/core/models/balance_audit_entry_model.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
-import 'package:Inventra/core/models/expense.dart';
-import 'package:Inventra/core/models/safe_balance.dart';
+import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/utils/result.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit_interface.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
@@ -57,6 +57,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
   @override
   Future<Result<void>> load() async {
+    print("load");
     emit(SafeLoading());
     try {
       final balance = _repository.getBalance();
@@ -97,12 +98,12 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       _repository.addExpense(expense);
 
       final balance = _repository.getBalance();
-      final newBalance = balance.currentAmount - value;
-      balance.currentAmount = newBalance;
+      final newBalance = balance.currentBalance - value;
+      balance.currentBalance = newBalance;
       balance.lastUpdated = DateTime.now();
       _repository.updateBalance(newBalance);
 
-      final auditEntry = BalanceAuditEntry(
+      final auditEntry = BalanceAuditEntryModel(
         type: BalanceChangeType.expense.index,
         amount: -value,
         referenceId: expense.id,
@@ -197,11 +198,11 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
     try {
       final current = _repository.getBalance();
-      final delta = newBalance - current.currentAmount;
+      final delta = newBalance - current.currentBalance;
 
       _repository.updateBalance(newBalance);
 
-      final auditEntry = BalanceAuditEntry(
+      final auditEntry = BalanceAuditEntryModel(
         type: BalanceChangeType.manualAdjustment.index,
         amount: delta,
         referenceId: 0,
@@ -213,8 +214,8 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       final expenses = _repository.getAllExpenses();
       _applyFiltersAndEmit(
         expenses,
-        balance: SafeBalance(
-          currentAmount: newBalance,
+        balance: SafeBalanceModel(
+          currentBalance: newBalance,
           lastUpdated: DateTime.now(),
         ),
       );
@@ -249,7 +250,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
   //     _repository.updateBalance(newBalance);
 
-  //     final auditEntry = BalanceAuditEntry(
+  //     final auditEntry = BalanceAuditEntryModel(
   //       type: type.index,
   //       amount: amount,
   //       referenceId: referenceId,
@@ -261,7 +262,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   //     final expenses = _repository.getAllExpenses();
   //     _applyFiltersAndEmit(
   //       expenses,
-  //       balance: SafeBalance(
+  //       balance: SafeBalanceModel(
   //         currentAmount: newBalance,
   //         lastUpdated: DateTime.now(),
   //       ),
@@ -273,13 +274,39 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   //   }
   // }
 
+  // Add this method for increasing safe balance from sell invoice
+  Future<void> increaseSafeBalance(double amount) async {
+    if (amount <= 0) return;
+    final current = _repository.getBalance();
+    final newBalance = current.currentBalance + amount;
+    _repository.updateBalance(newBalance);
+
+    final auditEntry = BalanceAuditEntryModel(
+      type: BalanceChangeType.sellInvoice.index,
+      amount: amount,
+      referenceId: 0, // Will be set by caller
+      timestamp: DateTime.now(),
+      note: 'فاتورة بيع',
+    );
+    _repository.addAuditEntry(auditEntry);
+
+    final expenses = _repository.getAllExpenses();
+    _applyFiltersAndEmit(
+      expenses,
+      balance: SafeBalanceModel(
+        currentBalance: newBalance,
+        lastUpdated: DateTime.now(),
+      ),
+    );
+  }
+
   void _applyFiltersAndEmit(
     List<ExpenseModel> expenses, {
-    SafeBalance? balance,
+    SafeBalanceModel? balance,
   }) {
     final filtered = _applyFilters(expenses);
     final currentBalance =
-        balance?.currentAmount ??
+        balance?.currentBalance ??
         (state is SafeLoaded ? (state as SafeLoaded).balance : 0);
     emit(
       SafeLoaded(
@@ -323,7 +350,8 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
     if (_searchText != null && _searchText!.isNotEmpty) {
       final normalizedSearch = _searchText!.normalizeArabic();
       result = result
-          .where((e) => e.note.normalizeArabic().contains(normalizedSearch)).toList();
+          .where((e) => e.note.normalizeArabic().contains(normalizedSearch))
+          .toList();
     }
 
     return result;

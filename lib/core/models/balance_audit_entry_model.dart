@@ -1,23 +1,23 @@
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class BalanceAuditEntry {
+class BalanceAuditEntryModel {
   @Id()
   int id = 0;
 
   @Index()
-  int type;
+ final int type;
 
-  double amount;
+ final double amount;
 
-  int referenceId;
+final  int referenceId;
 
   @Index()
-  DateTime timestamp;
+ final DateTime timestamp;
 
-  String? note;
+ final String? note;
 
-  BalanceAuditEntry({
+  BalanceAuditEntryModel({
     required this.type,
     required this.amount,
     required this.referenceId,

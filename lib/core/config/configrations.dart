@@ -8,13 +8,15 @@ import 'package:Inventra/features/dashboard/presentation/views/add_product_view.
 import 'package:Inventra/features/dashboard/presentation/views/add_supplier_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/inventory/presentation/views/edit_product_view.dart';
+import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
+import 'package:Inventra/features/selling_invoice/presentation/views/add_product_to_invoice_view.dart';
+import 'package:Inventra/features/selling_invoice/presentation/views/selling_invoice_view.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
@@ -63,7 +65,7 @@ class AppRouter {
                 child: EditProductView(product: product),
               ),
         );
- 
+
       case AppRoutes.addExpenseView:
         return pageRouteBuilderMethod(
           settings: settings,
@@ -71,6 +73,27 @@ class AppRouter {
               BlocProvider.value(
                 value: GetIt.instance<SafeCubit>(),
                 child: const AddExpenseView(),
+              ),
+        );
+
+      case AppRoutes.sellingInvoiceView:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BlocProvider.value(
+                value: GetIt.instance<SellInvoiceCubit>()..loadCustomers(),
+                child: const SellingInvoiceView(),
+              ),
+        );
+
+      case AppRoutes.addProductToInvoice:
+        final cubit = GetIt.instance<SellInvoiceCubit>();
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BlocProvider.value(
+                value: cubit..loadProducts(''),
+                child: const AddProductToInvoiceView(),
               ),
         );
 
@@ -92,4 +115,6 @@ abstract class AppRoutes {
   static const String editproductView = '/editproductView';
   static const String addcustomerView = '/addcustomerView';
   static const String addExpenseView = '/addExpenseView';
+  static const String sellingInvoiceView = '/selling-invoice';
+  static const String addProductToInvoice = '/add-product-to-invoice';
 }

@@ -77,7 +77,7 @@ class _SafeSearchAndFilterState extends State<SafeSearchAndFilter> {
             if (timer?.isActive ?? false) {
               timer!.cancel();
             }
-            timer = Timer(const Duration(milliseconds: 500), () {
+            timer = Timer(const Duration(milliseconds: 300), () {
               context.read<SafeCubit>().setSearchFilter(
                 query.isEmpty ? null : query,
               );

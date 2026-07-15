@@ -4,7 +4,11 @@ import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/observer.dart';
 import 'package:Inventra/core/utilities/app_theme.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
+import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
+import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository_impl.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
+import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,10 +83,21 @@ Future<void> configureDependencies() async {
 
   // 3. Repositories
   final safeRepository = SafeRepositoryImpl(objectBoxServices);
-  GetIt.instance.registerLazySingleton<SafeRepositoryImpl>(() => safeRepository);
+  GetIt.instance.registerLazySingleton<SafeRepository>(() => safeRepository);
+
+  final sellInvoiceRepository = SellInvoiceRepositoryImpl(objectBoxServices);
+  GetIt.instance
+      .registerLazySingleton<SellInvoiceRepository>(() => sellInvoiceRepository);
 
   // 4. Cubits (LazySingletons for app-wide state)
   GetIt.instance.registerLazySingleton<AppCubit>(() => AppCubit());
   GetIt.instance.registerLazySingleton<ProductCubit>(() => ProductCubit());
-  GetIt.instance.registerLazySingleton<SafeCubit>(() => SafeCubit(safeRepository));
+  GetIt.instance
+      .registerLazySingleton<SafeCubit>(() => SafeCubit(safeRepository));
+  GetIt.instance.registerLazySingleton<SellInvoiceCubit>(() =>
+      SellInvoiceCubit(GetIt.instance<SellInvoiceRepository>()));
+
+  // 5. ObjectBox Boxes for new entities
+  GetIt.instance
+      .registerLazySingleton(() => objectBoxServices.sellInvoiceItemsBox);
 }

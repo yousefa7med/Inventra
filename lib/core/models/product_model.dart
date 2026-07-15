@@ -6,19 +6,23 @@ class ProductModel {
   int id = 0;
   final String name;
   final String? imgPath;
-  final int quantity;
+  int quantity;
   final double buyingPrice;
   final double saleingPrice;
   final double wholesalePrice;
   final String? barcode;
 
+  // Backlink for sell invoice items
+  // @Backlink('productRef')
+  // final ToMany<SellInvoiceItemModel> invoiceItems = ToMany<SellInvoiceItemModel>();
+
   ProductModel({
     required this.name,
-     this.imgPath,
+    this.imgPath,
     required this.quantity,
     required this.buyingPrice,
     required this.saleingPrice,
     required this.wholesalePrice,
-     this.barcode,
+    this.barcode,
   });
 }

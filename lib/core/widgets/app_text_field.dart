@@ -16,6 +16,7 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.hintText,
     this.focusNode,
+    this.onSuffixTap,
   });
   final String? label;
   final String? hintText;
@@ -28,6 +29,7 @@ class AppTextField extends StatelessWidget {
   final String? suffixText;
   final void Function(String)? onChanged;
   final FocusNode? focusNode;
+  final VoidCallback? onSuffixTap;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -38,7 +40,12 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       focusNode: focusNode,
       decoration: InputDecoration(
-        suffixIcon: suffixIcon,
+        suffixIcon: (suffixIcon != null || onSuffixTap != null)
+          ? InkWell(
+              onTap: onSuffixTap,
+              child: suffixIcon ?? const Icon(Icons.arrow_drop_down),
+            )
+          : null,
         suffixText: suffixText,
         prefixIcon: prefixIcon,
         border: OutlineInputBorder(

@@ -20,7 +20,6 @@ flutter run
 | Get deps | `flutter pub get` |
 | Codegen (ObjectBox) | `dart run build_runner build --delete-conflicting-outputs` |
 | Run app | `flutter run` |
-| Run tests | `flutter test` |
 | Analyze | `flutter analyze` |
 
 ## Project Structure
@@ -86,10 +85,12 @@ lib/
 - **Drawer Navigation**: Use `AppNavigation.pushName(context, AppRoutes.drawerRouteName)`
 - **Colors**: NEVER hardcode colors. Use `AppColors` class only. If a color is missing, add it to `AppColors` first, then use it everywhere.
 - **TextStyles**: NEVER hardcode `TextStyle()`. Use `AppTextStyle` class only. If a style is missing, add it to `AppTextStyle` first, then use it everywhere.
+- **Widget Styles/Decorations**: NEVER hardcode `BoxDecoration`, `InputDecoration`, `ButtonStyle`, `MenuStyle`, or similar in custom widgets. Define reusable styles in `AppTheme` (component themes: `elevatedButtonTheme`, `inputDecorationTheme`, `dropdownMenuTheme`, `cardTheme`, etc.) and access via `Theme.of(context)` or `AppTheme.lightTheme/darkTheme`. If a theme is missing, add it to `AppTheme` first.
 - **TextFields**: NEVER use raw `TextFormField`/`TextField`. Use `AppTextField` from `core/widgets/app_text_field.dart` only.
 - **Buttons**: NEVER use raw `ElevatedButton` in `SizedBox`. Use `AppButton` from `core/widgets/app_button.dart` for full-width buttons only.
 - **Widgets**: NEVER use inline `Widget Function()` builders or `_build*()` methods. Extract into proper widget classes — feature-specific in `features/*/presentation/widgets/`, common in `core/widgets/`.
 - **BlocBuilder States**: In `BlocBuilder`, each state body (e.g., `SafeLoading`, `SafeError`, `SafeLoaded`) MUST be a separate widget class (e.g., `SafeLoadingBody`, `SafeErrorBody`, `SafeLoadedBody`).
+- **Const Correctness**: ALWAYS use `const` constructors for immutable widgets, literals, and declarations. Prefer `const` everywhere possible — this is enforced by lint rules (`prefer_const_constructors`, `prefer_const_literals_to_create_immutables`, `prefer_const_declarations`). Avoid unnecessary object allocation in build methods.
 
 ## State Management Details
 - Uses `flutter_bloc` ^9.1.1 with Cubit pattern (not Bloc)
@@ -142,12 +143,11 @@ lib/
 
 ## Gotchas
 1. **ObjectBox requires codegen** - run `build_runner` after model changes
-2. **Test file broken** - `test/widget_test.dart` imports `package:inventra/main.dart` (should be `Inventra`)
-3. **No analysis_options.yaml** - uses defaults only
-4. **ThemeMode hardcoded to light** - `main.dart:54` ignores `AppCubit` theme state
-5. **Arabic-only** - no localization delegates for other locales
-6. **DI order matters** - CacheHelper must init before ObjectBoxServices (`main.dart:67-74`)
-7. **ProductCubit** - Registered as lazy singleton but `GetIt.instance<ProductCubit>()` used directly in router (`configrations.dart:56`)
+2. **No analysis_options.yaml** - uses defaults only
+3. **ThemeMode hardcoded to light** - `main.dart:54` ignores `AppCubit` theme state
+4. **Arabic-only** - no localization delegates for other locales
+5. **DI order matters** - CacheHelper must init before ObjectBoxServices (`main.dart:67-74`)
+6. **ProductCubit** - Registered as lazy singleton but `GetIt.instance<ProductCubit>()` used directly in router (`configrations.dart:56`)
 
 ## Common Tasks
 

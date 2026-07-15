@@ -62,7 +62,7 @@ class _InventoryViewState extends State<InventoryView> {
                   if (timer?.isActive ?? false) {
                     timer!.cancel();
                   }
-                  timer = Timer(const Duration(milliseconds: 500), () {
+                  timer = Timer(const Duration(milliseconds: 300), () {
                     ProductCubit.get(context).filterProducts(query);
                   });
                 },
