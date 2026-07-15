@@ -14,6 +14,7 @@ import 'package:Inventra/features/selling_invoice/presentation/views/selling_inv
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart';
+import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -97,6 +98,34 @@ class AppRouter {
               ),
         );
 
+      case AppRoutes.allCustomers:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Scaffold(body: Center(child: Text('جميع العملاء'))),
+        );
+
+      case AppRoutes.allSuppliers:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Scaffold(body: Center(child: Text('جميع الموردين'))),
+        );
+
+      case AppRoutes.buyInvoices:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const Scaffold(body: Center(child: Text('فواتير المشتريات'))),
+        );
+
+      case AppRoutes.settings:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const SettingsView(),
+        );
+
       default:
         return pageRouteBuilderMethod(
           settings: settings,
@@ -117,4 +146,9 @@ abstract class AppRoutes {
   static const String addExpenseView = '/addExpenseView';
   static const String sellingInvoiceView = '/selling-invoice';
   static const String addProductToInvoice = '/add-product-to-invoice';
+
+  static const String allCustomers = '/all-customers';
+  static const String allSuppliers = '/all-suppliers';
+  static const String buyInvoices = '/buy-invoices';
+  static const String settings = '/settings';
 }

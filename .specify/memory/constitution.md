@@ -1,12 +1,11 @@
 <!--
 ## Sync Impact Report
-- **Version change**: 1.8.0 → 1.9.0 (MINOR — added BlocListener listenWhen optimization requirement to Principles IV & VIII)
+- **Version change**: 1.9.0 → 1.10.0 (MINOR — added Spec Branch Naming requirement to Governance section)
 - **Modified principles**: 
-  - IV. Performance & Resource Efficiency (added explicit BlocListener listenWhen guidance)
-  - VIII. Custom Widget Architecture (expanded BlocListener requirements to include listenWhen)
-- **Added sections**: None
+  - Governance (added mandatory spec branch naming convention: feature/<spec-name>)
+- **Added sections**: Spec Branch Naming (MANDATORY) under Governance
 - **Removed sections**: None
-- **Templates requiring updates**: ⚠ pending — `.specify/templates/plan-template.md`, `.specify/templates/spec-template.md`, `.specify/templates/tasks-template.md` if they reference principle numbers
+- **Templates requiring updates**: ⚠ pending — `.specify/templates/plan-template.md`, `.specify/templates/spec-template.md`, `.specify/templates/tasks-template.md` if they reference governance rules
 - **Follow-up TODOs**: None
 
 ## Previous Sync Impact Report
@@ -96,6 +95,9 @@ This Constitution supersedes all ad-hoc practices, team conventions, and prior a
 4. Version bump per SemVer: MAJOR for principle removal/redefinition, MINOR for new principle/section, PATCH for clarifications
 5. Update of `CHANGELOG.md`, `AGENTS.md`, and affected templates (`.specify/templates/*`)
 
+### Spec Branch Naming (MANDATORY)
+Every spec/feature MUST be developed in its own Git branch named `feature/<spec-name>` (kebab-case, descriptive). The branch name MUST match the spec filename (e.g., `feature/add-product-barcode-scanning` for `specs/001-add-product-barcode-scanning.md`). Direct commits to `main`/`master` are FORBIDDEN for feature work. All spec work MUST go through a Pull Request with the branch name clearly indicating the feature scope.
+
 All PR reviews MUST verify compliance with Core Principles I–VIII and Quality Gates. Complexity (new deps, patterns, files >300 LOC) MUST be justified in PR description. Runtime guidance lives in `AGENTS.md`—keep both docs in sync.
 
-**Version**: 1.9.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-15
+**Version**: 1.10.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-15

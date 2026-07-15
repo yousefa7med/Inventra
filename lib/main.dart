@@ -86,18 +86,22 @@ Future<void> configureDependencies() async {
   GetIt.instance.registerLazySingleton<SafeRepository>(() => safeRepository);
 
   final sellInvoiceRepository = SellInvoiceRepositoryImpl(objectBoxServices);
-  GetIt.instance
-      .registerLazySingleton<SellInvoiceRepository>(() => sellInvoiceRepository);
+  GetIt.instance.registerLazySingleton<SellInvoiceRepository>(
+    () => sellInvoiceRepository,
+  );
 
   // 4. Cubits (LazySingletons for app-wide state)
   GetIt.instance.registerLazySingleton<AppCubit>(() => AppCubit());
   GetIt.instance.registerLazySingleton<ProductCubit>(() => ProductCubit());
-  GetIt.instance
-      .registerLazySingleton<SafeCubit>(() => SafeCubit(safeRepository));
-  GetIt.instance.registerLazySingleton<SellInvoiceCubit>(() =>
-      SellInvoiceCubit(GetIt.instance<SellInvoiceRepository>()));
+  GetIt.instance.registerLazySingleton<SafeCubit>(
+    () => SafeCubit(safeRepository),
+  );
+  GetIt.instance.registerLazySingleton<SellInvoiceCubit>(
+    () => SellInvoiceCubit(GetIt.instance<SellInvoiceRepository>()),
+  );
 
   // 5. ObjectBox Boxes for new entities
-  GetIt.instance
-      .registerLazySingleton(() => objectBoxServices.sellInvoiceItemsBox);
+  GetIt.instance.registerLazySingleton(
+    () => objectBoxServices.sellInvoiceItemsBox,
+  );
 }
