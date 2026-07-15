@@ -5,6 +5,7 @@ import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
@@ -45,16 +46,19 @@ class InvoiceTotalsCard extends StatelessWidget {
                     Text(AppStrings.discount, style: AppTextStyle.medium14),
                     const Gap(16),
                     Expanded(
-                      child: AppTextField(
-                        hintText: '0.00',
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
+                      child: SizedBox(
+                        height: 42.h,
+                        child: AppTextField(
+                          hintText: '0.00',
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          onChanged: (value) {
+                            final discount = double.tryParse(value) ?? 0.0;
+                            cubit.setDiscount(discount);
+                          },
+                          suffixText: AppStrings.egp,
                         ),
-                        onChanged: (value) {
-                          final discount = double.tryParse(value) ?? 0.0;
-                          cubit.setDiscount(discount);
-                        },
-                        suffixText: AppStrings.egp,
                       ),
                     ),
                   ],

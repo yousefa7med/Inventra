@@ -13,7 +13,6 @@ import 'package:Inventra/features/selling_invoice/presentation/widgets/invoice_p
 import 'package:Inventra/features/selling_invoice/presentation/widgets/invoice_totals_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
 class SellingInvoiceView extends StatelessWidget {
   const SellingInvoiceView({super.key});
@@ -22,62 +21,74 @@ class SellingInvoiceView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: const CustomAppBar(title: AppStrings.invoiceFormTitle),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CustomerDropdownMenu(),
-                const Gap(16),
-                const InvoiceProductList(),
-                const Gap(16),
-                const InvoiceTotalsCard(),
-                const Gap(16),
-
-                BlocListener<SellInvoiceCubit, SellInvoiceState>(
-                  listener: (context, state) {
-                    if (state is SellInvoiceError) {
-                      showSnackBar(
-                        context,
-                        state.message,
-                        color: AppColors.error,
-                      );
-                    } else if (state is SellInvoiceConfirmed) {
-                      showSnackBar(
-                        context,
-                        "تم اضافة الفاتورة بنجاح",
-                        color: AppColors.success,
-                      );
-                    }
-                  },
-                  child: AppButton(
-                    onPressed: () async {
-                      if (context
-                          .read<SellInvoiceCubit>()
-                          .validateSellInvoice()) {
-                        await context.read<SellInvoiceCubit>().confirmInvoice();
-                        AppNavigation.pop(context: context);
-                      }
-                    },
-                    child: const Text(
-                      AppStrings.confirmInvoice,
-                      style: AppTextStyle.navBar,
+      child: BlocListener<SellInvoiceCubit, SellInvoiceState>(
+        listener: (context, state) {
+          if (state is SellInvoiceError) {
+            showSnackBar(context, state.message, color: AppColors.error);
+          } else if (state is SellInvoiceConfirmed) {
+            showSnackBar(
+              context,
+              "تم اضافة الفاتورة بنجاح",
+              color: AppColors.success,
+            );
+          }
+        },
+        child: Scaffold(
+          appBar: const CustomAppBar(title: AppStrings.invoiceFormTitle),
+          body: SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                // Customer Dropdown
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: CustomerDropdownMenu(),
+                  ),
+                ),
+                // Invoice Product List (uses slivers internally)
+                const SliverInvoiceProductList(),
+                // Invoice Totals Card
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: InvoiceTotalsCard(),
+                  ),
+                ),
+                // Confirm Button
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: AppButton(
+                      onPressed: () async {
+                        if (context
+                            .read<SellInvoiceCubit>()
+                            .validateSellInvoice()) {
+                          await context
+                              .read<SellInvoiceCubit>()
+                              .confirmInvoice();
+                          if (context.mounted) {
+                            AppNavigation.pop(context: context);
+                          }
+                        }
+                      },
+                      child: const Text(
+                        AppStrings.confirmInvoice,
+                        style: AppTextStyle.navBar,
+                      ),
                     ),
                   ),
                 ),
+                const SliverToBoxAdapter(child: SizedBox(height: 100)),
               ],
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => AppNavigation.pushName(
-            context: context,
-            route: AppRoutes.addProductToInvoice,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => AppNavigation.pushName(
+              context: context,
+              route: AppRoutes.addProductToInvoice,
+            ),
+            child: const Icon(Icons.add),
           ),
-          child: const Icon(Icons.add),
         ),
       ),
     );

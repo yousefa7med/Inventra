@@ -41,11 +41,11 @@ class AppTextField extends StatelessWidget {
       focusNode: focusNode,
       decoration: InputDecoration(
         suffixIcon: (suffixIcon != null || onSuffixTap != null)
-          ? InkWell(
-              onTap: onSuffixTap,
-              child: suffixIcon ?? const Icon(Icons.arrow_drop_down),
-            )
-          : null,
+            ? InkWell(
+                onTap: onSuffixTap,
+                child: suffixIcon ?? const Icon(Icons.arrow_drop_down),
+              )
+            : null,
         suffixText: suffixText,
         prefixIcon: prefixIcon,
         border: OutlineInputBorder(
@@ -67,6 +67,7 @@ class AppTextField extends StatelessWidget {
         labelText: label,
         labelStyle: AppTextStyle.regular14,
         hintText: hintText,
+        hintStyle: AppTextStyle.regular14,
       ),
     );
   }

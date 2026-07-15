@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class InvoiceProductList extends StatelessWidget {
-  const InvoiceProductList({super.key});
+class SliverInvoiceProductList extends StatelessWidget {
+  const SliverInvoiceProductList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +21,24 @@ class InvoiceProductList extends StatelessWidget {
           curr is SellInvoiceRemoveProduct ||
           curr is SellInvoiceUpdateProductQuantity,
       builder: (context, state) {
-        log("build");
+        log("sliver build");
         final cubit = context.read<SellInvoiceCubit>();
 
         if (cubit.items.isEmpty) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                AppStrings.noProductsAdded,
-                style: AppTextStyle.regular12.copyWith(color: AppColors.grey),
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  AppStrings.noProductsAdded,
+                  style: AppTextStyle.regular12.copyWith(color: AppColors.grey),
+                ),
               ),
             ),
           );
         }
 
-        return ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+        return SliverList.separated(
           itemCount: cubit.items.length,
           separatorBuilder: (_, _) => const Gap(8),
           itemBuilder: (context, index) {

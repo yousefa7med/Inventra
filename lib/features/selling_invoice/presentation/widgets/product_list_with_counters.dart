@@ -34,3 +34,35 @@ class ProductListWithCounters extends StatelessWidget {
     );
   }
 }
+
+class ProductListWithCountersSliver extends StatelessWidget {
+  const ProductListWithCountersSliver({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SellInvoiceCubit, SellInvoiceState>(
+      builder: (context, state) {
+        final cubit = context.read<SellInvoiceCubit>();
+
+        if (cubit.products.isEmpty && state is! SellInvoiceLoading) {
+          return const SliverToBoxAdapter(
+            child: EmptyState(
+              icon: Icons.production_quantity_limits_outlined,
+              message: AppStrings.noProductsFound,
+            ),
+          );
+        }
+
+        return SliverPadding(
+          sliver: SliverList.builder(
+            itemCount: cubit.products.length,
+            itemBuilder: (context, index) {
+              return ProductCardWithCounter(product: cubit.products[index]);
+            },
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+        );
+      },
+    );
+  }
+}
