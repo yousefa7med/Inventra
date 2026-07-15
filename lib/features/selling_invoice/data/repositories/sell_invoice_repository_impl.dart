@@ -5,6 +5,7 @@ import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/balance_audit_entry_model.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
 import 'package:Inventra/core/models/customer_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/sell_invoice_item_model.dart';
@@ -46,12 +47,10 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     log(searchText);
     late final List<ProductModel> products;
     if (searchText.isEmpty) {
-      print(searchText.isEmpty);
       return getAllProducts();
     }
 
     if (RegExp(r'^\d+$').hasMatch(searchText)) {
-      print("RegExphasMatch(searchText)");
       final query = _objectBox.productsBox
           .query(ProductModel_.barcode.contains(searchText))
           .build();
@@ -60,7 +59,6 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
 
       return products;
     }
-    print("object");
     final query = _objectBox.productsBox
         .query(ProductModel_.name.contains(searchText, caseSensitive: false))
         .order(ProductModel_.name)
@@ -78,7 +76,6 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
   }) {
     SellingInvoiceModel? savedInvoice;
     double totalPrice = 0.0;
-
     _objectBox.store.runInTransaction(TxMode.write, () {
       final invoice = SellingInvoiceModel(
         date: DateTime.now(),
@@ -103,10 +100,13 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
       savedInvoice = invoice;
     });
 
-    final balance = _objectBox.safeBalanceBox.get(1);
-    balance?.currentBalance += (totalPrice - (discount ?? 0));
-    _objectBox.safeBalanceBox.put(balance!);
-    // Record BalanceAuditEntry for sell invoice
+    final balance =
+        _objectBox.safeBalanceBox.get(1) ??
+        SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
+
+    balance.currentBalance += (totalPrice - (discount ?? 0));
+    _objectBox.safeBalanceBox.put(balance);
+
     final auditEntry = BalanceAuditEntryModel(
       type: BalanceChangeType.sellInvoice.index,
       amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
