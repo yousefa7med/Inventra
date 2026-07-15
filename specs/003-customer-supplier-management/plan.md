@@ -62,6 +62,8 @@ This feature implements Customer and Supplier management screens with search, ca
 - AppTextField/AppButton for forms ✓
 - No raw Navigator.of(context) / ScaffoldMessenger.of(context) ✓
 - url_launcher dependency needs to be added
+- **Component themes** (cardTheme, inputDecorationTheme, elevatedButtonTheme) defined in AppTheme and accessed via Theme.of(context) ✓
+- **Accessibility**: Arabic semantic labels, 4.5:1 contrast via AppColors, touch targets ≥48dp ✓
 
 ## Project Structure
 
@@ -131,6 +133,14 @@ lib/
 ```
 
 **Structure Decision**: Following existing feature-based architecture. New features get dedicated folders under `features/` with controller/cubit and presentation/views/widgets subdirectories, mirroring `features/inventory/` and `features/safe/` patterns.
+
+### Architecture Decisions
+
+**Cubit Separation**: CustomerCubit and SupplierCubit are separate (not sharing a base class) because:
+- Different model types (CustomerModel vs SupplierModel)
+- Different query fields (Customer searches by `name`, Supplier searches by `name` (contact person))
+- Different form field counts (3 vs 4 fields)
+- YAGNI principle (Constitution V) - abstraction not justified for current complexity
 
 ## Complexity Tracking
 

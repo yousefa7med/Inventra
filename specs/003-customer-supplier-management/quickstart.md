@@ -175,7 +175,7 @@ flutter run
 
 ---
 
-### Test 10: RTL & Theme Compliance
+### Test 10: RTL & Constitution Compliance
 
 **Steps**:
 1. Verify all text is Arabic
@@ -186,8 +186,13 @@ flutter run
 6. Verify AppButton used for save buttons
 7. Verify AppNavigation.pushName for all navigation
 8. Verify showSnackBar helper for all snackbars
+9. Verify custom widgets use Theme.of(context).cardTheme, inputDecorationTheme, elevatedButtonTheme
+10. Verify BlocBuilder uses buildWhen, BlocListener uses listenWhen
+11. Verify const constructors used for immutable widgets
+12. Verify flutter analyze shows zero errors/warnings
+13. Verify flutter build apk --debug compiles without warnings
 
-**Expected**: Full compliance with project conventions
+**Expected**: Full compliance with project conventions and Constitution Principles I-X
 
 ---
 
@@ -240,7 +245,7 @@ lib/
 ## Key Integration Points
 
 1. **AppRoutes** (core/config/configrations.dart):
-   - Add `editCustomerView` and `editSupplierView` constants
+   - Add `editCustomerView` and `editSupplierView` constants (camelCase)
    - Add cases in `AppRouter.generateRoute()` with model arguments
 
 2. **GetIt Registration** (main.dart):
