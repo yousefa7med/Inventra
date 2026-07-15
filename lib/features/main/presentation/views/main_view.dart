@@ -4,7 +4,7 @@ import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_global_keys.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
-import 'package:Inventra/core/widgets/custom_drawer.dart';
+import 'package:Inventra/core/widgets/app_drawer.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/operations/presentation/views/operations_view.dart';
@@ -23,7 +23,7 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       key: AppGlobalKeys.mainScaffold,
-      drawer: const CustomDrawer(),
+      drawer: const AppDrawer(),
       resizeToAvoidBottomInset: false,
       body: PersistentTabView(
         onTabChanged: (value) {

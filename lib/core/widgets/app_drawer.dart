@@ -9,8 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class CustomDrawer extends StatelessWidget {
         statusBarBrightness: Brightness.light,
       ),
       child: Drawer(
-        width: 280.w,
+        width: MediaQuery.sizeOf(context).width * 0.75,
         child: Column(
           children: [
             const _DrawerHeader(),
