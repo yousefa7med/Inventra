@@ -133,7 +133,7 @@ class _InventoryViewState extends State<InventoryView> {
                                       await AppNavigation.pushName(
                                         rootNavigator: true,
                                         context: context,
-                                        route: AppRoutes.editproductView,
+                                        route: AppRoutes.productFormView,
                                         argument: product,
                                       );
                                       if (!context.mounted) return;

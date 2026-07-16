@@ -1,4 +1,3 @@
-import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
@@ -8,10 +7,11 @@ import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
+import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get_it/get_it.dart';
 
 class SupplierFormView extends StatefulWidget {
   const SupplierFormView({super.key, this.supplier});
@@ -148,7 +148,7 @@ class _SupplierFormViewState extends State<SupplierFormView> {
                           );
                         }
 
-                        updateSupplier(supplier);
+                        context.read<SupplierCubit>().updateSupplier(supplier);
 
                         AppNavigation.pop(context: context);
                       }
@@ -165,9 +165,5 @@ class _SupplierFormViewState extends State<SupplierFormView> {
         ),
       ),
     );
-  }
-
-  void updateSupplier(SupplierModel supplier) {
-    GetIt.instance<ObjectBoxServices>().suppliersBox.put(supplier);
   }
 }

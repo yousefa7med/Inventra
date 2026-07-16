@@ -1,7 +1,6 @@
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
-import 'package:Inventra/core/utilities/app_global_keys.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utilities/assets.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +37,7 @@ class AppDrawer extends StatelessWidget {
                         context: context,
                         route: AppRoutes.allCustomers,
                       );
-                      Future.delayed(const Duration(milliseconds: 125), () {
-                        AppGlobalKeys.mainScaffold.currentState?.closeDrawer();
-                      });
+                   
                     },
                   ),
                   _DrawerItem(
@@ -51,9 +48,7 @@ class AppDrawer extends StatelessWidget {
                         context: context,
                         route: AppRoutes.allSuppliers,
                       );
-                      Future.delayed(const Duration(milliseconds: 125), () {
-                        AppGlobalKeys.mainScaffold.currentState?.closeDrawer();
-                      });
+                  
                     },
                   ),
                   _DrawerItem(
@@ -64,9 +59,7 @@ class AppDrawer extends StatelessWidget {
                         context: context,
                         route: AppRoutes.buyInvoices,
                       );
-                      Future.delayed(const Duration(milliseconds: 125), () {
-                        AppGlobalKeys.mainScaffold.currentState?.closeDrawer();
-                      });
+                     
                     },
                   ),
                   const _DrawerDivider(),
@@ -78,9 +71,7 @@ class AppDrawer extends StatelessWidget {
                         context: context,
                         route: AppRoutes.settings,
                       );
-                      Future.delayed(const Duration(milliseconds: 125), () {
-                        AppGlobalKeys.mainScaffold.currentState?.closeDrawer();
-                      });
+              
                     },
                   ),
                   const _DrawerDivider(),

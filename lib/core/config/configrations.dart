@@ -51,7 +51,10 @@ class AppRouter {
         return pageRouteBuilderMethod(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
-              SupplierFormView(supplier: supplier),
+              BlocProvider.value(
+                value: GetIt.instance<SupplierCubit>(),
+                child: SupplierFormView(supplier: supplier),
+              ),
         );
 
       case AppRoutes.customerFormView:
@@ -59,7 +62,10 @@ class AppRouter {
         return pageRouteBuilderMethod(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
-              CustomerFormView(customer: customer),
+              BlocProvider.value(
+                value: GetIt.instance<CustomerCubit>(),
+                child: CustomerFormView(customer: customer),
+              ),
         );
 
       case AppRoutes.addExpenseView:

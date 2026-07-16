@@ -3,6 +3,9 @@ import 'package:Inventra/core/controller/controllers/app_cubit/app_cubit.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/observer.dart';
 import 'package:Inventra/core/utilities/app_theme.dart';
+import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
+import 'package:Inventra/features/customers/data/repositories/customer_repository.dart';
+import 'package:Inventra/features/customers/data/repositories/customer_repository_impl.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
@@ -10,6 +13,9 @@ import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository_impl.dart';
+import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
+import 'package:Inventra/features/suppliers/data/repositories/supplier_repository.dart';
+import 'package:Inventra/features/suppliers/data/repositories/supplier_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -90,8 +96,24 @@ Future<void> configureDependencies() async {
     () => sellInvoiceRepository,
   );
 
+  final customerRepository = CustomerRepositoryImpl(objectBoxServices);
+  GetIt.instance.registerLazySingleton<CustomerRepository>(
+    () => customerRepository,
+  );
+
+  final supplierRepository = SupplierRepositoryImpl(objectBoxServices);
+  GetIt.instance.registerLazySingleton<SupplierRepository>(
+    () => supplierRepository,
+  );
+
   // 4. Cubits (LazySingletons for app-wide state)
   GetIt.instance.registerLazySingleton<AppCubit>(() => AppCubit());
+  GetIt.instance.registerLazySingleton<CustomerCubit>(
+    () => CustomerCubit(GetIt.instance<CustomerRepository>()),
+  );
+  GetIt.instance.registerLazySingleton<SupplierCubit>(
+    () => SupplierCubit(repository: GetIt.instance<SupplierRepository>()),
+  );
   GetIt.instance.registerLazySingleton<ProductCubit>(() => ProductCubit());
   GetIt.instance.registerLazySingleton<SafeCubit>(
     () => SafeCubit(safeRepository),

@@ -1,5 +1,5 @@
 import 'package:Inventra/core/constants/app_strings.dart';
-import 'package:Inventra/core/widgets/empty_state.dart';
+import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
 import 'package:Inventra/features/selling_invoice/presentation/widgets/product_card_with_counter.dart';
@@ -18,7 +18,7 @@ class ProductListWithCountersSliver extends StatelessWidget {
 
         if (cubit.products.isEmpty && state is! SellInvoiceLoading) {
           return const SliverToBoxAdapter(
-            child: EmptyState(
+            child: EmptyStateWidget(
               icon: Icons.production_quantity_limits_outlined,
               message: AppStrings.noProductsFound,
             ),

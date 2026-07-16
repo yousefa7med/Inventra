@@ -1,5 +1,4 @@
-
-import 'package:Inventra/core/widgets/empty_state.dart';
+import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/presentation/views/adjust_balance_dialog.dart';
 import 'package:Inventra/features/safe/presentation/widgets/balance_card.dart';
@@ -90,7 +89,7 @@ class _SafeLoadedBodyState extends State<SafeLoadedBody> {
         ),
         if (widget.state.filteredExpenses.isEmpty)
           const SliverFillRemaining(
-            child: EmptyState(
+            child: EmptyStateWidget(
               icon: Icons.receipt_long_outlined,
               message: 'لا توجد مصروفات',
             ),

@@ -77,7 +77,7 @@ class DashboardView extends StatelessWidget {
                       AppNavigation.pushName(
                         rootNavigator: true,
                         context: context,
-                        route: AppRoutes.addproductView,
+                        route: AppRoutes.productFormView,
                       );
                     },
                     icon: Icons.shop,
@@ -91,7 +91,7 @@ class DashboardView extends StatelessWidget {
                         rootNavigator: true,
 
                         context: context,
-                        route: AppRoutes.addcustomerView,
+                        route: AppRoutes.customerFormView,
                       );
                     },
                     icon: Icons.shop,
@@ -105,7 +105,7 @@ class DashboardView extends StatelessWidget {
                         rootNavigator: true,
 
                         context: context,
-                        route: AppRoutes.addsupplierView,
+                        route: AppRoutes.supplierFormView,
                       );
                     },
                     icon: Icons.shop,

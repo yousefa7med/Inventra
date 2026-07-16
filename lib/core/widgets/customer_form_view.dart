@@ -1,4 +1,3 @@
-import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
@@ -8,10 +7,11 @@ import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
+import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:get_it/get_it.dart';
 
 class CustomerFormView extends StatefulWidget {
   const CustomerFormView({super.key, this.customer});
@@ -116,7 +116,7 @@ class _CustomerFormViewState extends State<CustomerFormView> {
                             phoneNum: phoneController.text.trim(),
                           );
                         }
-                        updateCustomer(customer);
+                        context.read<CustomerCubit>().updateCustomer(customer);
                         if (!isEditing) {
                           showSnackBar(
                             context,
@@ -146,9 +146,5 @@ class _CustomerFormViewState extends State<CustomerFormView> {
         ),
       ),
     );
-  }
-
-  void updateCustomer(CustomerModel customer) {
-    GetIt.instance<ObjectBoxServices>().customersBox.put(customer);
   }
 }
