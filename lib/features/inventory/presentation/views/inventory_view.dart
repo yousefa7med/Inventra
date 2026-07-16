@@ -63,12 +63,12 @@ class _InventoryViewState extends State<InventoryView> {
                     timer!.cancel();
                   }
                   timer = Timer(const Duration(milliseconds: 300), () {
-                    ProductCubit.get(context).filterProducts(query);
+                    context.read<ProductCubit>().searchProducts(query);
                   });
                 },
                 clearFunction: () {
                   searchController.clear();
-                  ProductCubit.get(context).filterProducts('');
+                  context.read<ProductCubit>().searchProducts('');
                 },
               ),
 
@@ -103,7 +103,7 @@ class _InventoryViewState extends State<InventoryView> {
                             Gap(16.h),
                             ElevatedButton.icon(
                               onPressed: () =>
-                                  ProductCubit.get(context).loadProducts(),
+                                  context.read<ProductCubit>().loadProducts(),
                               icon: const Icon(Icons.refresh),
                               label: const Text('إعادة المحاولة'),
                             ),
@@ -113,11 +113,10 @@ class _InventoryViewState extends State<InventoryView> {
                     );
                   }
                   if (state is ProductsLoaded) {
-                    final products = state.filteredProducts;
+                    final products = context.read<ProductCubit>().filteredProducts;
                     return Expanded(
                       child: RefreshIndicator(
-                        onRefresh: () =>
-                            ProductCubit.get(context).loadProducts(),
+                        onRefresh: () => context.read<ProductCubit>().loadProducts(),
                         child: products.isEmpty
                             ? const NoSearchResult()
                             : ListView.separated(
@@ -137,7 +136,7 @@ class _InventoryViewState extends State<InventoryView> {
                                         argument: product,
                                       );
                                       if (!context.mounted) return;
-                                      ProductCubit.get(context).loadProducts();
+                                      context.read<ProductCubit>().loadProducts();
                                     },
                                     onDeleteTap: () {
                                       appDialog(
@@ -147,9 +146,7 @@ class _InventoryViewState extends State<InventoryView> {
                                             'هل أنت متأكد من حذف "${product.name}"؟',
                                         msg: "حذف",
                                         action: () {
-                                          ProductCubit.get(
-                                            context,
-                                          ).deleteProduct(product);
+                                          context.read<ProductCubit>().deleteProduct(product);
                                         },
                                       );
                                     },

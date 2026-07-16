@@ -14,13 +14,7 @@ final class ProductLoading extends ProductState {
 }
 
 final class ProductsLoaded extends ProductState {
-  final List<ProductModel> products;
-  final List<ProductModel> filteredProducts;
-
-  const ProductsLoaded({
-    required this.products,
-    required this.filteredProducts,
-  });
+  const ProductsLoaded();
 }
 
 

@@ -1,132 +1,103 @@
-import 'dart:io';
-
-import 'package:Inventra/core/helper/arabic_normalizer.dart';
-import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/product_model.dart';
-import 'package:flutter/material.dart';
+import 'package:Inventra/features/inventory/controller/cubit/product_cubit_interface.dart';
+import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import 'package:meta/meta.dart';
 
 part 'product_state.dart';
 
-class ProductCubit extends Cubit<ProductState> {
-  ProductCubit() : super(const ProductInitial());
+class ProductCubit extends Cubit<ProductState> implements ProductCubitInterface {
+  final ProductRepository _repository;
 
-  static ProductCubit get(BuildContext context) => BlocProvider.of(context);
+  ProductCubit(this._repository) : super(const ProductInitial());
+
+  @override
+  List<ProductModel> get products => _allProducts;
+
+  @override
+  List<ProductModel> get filteredProducts => _filteredProducts;
 
   List<ProductModel> _allProducts = [];
   List<ProductModel> _filteredProducts = [];
 
-  List<ProductModel> get allProducts => _allProducts;
-  List<ProductModel> get filteredProducts => _filteredProducts;
-
+  @override
   Future<void> loadProducts() async {
     emit(const ProductLoading());
     try {
-      _allProducts = GetIt.instance<ObjectBoxServices>().productsBox.getAll();
+      _allProducts = _repository.getAllProducts();
       _filteredProducts = List.from(_allProducts);
-      emit(
-        ProductsLoaded(
-          products: _allProducts,
-          filteredProducts: _filteredProducts,
-        ),
-      );
+      emit(const ProductsLoaded());
     } catch (e) {
       emit(ProductError('فشل تحميل المنتجات: $e'));
     }
   }
 
-  void filterProducts(String query) {
-    if (query.isEmpty) {
-      _filteredProducts = List.from(_allProducts);
-    } else {
-      final normalizedQuery = query.normalizeArabic();
-      _filteredProducts = _allProducts.where((product) {
-        final nameMatch = product.name.normalizeArabic().contains(
-          normalizedQuery,
-        );
-        if (product.barcode != null) {
-          final barcodeMatch = product.barcode!.normalizeArabic().contains(
-            normalizedQuery,
-          );
-          return nameMatch || barcodeMatch;
-        }
-        return nameMatch;
-      }).toList();
+  @override
+  void searchProducts(String query) {
+    try {
+      _filteredProducts = _repository.searchProducts(query);
+      emit(const ProductsLoaded());
+    } catch (e) {
+      emit(ProductError('فشل البحث: $e'));
     }
-    emit(
-      ProductsLoaded(
-        products: _allProducts,
-        filteredProducts: _filteredProducts,
-      ),
-    );
   }
 
+  @override
   Future<void> addProduct(ProductModel product) async {
     try {
-      GetIt.instance<ObjectBoxServices>().productsBox.put(product);
+      _repository.addProduct(product);
       _allProducts.add(product);
       _filteredProducts = List.from(_allProducts);
-      emit(
-        ProductsLoaded(
-          products: _allProducts,
-          filteredProducts: _filteredProducts,
-        ),
-      );
+      emit(const ProductsLoaded());
     } catch (e) {
       emit(ProductError('فشل إضافة المنتج: $e'));
       rethrow;
     }
   }
 
-void updateProduct(ProductModel product)  {
+  @override
+  Future<void> updateProduct(ProductModel product) async {
     try {
-      GetIt.instance<ObjectBoxServices>().productsBox.put(product);
+      _repository.updateProduct(product);
+
       final index = _allProducts.indexWhere((p) => p.id == product.id);
       if (index != -1) {
         _allProducts[index] = product;
+      } else {
+        _allProducts.add(product);
       }
-      _filteredProducts = List.from(_allProducts);
-      emit(
-        ProductsLoaded(
-          products: _allProducts,
-          filteredProducts: _filteredProducts,
-        ),
+
+      final filteredIndex = _filteredProducts.indexWhere(
+        (p) => p.id == product.id,
       );
+      if (filteredIndex != -1) {
+        _filteredProducts[filteredIndex] = product;
+      } else {
+        _filteredProducts.add(product);
+      }
+
+      emit(const ProductsLoaded());
     } catch (e) {
       emit(ProductError('فشل تعديل المنتج: $e'));
       rethrow;
     }
   }
 
+  @override
   Future<void> deleteProduct(ProductModel product) async {
     try {
-      if (product.imgPath != null && product.imgPath!.isNotEmpty) {
-        final file = File(product.imgPath!);
-        if (file.existsSync()) {
-          file.deleteSync();
-        }
-      }
-      GetIt.instance<ObjectBoxServices>().productsBox.remove(product.id);
+      _repository.deleteProduct(product.id);
       _allProducts.removeWhere((p) => p.id == product.id);
       _filteredProducts.removeWhere((p) => p.id == product.id);
-      emit(
-        ProductsLoaded(
-          products: _allProducts,
-          filteredProducts: _filteredProducts,
-        ),
-      );
+      emit(const ProductsLoaded());
     } catch (e) {
       emit(ProductError('فشل حذف المنتج: $e'));
       rethrow;
     }
   }
 
+  @override
   bool isBarcodeUnique(String barcode, {int? excludeId}) {
-    return !_allProducts.any(
-      (p) => p.barcode == barcode && (excludeId == null || p.id != excludeId),
-    );
+    return _repository.isBarcodeUnique(barcode, excludeId: excludeId);
   }
-
-
 }
