@@ -12,9 +12,25 @@ class ProductModel {
   final double wholesalePrice;
   final String? barcode;
 
-  // Backlink for sell invoice items
-  // @Backlink('productRef')
-  // final ToMany<SellInvoiceItemModel> invoiceItems = ToMany<SellInvoiceItemModel>();
+  ProductModel copyWith({
+    String? name,
+    String? imgPath,
+    int? quantity,
+    double? buyingPrice,
+    double? saleingPrice,
+    double? wholesalePrice,
+    String? barcode,
+  }) {
+    return ProductModel(
+      name: name ?? this.name,
+      quantity: quantity ?? this.quantity,
+      buyingPrice: buyingPrice ?? this.buyingPrice,
+      saleingPrice: saleingPrice ?? this.saleingPrice,
+      wholesalePrice: wholesalePrice ?? this.wholesalePrice,
+      imgPath: imgPath ?? this.imgPath,
+      barcode: barcode ?? this.barcode,
+    )..id = id;
+  }
 
   ProductModel({
     required this.name,

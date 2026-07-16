@@ -5,26 +5,28 @@ import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/add_image.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-class AddProductView extends StatefulWidget {
-  const AddProductView({super.key});
-
+class ProductFormView extends StatefulWidget {
+  const ProductFormView({super.key, this.product});
+  final ProductModel? product;
   @override
-  State<AddProductView> createState() => _AddProductViewState();
+  State<ProductFormView> createState() => _ProductFormViewState();
 }
 
-class _AddProductViewState extends State<AddProductView> {
+class _ProductFormViewState extends State<ProductFormView> {
   final _formKey = GlobalKey<FormState>();
   final picker = ImagePicker();
   XFile? image;
@@ -34,15 +36,27 @@ class _AddProductViewState extends State<AddProductView> {
   late final TextEditingController bPriceController;
   late final TextEditingController wPriceController;
   late final TextEditingController sPriceController;
+  String? imgPath;
+  late final bool isEditing;
 
   @override
   void initState() {
-    barcodeController = TextEditingController();
-    nameController = TextEditingController();
-    quantatyController = TextEditingController();
-    bPriceController = TextEditingController();
-    wPriceController = TextEditingController();
-    sPriceController = TextEditingController();
+    isEditing = widget.product != null;
+    barcodeController = TextEditingController(text: widget.product?.barcode);
+    nameController = TextEditingController(text: widget.product?.name);
+    quantatyController = TextEditingController(
+      text: widget.product?.quantity.toString(),
+    );
+    bPriceController = TextEditingController(
+      text: widget.product?.buyingPrice.toString(),
+    );
+    wPriceController = TextEditingController(
+      text: widget.product?.wholesalePrice.toString(),
+    );
+    sPriceController = TextEditingController(
+      text: widget.product?.saleingPrice.toString(),
+    );
+    imgPath = widget.product?.imgPath;
     super.initState();
   }
 
@@ -62,26 +76,25 @@ class _AddProductViewState extends State<AddProductView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: const CustomAppBar(title: 'إضافة منتج'),
+        appBar: CustomAppBar(title: isEditing ? 'تعديل المنتج' : 'إضافة منتج'),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Form(
               key: _formKey,
-              autovalidateMode:
-                  AutovalidateMode.onUserInteraction, // تحسين الـ UX
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Gap(24),
-                  image == null
+                  imgPath == null
                       ? AddProductImageWidget(
                           onTap: () async {
                             await pickImage();
                           },
                         )
                       : ProductImage(
-                          imagePath: image!.path,
+                          imagePath: imgPath!,
                           onTap: () async {
                             await pickImage();
                           },
@@ -92,12 +105,7 @@ class _AddProductViewState extends State<AddProductView> {
                     label: "اسم المنتج",
                     textInputAction: TextInputAction.next,
                     controller: nameController,
-                    validator: (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return "ادخل اسم المنتج";
-                      }
-                      return null;
-                    },
+                    validator: Validator.validateName(),
                   ),
                   const Gap(16),
 
@@ -109,12 +117,7 @@ class _AddProductViewState extends State<AddProductView> {
                       Icons.qr_code_scanner,
                       color: AppColors.primary,
                     ),
-                    validator: (p0) {
-                      if (p0 == null || p0.isEmpty) {
-                        return "ادخل الباركود";
-                      }
-                      return null;
-                    },
+                    validator: Validator.validateBarcode(),
                   ),
                   const Gap(16),
 
@@ -123,14 +126,7 @@ class _AddProductViewState extends State<AddProductView> {
                     label: "الكمية المتاحة",
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "ادخل الكمية المتاحة";
-                      }
-                      final price = double.tryParse(value);
-                      if (price == null || price <= 0) return "رقم غير صحيح";
-                      return null;
-                    },
+                    validator: Validator.validateQuantaty(),
                   ),
                   const Gap(20),
 
@@ -143,16 +139,7 @@ class _AddProductViewState extends State<AddProductView> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           suffixText: 'ج.م',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "ادخل سعر الشراء";
-                            }
-                            final price = double.tryParse(value);
-                            if (price == null || price <= 0) {
-                              return "رقم غير صحيح";
-                            }
-                            return null;
-                          },
+                          validator: Validator.validateBuyingPrice(),
                         ),
                       ),
                       Gap(12.w),
@@ -164,22 +151,9 @@ class _AddProductViewState extends State<AddProductView> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           suffixText: 'ج.م',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "ادخل سعر الجملة";
-                            }
-                            final price = double.tryParse(value);
-                            if (price == null || price <= 0) {
-                              return "رقم غير صحيح";
-                            }
-                            // مقارنة مع سعر الشراء
-                            final buyingPrice =
-                                double.tryParse(bPriceController.text) ?? 0;
-                            if (price <= buyingPrice) {
-                              return "يجب أن يكون أكبر من سعرالشراء";
-                            }
-                            return null;
-                          },
+                          validator: Validator.validateWholeSalePrice(
+                            bPriceController.text,
+                          ),
                         ),
                       ),
                       Gap(12.w),
@@ -190,27 +164,10 @@ class _AddProductViewState extends State<AddProductView> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.done,
                           suffixText: 'ج.م',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "ادخل سعر البيع";
-                            }
-                            final price = double.tryParse(value);
-                            if (price == null || price <= 0) {
-                              return "رقم غير صحيح";
-                            }
-                            final buyingPrice =
-                                double.tryParse(bPriceController.text) ?? 0;
-                            final wholesalePrice =
-                                double.tryParse(wPriceController.text) ?? 0;
-
-                            if (price <= buyingPrice) {
-                              return "يجب أن يكون أعلى من سعر الشراء";
-                            }
-                            if (price <= wholesalePrice) {
-                              return "يجب أن يكون أعلى من سعر الجملة";
-                            }
-                            return null;
-                          },
+                          validator: Validator.validateSellingPrice(
+                            bPriceController.text,
+                            wPriceController.text,
+                          ),
                         ),
                       ),
                     ],
@@ -219,57 +176,87 @@ class _AddProductViewState extends State<AddProductView> {
                   AppButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        String? imagePath;
+                        late final ProductModel product;
+                        String? oldImagePath = widget.product?.imgPath;
+                        String? workingImgPath = imgPath;
+
+                        // حفظ الصورة الجديدة أولاً في متغير مؤقت
                         if (image != null) {
-                          imagePath = await saveProductImage(image!);
+                          workingImgPath = await saveProductImage(image!);
                         }
 
-                        final product = ProductModel(
-                          name: nameController.text.trim(),
-                          quantity: int.tryParse(quantatyController.text) ?? 0,
-                          buyingPrice:
-                              double.tryParse(bPriceController.text) ?? 0,
-                          saleingPrice:
-                              double.tryParse(sPriceController.text) ?? 0,
-                          wholesalePrice:
-                              double.tryParse(wPriceController.text) ?? 0,
-                          barcode: barcodeController.text,
-                          imgPath: imagePath,
-                        );
-
-                        // Check barcode uniqueness
-                        final cubit = ProductCubit.get(context);
-                        final barcode = product.barcode?.trim() ?? '';
-                        if (barcode.isNotEmpty &&
-                            !cubit.isBarcodeUnique(barcode)) {
-                          showSnackBar(
-                            context,
-                            'الباركود مستخدم بالفعل لمنتج آخر',
-                            color: AppColors.error,
+                        if (isEditing) {
+                          product = widget.product!.copyWith(
+                            name: nameController.text.trim(),
+                            quantity: int.tryParse(quantatyController.text),
+                            buyingPrice: double.tryParse(bPriceController.text),
+                            saleingPrice: double.tryParse(
+                              sPriceController.text,
+                            ),
+                            wholesalePrice: double.tryParse(
+                              wPriceController.text,
+                            ),
+                            barcode: barcodeController.text,
+                            imgPath: workingImgPath,
                           );
-                          return;
+                        } else {
+                          product = ProductModel(
+                            name: nameController.text.trim(),
+                            quantity:
+                                int.tryParse(quantatyController.text) ?? 0,
+                            buyingPrice:
+                                double.tryParse(bPriceController.text) ?? 0,
+                            saleingPrice:
+                                double.tryParse(sPriceController.text) ?? 0,
+                            wholesalePrice:
+                                double.tryParse(wPriceController.text) ?? 0,
+                            barcode: barcodeController.text,
+                            imgPath: workingImgPath,
+                          );
                         }
 
                         try {
-                          await cubit.addProduct(product);
+                          // محاولة الحفظ في قاعدة البيانات
+                          context.read<ProductCubit>().updateProduct(product);
+
+                          // إذا نجحت عملية الحفظ، نقوم بحذف الصورة القديمة بأمان الآن
+                          if (isEditing &&
+                              image != null &&
+                              oldImagePath != null) {
+                            await deleteImage(oldImagePath);
+                          }
+
                           if (!context.mounted) return;
                           showSnackBar(
                             context,
-                            "تم إضافة المنتج بنجاح",
+                            isEditing
+                                ? "تم تعديل المنتج بنجاح"
+                                : "تم إضافة المنتج بنجاح",
                             color: AppColors.success,
                           );
+
                           AppNavigation.pop(context: context);
                         } catch (e) {
+                          if (image != null && workingImgPath != null) {
+                          await  deleteImage(workingImgPath);
+                            imgPath = oldImagePath;
+                          }
+
                           if (!context.mounted) return;
                           showSnackBar(
                             context,
-                            'فشل إضافة المنتج: $e',
+                            isEditing
+                                ? 'فشل تعديل المنتج: $e'
+                                : 'فشل إضافة المنتج: $e',
                             color: AppColors.error,
                           );
                         }
                       }
                     },
-                    child: Text("إضافة المنتج", style: AppTextStyle.medium16),
+                    child: Text(
+                      isEditing ? "تعديل المنتج" : "إضافة المنتج",
+                      style: AppTextStyle.medium16,
+                    ),
                   ),
                 ],
               ),
@@ -287,7 +274,9 @@ class _AddProductViewState extends State<AddProductView> {
       maxWidth: 500,
     );
     if (image != null) {
-      setState(() {});
+      setState(() {
+        imgPath = image!.path;
+      });
     }
   }
 
@@ -302,5 +291,14 @@ class _AddProductViewState extends State<AddProductView> {
     File localImage = await File(pickedImage.path).copy(newPath);
 
     return localImage.path;
+  }
+
+  Future<void> deleteImage(String path) async {
+    if (path.isNotEmpty) {
+      final file = File(path);
+      if (await file.exists()) {
+        file.delete();
+      }
+    }
   }
 }
