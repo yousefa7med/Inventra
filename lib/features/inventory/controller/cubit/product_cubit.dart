@@ -79,7 +79,7 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  Future<void> updateProduct(ProductModel product) async {
+void updateProduct(ProductModel product)  {
     try {
       GetIt.instance<ObjectBoxServices>().productsBox.put(product);
       final index = _allProducts.indexWhere((p) => p.id == product.id);

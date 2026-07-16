@@ -126,8 +126,8 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 - **Phone number formats**: The call button should handle various phone formats (with/without country code, spaces, dashes) by passing the raw number to `url_launcher`.
 - **RTL layout**: Since the app is Arabic-only (RTL), all cards, forms, and search bars must respect RTL layout.
 - **Search performance**: Search should debounce (e.g., 300ms) to avoid excessive database queries on large datasets.
-- **Edit navigation**: Edit screens should receive the customer/supplier ID via route arguments (using AppNavigation.pushName with arguments).
-- **Validation reuse**: Edit forms must reuse the exact same validation logic as Add forms (DRY principle - extract validation to shared utilities).
+- **Edit navigation**: Edit screens should receive the full CustomerModel/SupplierModel object via route arguments (using AppNavigation.pushName with arguments, following EditProductView pattern).
+- **Validation reuse**: Edit forms must reuse the exact same validation logic as Add forms (DRY principle - extract validation to shared utilities in `core/utils/validators.dart`).
 - **Offline support**: Since ObjectBox is local-only, all operations work offline. No network error handling needed.
 
 ---
@@ -142,7 +142,7 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 - **FR-004**: System MUST provide a call button on each customer card that launches the device dialer with the customer's phone number using `url_launcher`.
 - **FR-005**: System MUST show an error snackbar when the call button is tapped for a customer without a phone number.
 - **FR-006**: System MUST provide an edit button on each customer card that navigates to EditCustomerView with the customer's data pre-filled.
-- **FR-007**: System MUST provide an EditCustomerView with a form identical to AddCustomerView (same fields: name, phone, address) pre-filled with existing customer data.
+- **FR-007**: System MUST provide an EditCustomerView with a form identical to AddCustomerView (same fields: name, phone, address) pre-filled with existing customer data. Balance is computed from invoices, displayed read-only in list, not editable in form.
 - **FR-008**: System MUST apply the same validation rules on EditCustomerView as AddCustomerView (required name, valid phone format, etc.).
 - **FR-009**: System MUST update the customer in the ObjectBox database on successful edit form submission and navigate back to AllCustomersView.
 - **FR-010**: System MUST provide an "All Suppliers" screen accessible from the AppDrawer with identical functionality to AllCustomersView but for suppliers.
@@ -151,7 +151,7 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 - **FR-013**: System MUST provide a call button on each supplier card that launches the device dialer with the supplier's phone number.
 - **FR-014**: System MUST show an error snackbar when the call button is tapped for a supplier without a phone number.
 - **FR-015**: System MUST provide an edit button on each supplier card that navigates to EditSupplierView with the supplier's data pre-filled.
-- **FR-016**: System MUST provide an EditSupplierView with a form identical to AddSupplierView (fields: contact name, store name, store address, phone) pre-filled with existing supplier data.
+- **FR-016**: System MUST provide an EditSupplierView with a form identical to AddSupplierView (fields: contact name, store name, store address, phone) pre-filled with existing supplier data. Balance is computed from buy invoices, displayed read-only in list, not editable in form.
 - **FR-017**: System MUST apply the same validation rules on EditSupplierView as AddSupplierView (required contact name min 3 chars, required store name, required store address, required phone with format regex).
 - **FR-018**: System MUST update the supplier in the ObjectBox database on successful edit form submission and navigate back to AllSuppliersView.
 - **FR-019**: System MUST show an empty state with appropriate message when no customers/suppliers exist or no search results match.
@@ -162,7 +162,7 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 - **FR-024**: System MUST use `AppTheme`, `AppColors`, and `AppTextStyle` for all styling (no hardcoded colors, text styles, or decorations).
 - **FR-025**: System MUST use RTL layout (Arabic locale) for all screens.
 - **FR-026**: System MUST debounce search input (300ms) to avoid excessive database queries.
-- **FR-027**: System MUST extract validation logic into shared utilities reusable by both Add and Edit forms for customers and suppliers.
+- **FR-027**: System MUST extract validation logic into `core/utils/validators.dart` with separate validators for Customer (name, phone, address) and Supplier (name, storeName, storeAdd, phone), reusable by both Add and Edit forms for customers and suppliers.
 - **FR-028**: System MUST use BLoC/Cubit pattern for state management (CustomerCubit, SupplierCubit) registered as LazySingleton in GetIt.
 - **FR-029**: System MUST add routes for EditCustomerView and EditSupplierView in AppRoutes and AppRouter.
 
@@ -170,8 +170,8 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 
 ### Key Entities
 
-- **Customer**: Represents a customer entity with fields: `id` (int), `name` (String), `phoneNum` (String), `address` (String?), `balance` (double). Stored in ObjectBox. Note: `address` is nullable in the model.
-- **Supplier**: Represents a supplier entity with fields: `id` (int), `name` (String), `storeName` (String), `storeAdd` (String?), `phoneNum` (String). Stored in ObjectBox. Note: Supplier has separate `name` (contact person) and `storeName` (company/store), with `storeAdd` as address.
+- **Customer**: Represents a customer entity with fields: `id` (int), `name` (String), `phoneNum` (String), `address` (String?), `balance` (double). Stored in ObjectBox. Note: `address` is nullable in the model. `balance` is computed from invoices, displayed read-only in list, not editable in form.
+- **Supplier**: Represents a supplier entity with fields: `id` (int), `name` (String), `storeName` (String), `storeAdd` (String?), `phoneNum` (String). Stored in ObjectBox. Note: Supplier has separate `name` (contact person) and `storeName` (company/store), with `storeAdd` as address. `balance` is computed from buy invoices, displayed read-only in list, not editable in form.
 - **CustomerCubit**: Manages state for customer list, search, and edit operations. States: CustomerLoading, CustomerLoaded(List<Customer>), CustomerError(String), CustomerOperationSuccess.
 - **SupplierCubit**: Manages state for supplier list, search, and edit operations. States: SupplierLoading, SupplierLoaded(List<Supplier>), SupplierError(String), SupplierOperationSuccess.
 - **EditCustomerView**: Screen for editing an existing customer, receives CustomerModel object via route arguments.
@@ -183,8 +183,8 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 
 ### Measurable Outcomes
 
-- **SC-001**: User can search customers by name and see filtered results within 300ms of typing.
-- **SC-002**: User can tap call button on a customer card and the device dialer opens with the correct phone number 100% of the time.
+- **SC-001**: User can search customers by name and see filtered results immediately (manual verification per quickstart Test 1).
+- **SC-002**: User can tap call button on a customer card and the device dialer opens with the correct phone number (manual verification per quickstart Test 3).
 - **SC-003**: User can edit a customer's details, submit the form, and see the updated data reflected in the customer list immediately.
 - **SC-004**: All validation rules from Add Customer form apply identically to Edit Customer form (zero validation differences).
 - **SC-005**: Same measurable outcomes (SC-001 through SC-004) apply to Suppliers (AllSuppliersView, EditSupplierView).
@@ -200,7 +200,7 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 - **ObjectBox models exist**: Customer and Supplier entities already exist in `core/models/` with @Entity annotations. Customer has: id, name, phoneNum, address?, balance. Supplier has: id, name, storeName, storeAdd?, phoneNum, balance. (Note: fields differ between entities - Supplier has separate contact name and store name/address).
 - **Add Customer/Supplier forms exist**: The "Add Customer" and "Add Supplier" forms with validation logic already exist in `features/dashboard/presentation/views/` and can be referenced/reused.
 - **AppDrawer already has menu items**: "All Customers" and "All Suppliers" items already exist in the drawer navigation pointing to AllCustomersView and AllSuppliersView routes.
-- **Routes exist**: AppRoutes already contains routes for `allCustomers` and `allSuppliers`. New routes for `editCustomerView` and `editSupplierView` need to be added.
+- **Routes exist**: AppRoutes already contains routes for `allCustomers` and `allSuppliers`. New routes for `editCustomerView` and `editSupplierView` need to be added (camelCase matching existing `addCustomerView`/`addSupplierView` pattern).
 - **ADD url_launcher**: The `url_launcher` package is NOT currently in pubspec.yaml - it MUST BE ADDED as a dependency for the call feature.
 - **GetIt DI configured**: GetIt is set up in main.dart with LazySingleton registration pattern for Cubits.
 - **ObjectBox codegen**: After any model changes, `dart run build_runner build --delete-conflicting-outputs` must be run.
@@ -224,6 +224,8 @@ Same as User Story 4 but for suppliers - edit form with same validations as Add 
 ### Routes to Add (in `core/config/configrations.dart`):
 - `AppRoutes.editCustomerView` → `/edit-customer` (expects `CustomerModel` as arguments)
 - `AppRoutes.editSupplierView` → `/edit-supplier` (expects `SupplierModel` as arguments)
+
+**Note**: Existing routes `addcustomerView` and `addsupplierView` should be renamed to `addCustomerView` and `addSupplierView` for consistent camelCase naming (breaking change).
 
 ### Route Arguments (following EditProductView pattern):
 - `editCustomerView`: Expects `arguments` as `CustomerModel` (full object)

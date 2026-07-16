@@ -11,8 +11,19 @@ class SupplierModel {
 
   SupplierModel({
     required this.name,
-     this.storeAdd,
+    this.storeAdd,
     required this.storeName,
     required this.phoneNum,
   });
+  SupplierModel copyWith({
+    String? name,
+    String? storeAdd,
+    String? storeName,
+    String? phoneNum,
+  }) => SupplierModel(
+    name: name ?? this.name,
+    storeName: storeName ?? this.storeName,
+    phoneNum: phoneNum ?? this.phoneNum,
+    storeAdd: storeAdd ?? this.storeAdd,
+  )..id = id;
 }

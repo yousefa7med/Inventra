@@ -4,23 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-class EmptyState extends StatelessWidget {
-  const EmptyState({super.key, required this.icon, required this.message});
-
-  final IconData icon;
+class CustomerLoadingErrorWidget extends StatelessWidget {
+  const CustomerLoadingErrorWidget({
+    super.key,
+    required this.message,
+    required this.onPressed,
+  });
   final String message;
-
+  final void Function() onPressed;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 60.r, color: AppColors.greyMedium400),
-          Gap(12.h),
           Text(
             message,
-            style: AppTextStyle.medium16.copyWith(color: AppColors.grey),
+            style: AppTextStyle.medium16.copyWith(color: AppColors.error),
+          ),
+          Gap(16.h),
+          ElevatedButton(
+            onPressed: onPressed,
+            child: const Text('إعادة المحاولة'),
           ),
         ],
       ),
