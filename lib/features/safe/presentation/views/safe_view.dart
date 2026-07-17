@@ -41,8 +41,8 @@ class SafeView extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            await AppNavigation.pushName(
+          onPressed: () {
+            AppNavigation.pushName(
               rootNavigator: true,
               context: context,
               route: AppRoutes.addExpenseView,

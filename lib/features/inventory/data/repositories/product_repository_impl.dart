@@ -1,8 +1,6 @@
-import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
-import 'package:Inventra/objectbox.g.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ObjectBoxServices _objectBoxServices;
@@ -15,34 +13,13 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  void addProduct(ProductModel product) {
-    _objectBoxServices.productsBox.put(product);
-  }
-
-  @override
-  void updateProduct(ProductModel product) {
+  void insertProduct(ProductModel product) {
     _objectBoxServices.productsBox.put(product);
   }
 
   @override
   void deleteProduct(int id) {
     _objectBoxServices.productsBox.remove(id);
-  }
-
-  @override
-  List<ProductModel> searchProducts(String query) {
-    if (query.isEmpty) return getAllProducts();
-
-    final searchText = query.toLowerCase().normalizeArabic();
-
-    final queryBuilder = _objectBoxServices.productsBox
-        .query(
-          ProductModel_.name.contains(searchText, caseSensitive: false),
-        )
-        .build();
-    final result = queryBuilder.find();
-    queryBuilder.close();
-    return result;
   }
 
   @override

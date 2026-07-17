@@ -50,44 +50,29 @@ class CustomerCard extends StatelessWidget {
                         ),
                       ),
                       Gap(4.h),
-                      if (customer.address != null &&
-                          customer.address!.isNotEmpty)
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 14.r,
-                              color: AppColors.grey,
-                            ),
-                            Gap(4.w),
-                            Expanded(
-                              child: Text(
-                                customer.address!,
-                                style: AppTextStyle.regular12.copyWith(
-                                  color: AppColors.grey,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        )
-                      else
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 14.r,
-                              color: AppColors.grey,
-                            ),
-                            Gap(4.w),
-                            Text(
-                              'لا يوجد عنوان',
+
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 14.r,
+                            color: AppColors.grey,
+                          ),
+                          Gap(4.w),
+                          Expanded(
+                            child: Text(
+                              (customer.address != null &&
+                                      customer.address!.isNotEmpty)
+                                  ? customer.address!
+                                  : 'لا يوجد عنوان',
                               style: AppTextStyle.regular12.copyWith(
                                 color: AppColors.grey,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

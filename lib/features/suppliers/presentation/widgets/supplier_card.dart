@@ -70,8 +70,6 @@ class SupplierCard extends StatelessWidget {
                         ],
                       ),
                       Gap(4.h),
-                      if (supplier.storeAdd != null &&
-                          supplier.storeAdd!.isNotEmpty)
                         Row(
                           children: [
                             Icon(
@@ -81,8 +79,9 @@ class SupplierCard extends StatelessWidget {
                             ),
                             Gap(4.w),
                             Expanded(
-                              child: Text(
-                                supplier.storeAdd!,
+                              child: Text((
+                         supplier.storeAdd != null &&
+                          supplier.storeAdd!.isNotEmpty)?       supplier.storeAdd!:  'لا يوجد عنوان',
                                 style: AppTextStyle.regular12.copyWith(
                                   color: AppColors.grey,
                                 ),
@@ -91,23 +90,7 @@ class SupplierCard extends StatelessWidget {
                             ),
                           ],
                         )
-                      else
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on,
-                              size: 14.r,
-                              color: AppColors.grey,
-                            ),
-                            Gap(4.w),
-                            Text(
-                              'لا يوجد عنوان',
-                              style: AppTextStyle.regular12.copyWith(
-                                color: AppColors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
+                    
                     ],
                   ),
                 ),
