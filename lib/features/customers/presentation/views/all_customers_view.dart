@@ -141,11 +141,7 @@ class _AllCustomersViewState extends State<AllCustomersView> {
                         final customer = customers[index];
                         return CustomerCard(
                           customer: customer,
-                          onEditTap: () => AppNavigation.pushName(
-                            context: context,
-                            route: AppRoutes.customerFormView,
-                            argument: customer,
-                          ),
+            
                         );
                       },
                     ),

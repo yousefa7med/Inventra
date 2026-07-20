@@ -1,4 +1,6 @@
+import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/models/customer_model.dart';
+import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utils/phone_utils.dart';
@@ -7,14 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class CustomerCard extends StatelessWidget {
-  const CustomerCard({
-    super.key,
-    required this.customer,
-    required this.onEditTap,
-  });
+  const CustomerCard({super.key, required this.customer});
 
   final CustomerModel customer;
-  final VoidCallback onEditTap;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +74,11 @@ class CustomerCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: onEditTap,
+                  onPressed: () => AppNavigation.pushName(
+                    context: context,
+                    route: AppRoutes.customerFormView,
+                    argument: customer,
+                  ),
                   icon: Icon(
                     Icons.edit,
                     color: AppColors.secondary,
