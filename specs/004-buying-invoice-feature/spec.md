@@ -25,16 +25,16 @@ Enable users to create buying invoices when purchasing products from suppliers. 
 10. Success message shown, form resets
 
 ### Alternative Flow: Restock with Price Change
-1. User selects existing product from product list
-2. If the product's current buying price differs from the price in the invoice item
-3. System shows dialog: "Price has changed. Update product buying price to new value?"
-4. If user confirms: product's buying price in inventory is updated to new price
-5. If user cancels: product is added with original buying price (no price update)
+1. User increments quantity on existing product in ProductSelectionView (from 0 to >0)
+2. If product's current buyingPrice differs from the price to be used in invoice
+3. System shows dialog in ProductSelectionView: "السعر تغير. تحديث سعر الشراء للمنتج؟" with current vs new price
+4. If user confirms: product's buyingPrice in inventory updated to new price before adding to invoice
+5. If user cancels: product added with current buyingPrice (no price update)
 
 ### Error Scenarios
-- No supplier selected → show error "Please select a supplier"
-- No items with quantity > 0 in invoice → show error "Please add at least one product with quantity"
-- Insufficient safe balance → show error "Insufficient safe balance"
+- No supplier selected → show error "يرجى اختيار مورد"
+- No items with quantity > 0 in invoice → show error "يرجى إضافة منتج واحد على الأقل بكمية أكبر من صفر"
+- Insufficient safe balance → show error "رصيد الخزنة غير كافٍ"
 
 ## Functional Requirements
 
@@ -44,7 +44,7 @@ The system shall support a Buying Invoice entity with:
 - Supplier (one-to-one relationship with SupplierModel)
 - Items (one-to-many relationship with InvoiceItemModel - existing model)
 - Total amount (calculated from items)
-- Paid amount (partial payment support)
+- Paid amount (reserved for future partial payment support, default 0)
 
 ### FR-002: Buying Invoice Item Data Model
 Each invoice item shall use the existing **InvoiceItemModel** (from lib/core/models/invoice_item_model.dart) with:
@@ -80,11 +80,13 @@ When user taps FAB to open product selection view:
 - When user returns from product selection, selected products with quantity > 0 are added to invoice
 
 ### FR-006: Restock Existing Product with Price Change
-When adding an existing product to invoice:
-- If the invoice item's unit price differs from product's current buying price
-- Show confirmation dialog: "Price changed. Update product buying price to new value?"
-- If confirmed: update product's buying price in inventory to new value
-- If cancelled: use product's current buying price (no update)
+When adding an existing product to invoice via ProductSelectionView:
+- User increments quantity counter from 0 to >0 on an existing product
+- If the product's current buyingPrice differs from the price that would be used in the invoice item
+- Show confirmation dialog in ProductSelectionView: "السعر تغير. تحديث سعر الشراء للمنتج؟" with current vs new price
+- If confirmed: update product's buyingPrice in inventory to new value before adding to invoice
+- If cancelled: use product's current buyingPrice (no update)
+- Item added to invoice with selected quantity and resolved unit price
 
 ### FR-007: Business Logic - Inventory & Safe Balance
 Upon confirming a buying invoice:
@@ -124,9 +126,8 @@ Represents a purchase invoice from a supplier.
 - date (DateTime)
 - supplier (ToOne<SupplierModel>)
 - items (ToMany<InvoiceItemModel>) - uses existing InvoiceItemModel
-- discount (double, optional)
-- paidAmount (double, default 0)
-- total (computed from items minus discount)
+- paidAmount (double, default 0) - reserved for future partial payment support
+- total (computed from items)
 
 ### InvoiceItemModel (existing - lib/core/models/invoice_item_model.dart)
 Represents a line item in an invoice (shared with selling invoices).
