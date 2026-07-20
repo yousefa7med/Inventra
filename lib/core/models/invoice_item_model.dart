@@ -1,3 +1,4 @@
+import 'package:Inventra/core/models/buying_invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -8,6 +9,7 @@ class InvoiceItemModel {
 
   // int sellInvoiceId = 0;
   final ToOne<ProductModel> product = ToOne<ProductModel>();
+  final ToOne<BuyingInvoiceModel> invoice = ToOne<BuyingInvoiceModel>();
 
   int quantity = 0;
   double unitPrice = 0.0;

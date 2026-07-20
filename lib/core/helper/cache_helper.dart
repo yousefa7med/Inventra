@@ -1,3 +1,4 @@
+import 'package:Inventra/core/models/buying_invoice_model.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -45,6 +46,7 @@ class ObjectBoxServices {
   late final Box<ProductModel> productsBox;
   late final Box<SupplierModel> suppliersBox;
   late final Box<SellingInvoiceModel> invoicesBox;
+  late final Box<BuyingInvoiceModel> buyInvoicesBox;
   late final Box<CustomerModel> customersBox;
   late final Box<ExpenseModel> expensesBox;
   late final Box<SafeBalanceModel> safeBalanceBox;
@@ -56,6 +58,7 @@ class ObjectBoxServices {
     productsBox = store.box<ProductModel>();
     suppliersBox = store.box<SupplierModel>();
     invoicesBox = store.box<SellingInvoiceModel>();
+    buyInvoicesBox = store.box<BuyingInvoiceModel>();
     customersBox = store.box<CustomerModel>();
     expensesBox = store.box<ExpenseModel>();
     safeBalanceBox = store.box<SafeBalanceModel>();

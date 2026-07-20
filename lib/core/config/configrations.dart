@@ -7,6 +7,8 @@ import 'package:Inventra/core/transitions/page_route_builder_method.dart';
 import 'package:Inventra/core/widgets/customer_form_view.dart';
 import 'package:Inventra/core/widgets/product_form_view.dart';
 import 'package:Inventra/core/widgets/supplier_form_view.dart';
+import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
+import 'package:Inventra/features/buying_invoice/presentation/views/product_selection_view.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
@@ -120,11 +122,21 @@ class AppRouter {
               BlocProvider.value(value: cubit, child: const AllSuppliersView()),
         );
 
-      case AppRoutes.buyInvoices:
+      case AppRoutes.buyingInvoiceView:
         return pageRouteBuilderMethod(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const Scaffold(body: Center(child: Text('فواتير المشتريات'))),
+              const Scaffold(body: Center(child: Text('فاتورة شراء - قريباً'))),
+        );
+
+      case AppRoutes.productSelectionView:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BlocProvider.value(
+                value: GetIt.instance<BuyInvoiceCubit>()..loadProducts(''),
+                child: const ProductSelectionView(),
+              ),
         );
 
       case AppRoutes.settings:
@@ -156,7 +168,8 @@ abstract class AppRoutes {
 
   static const String allCustomers = '/all-customers';
   static const String allSuppliers = '/all-suppliers';
-  static const String buyInvoices = '/buy-invoices';
+  static const String buyingInvoiceView = '/buying-invoice';
+  static const String productSelectionView = '/product-selection';
   static const String settings = '/settings';
 
   static const String supplierFormView = '/edit-supplier';

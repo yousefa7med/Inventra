@@ -9,6 +9,9 @@ import 'package:Inventra/features/customers/data/repositories/customer_repositor
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
 import 'package:Inventra/features/inventory/data/repositories/product_repository_impl.dart';
+import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
+import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository_impl.dart';
+import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
 import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository_impl.dart';
@@ -113,6 +116,11 @@ Future<void> configureDependencies() async {
     () => productRepository,
   );
 
+  final buyInvoiceRepository = BuyInvoiceRepositoryImpl(objectBoxServices);
+  GetIt.instance.registerLazySingleton<BuyInvoiceRepository>(
+    () => buyInvoiceRepository,
+  );
+
   // 4. Cubits (LazySingletons for app-wide state)
   GetIt.instance.registerLazySingleton<AppCubit>(() => AppCubit());
   GetIt.instance.registerLazySingleton<CustomerCubit>(
@@ -129,6 +137,9 @@ Future<void> configureDependencies() async {
   );
   GetIt.instance.registerLazySingleton<SellInvoiceCubit>(
     () => SellInvoiceCubit(GetIt.instance<SellInvoiceRepository>()),
+  );
+  GetIt.instance.registerLazySingleton<BuyInvoiceCubit>(
+    () => BuyInvoiceCubit(GetIt.instance<BuyInvoiceRepository>()),
   );
 
   // 5. ObjectBox Boxes for new entities
