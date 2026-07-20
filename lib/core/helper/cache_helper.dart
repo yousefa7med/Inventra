@@ -5,7 +5,7 @@ import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/balance_audit_entry_model.dart';
-import 'package:Inventra/core/models/sell_invoice_item_model.dart';
+import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,7 +49,7 @@ class ObjectBoxServices {
   late final Box<ExpenseModel> expensesBox;
   late final Box<SafeBalanceModel> safeBalanceBox;
   late final Box<BalanceAuditEntryModel> balanceAuditEntryBox;
-  late final Box<SellInvoiceItemModel> sellInvoiceItemsBox;
+  late final Box<InvoiceItemModel> sellInvoiceItemsBox;
 
   Future<void> init() async {
     store = await openStore();
@@ -60,6 +60,6 @@ class ObjectBoxServices {
     expensesBox = store.box<ExpenseModel>();
     safeBalanceBox = store.box<SafeBalanceModel>();
     balanceAuditEntryBox = store.box<BalanceAuditEntryModel>();
-    sellInvoiceItemsBox = store.box<SellInvoiceItemModel>();
+    sellInvoiceItemsBox = store.box<InvoiceItemModel>();
   }
 }

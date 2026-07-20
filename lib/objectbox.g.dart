@@ -19,7 +19,7 @@ import 'core/models/customer_model.dart';
 import 'core/models/expense_model.dart';
 import 'core/models/product_model.dart';
 import 'core/models/safe_balance_model.dart';
-import 'core/models/sell_invoice_item_model.dart';
+import 'core/models/invoice_item_model.dart';
 import 'core/models/selling_invoice_model.dart';
 import 'core/models/supplier_model.dart';
 
@@ -658,15 +658,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
-    SellInvoiceItemModel: obx_int.EntityDefinition<SellInvoiceItemModel>(
+    InvoiceItemModel: obx_int.EntityDefinition<InvoiceItemModel>(
       model: _entities[4],
-      toOneRelations: (SellInvoiceItemModel object) => [object.product],
-      toManyRelations: (SellInvoiceItemModel object) => {},
-      getId: (SellInvoiceItemModel object) => object.id,
-      setId: (SellInvoiceItemModel object, int id) {
+      toOneRelations: (InvoiceItemModel object) => [object.product],
+      toManyRelations: (InvoiceItemModel object) => {},
+      getId: (InvoiceItemModel object) => object.id,
+      setId: (InvoiceItemModel object, int id) {
         object.id = id;
       },
-      objectToFB: (SellInvoiceItemModel object, fb.Builder fbb) {
+      objectToFB: (InvoiceItemModel object, fb.Builder fbb) {
         fbb.startTable(6);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.product.targetId);
@@ -697,7 +697,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           12,
           0,
         );
-        final object = SellInvoiceItemModel(
+        final object = InvoiceItemModel(
           quantity: quantityParam,
           unitPrice: unitPriceParam,
           lineTotal: lineTotalParam,
@@ -987,31 +987,30 @@ class SafeBalanceModel_ {
   );
 }
 
-/// [SellInvoiceItemModel] entity fields to define ObjectBox queries.
+/// [InvoiceItemModel] entity fields to define ObjectBox queries.
 class SellInvoiceItemModel_ {
-  /// See [SellInvoiceItemModel.id].
-  static final id = obx.QueryIntegerProperty<SellInvoiceItemModel>(
+  /// See [InvoiceItemModel.id].
+  static final id = obx.QueryIntegerProperty<InvoiceItemModel>(
     _entities[4].properties[0],
   );
 
-  /// See [SellInvoiceItemModel.product].
-  static final product =
-      obx.QueryRelationToOne<SellInvoiceItemModel, ProductModel>(
-        _entities[4].properties[1],
-      );
+  /// See [InvoiceItemModel.product].
+  static final product = obx.QueryRelationToOne<InvoiceItemModel, ProductModel>(
+    _entities[4].properties[1],
+  );
 
-  /// See [SellInvoiceItemModel.quantity].
-  static final quantity = obx.QueryIntegerProperty<SellInvoiceItemModel>(
+  /// See [InvoiceItemModel.quantity].
+  static final quantity = obx.QueryIntegerProperty<InvoiceItemModel>(
     _entities[4].properties[2],
   );
 
-  /// See [SellInvoiceItemModel.unitPrice].
-  static final unitPrice = obx.QueryDoubleProperty<SellInvoiceItemModel>(
+  /// See [InvoiceItemModel.unitPrice].
+  static final unitPrice = obx.QueryDoubleProperty<InvoiceItemModel>(
     _entities[4].properties[3],
   );
 
-  /// See [SellInvoiceItemModel.lineTotal].
-  static final lineTotal = obx.QueryDoubleProperty<SellInvoiceItemModel>(
+  /// See [InvoiceItemModel.lineTotal].
+  static final lineTotal = obx.QueryDoubleProperty<InvoiceItemModel>(
     _entities[4].properties[4],
   );
 }
@@ -1035,7 +1034,7 @@ class SellingInvoiceModel_ {
 
   /// see [SellingInvoiceModel.items]
   static final items =
-      obx.QueryRelationToMany<SellingInvoiceModel, SellInvoiceItemModel>(
+      obx.QueryRelationToMany<SellingInvoiceModel, InvoiceItemModel>(
         _entities[5].relations[0],
       );
 }

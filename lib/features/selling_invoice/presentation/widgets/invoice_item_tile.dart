@@ -1,5 +1,5 @@
 import 'package:Inventra/core/constants/app_strings.dart';
-import 'package:Inventra/core/models/sell_invoice_item_model.dart';
+import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class InvoiceItemTile extends StatefulWidget {
-  final SellInvoiceItemModel item;
+  final InvoiceItemModel item;
   final int index;
 
   const InvoiceItemTile({super.key, required this.item, required this.index});

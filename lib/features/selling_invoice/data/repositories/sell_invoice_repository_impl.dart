@@ -8,7 +8,7 @@ import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
-import 'package:Inventra/core/models/sell_invoice_item_model.dart';
+import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
@@ -70,7 +70,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
 
   @override
   SellingInvoiceModel createSellInvoice({
-    required List<SellInvoiceItemModel> items,
+    required List<InvoiceItemModel> items,
     required CustomerModel customer,
     double? discount,
   }) {
@@ -129,7 +129,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
   }
 
   @override
-  void addItem(SellInvoiceItemModel item) {
+  void addItem(InvoiceItemModel item) {
     _objectBox.sellInvoiceItemsBox.put(item);
   }
 }
