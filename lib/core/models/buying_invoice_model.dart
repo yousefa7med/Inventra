@@ -8,7 +8,6 @@ class BuyingInvoiceModel {
   int id = 0;
 
   final DateTime date;
-  final double paidAmount;
 
   // Supplier relationship
   final ToOne<SupplierModel> supplier = ToOne<SupplierModel>();
@@ -18,9 +17,7 @@ class BuyingInvoiceModel {
 
   BuyingInvoiceModel({
     required this.date,
-    this.paidAmount = 0.0,
   });
 
   // Computed total from items
-  double get total => items.fold(0.0, (sum, item) => sum + item.lineTotal);
 }

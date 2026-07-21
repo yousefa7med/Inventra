@@ -9,10 +9,11 @@ import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
 import 'package:Inventra/features/selling_invoice/presentation/widgets/customer_dropdown_menu.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/invoice_product_list.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/invoice_totals_card.dart';
+import 'package:Inventra/features/selling_invoice/presentation/widgets/selling_invoice_product_list.dart';
+import 'package:Inventra/features/selling_invoice/presentation/widgets/selling_invoice_totals_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class SellingInvoiceView extends StatelessWidget {
   const SellingInvoiceView({super.key});
@@ -47,13 +48,11 @@ class SellingInvoiceView extends StatelessWidget {
                     child: CustomerDropdownMenu(),
                   ),
                 ),
-                // Invoice Product List (uses slivers internally)
-                const SliverInvoiceProductList(),
-                // Invoice Totals Card
+                const SellingInvoiceProductList(),
                 const SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: InvoiceTotalsCard(),
+                    child: SellingInvoiceTotalsCard(),
                   ),
                 ),
                 // Confirm Button
@@ -80,7 +79,7 @@ class SellingInvoiceView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 100)),
+                const SliverToBoxAdapter(child:  Gap(100)),
               ],
             ),
           ),

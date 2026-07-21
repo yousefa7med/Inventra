@@ -42,7 +42,7 @@ class _SupplierDropdownMenuState extends State<SupplierDropdownMenu> {
 
   void _selectSupplierIfMatched() {
     final cubit = context.read<BuyInvoiceCubit>();
-    final enteredText = controller.text.trim().normalizeArabic();
+    final enteredText = controller.text.trim().toLowerCase().normalizeArabic();
 
     if (enteredText.isEmpty) return;
 
@@ -50,7 +50,7 @@ class _SupplierDropdownMenuState extends State<SupplierDropdownMenu> {
       final matchedSupplier = cubit.suppliers.firstWhere(
         (s) =>
             s.name.trim().toLowerCase().normalizeArabic() ==
-            enteredText.toLowerCase(),
+            enteredText,
       );
 
       if (cubit.selectedSupplier != matchedSupplier) {

@@ -6,13 +6,13 @@ import 'package:flutter/services.dart';
 
 class QuantityCounter extends StatefulWidget {
   final int quantity;
-  final int maxQuantity;
+  final int? maxQuantity;
   final ValueChanged<int> onChanged;
   final TextEditingController controller;
   const QuantityCounter({
     super.key,
     required this.quantity,
-    required this.maxQuantity,
+    this.maxQuantity,
     required this.onChanged,
     required this.controller,
   });
@@ -43,11 +43,13 @@ class _QuantityCounterState extends State<QuantityCounter> {
       children: [
         IconButton(
           onPressed: () {
-            if (uiQuantity > 0) {
+            if (uiQuantity > 1) {
               widget.onChanged(uiQuantity - 1);
               widget.controller.text = (uiQuantity - 1).toString();
               uiQuantity--;
             }
+
+            // widget.quantity > 1 ? () => widget.onChanged(widget.quantity - 1) : },
           },
           icon: const Icon(Icons.remove),
           color: AppColors.red,
@@ -58,7 +60,7 @@ class _QuantityCounterState extends State<QuantityCounter> {
             inputFormatters: [
               TextInputFormatter.withFunction((oldValue, newValue) {
                 if ((int.tryParse(newValue.text) ?? int.parse(oldValue.text)) >
-                    widget.maxQuantity) {
+                    (widget.maxQuantity ?? 0)) {
                   return oldValue;
                 }
                 return newValue;
@@ -79,8 +81,9 @@ class _QuantityCounterState extends State<QuantityCounter> {
               contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             ),
             onChanged: (value) {
-              uiQuantity = int.tryParse(value) ?? 0;
-              if (uiQuantity >= 0 && uiQuantity <= widget.maxQuantity) {
+              uiQuantity = int.tryParse(value) ?? 1;
+              if (uiQuantity >= 1 &&
+                  uiQuantity <= (widget.maxQuantity ?? double.infinity)) {
                 widget.onChanged(uiQuantity);
               }
             },
@@ -88,7 +91,8 @@ class _QuantityCounterState extends State<QuantityCounter> {
         ),
         IconButton(
           onPressed: () {
-            if (uiQuantity < widget.maxQuantity) {
+            print(widget.maxQuantity);
+            if (uiQuantity < (widget.maxQuantity ?? double.infinity)) {
               widget.onChanged(uiQuantity + 1);
               widget.controller.text = (uiQuantity + 1).toString();
               uiQuantity++;

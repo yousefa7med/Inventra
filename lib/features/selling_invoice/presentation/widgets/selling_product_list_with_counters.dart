@@ -2,13 +2,12 @@ import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/product_card_with_counter.dart';
+import 'package:Inventra/features/selling_invoice/presentation/widgets/selling_product_card_with_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-class ProductListWithCountersSliver extends StatelessWidget {
-  const ProductListWithCountersSliver({super.key});
+class SellingProductListWithCounters extends StatelessWidget {
+  const SellingProductListWithCounters({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,9 @@ class ProductListWithCountersSliver extends StatelessWidget {
           sliver: SliverList.builder(
             itemCount: cubit.products.length,
             itemBuilder: (context, index) {
-              return ProductCardWithCounter(product: cubit.products[index]);
+              return SellingProductCardWithCounter(
+                product: cubit.products[index],
+              );
             },
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),

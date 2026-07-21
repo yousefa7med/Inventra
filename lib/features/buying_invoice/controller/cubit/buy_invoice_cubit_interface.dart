@@ -12,12 +12,12 @@ abstract class BuyInvoiceCubitInterface {
   List<ProductModel> get products;
 
   // Supplier actions
-  Future<void> loadSuppliers();
   void selectSupplier(SupplierModel supplier);
   void clearSupplier();
+  void loadSuppliers();
 
   // Product actions
-  Future<void> loadProducts(String query);
+  void loadProducts(String query);
   void addProductItem(ProductModel product, int quantity);
   void updateItemQuantity(int itemIndex, int newQuantity);
   void removeItem(int index);

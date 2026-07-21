@@ -98,6 +98,9 @@ This Constitution supersedes all ad-hoc practices, team conventions, and prior a
 ### Spec Branch Naming (MANDATORY)
 Every spec/feature MUST be developed in its own Git branch named `feature/<spec-name>` (kebab-case, descriptive). The branch name MUST match the spec filename (e.g., `feature/add-product-barcode-scanning` for `specs/001-add-product-barcode-scanning.md`). Direct commits to `main`/`master` are FORBIDDEN for feature work. All spec work MUST go through a Pull Request with the branch name clearly indicating the feature scope.
 
+### Git Push Policy (MANDATORY)
+NEVER push to remote without explicit user instruction. All commits and pushes MUST be explicitly requested by the user. The agent MUST wait for explicit "push" or "commit and push" command before executing any git push operation. This ensures the user maintains full control over what gets pushed to remote.
+
 All PR reviews MUST verify compliance with Core Principles I–VIII and Quality Gates. Complexity (new deps, patterns, files >300 LOC) MUST be justified in PR description. Runtime guidance lives in `AGENTS.md`—keep both docs in sync.
 
 **Version**: 1.10.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-15

@@ -8,11 +8,12 @@ import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_state.dart';
-import 'package:Inventra/features/buying_invoice/presentation/widgets/invoice_product_list.dart';
-import 'package:Inventra/features/buying_invoice/presentation/widgets/invoice_totals_card.dart';
+import 'package:Inventra/features/buying_invoice/presentation/widgets/buying_invoice_product_list.dart';
+import 'package:Inventra/features/buying_invoice/presentation/widgets/buying_invoice_totals_card.dart';
 import 'package:Inventra/features/buying_invoice/presentation/widgets/supplier_dropdown_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class BuyingInvoiceView extends StatelessWidget {
   const BuyingInvoiceView({super.key});
@@ -47,13 +48,11 @@ class BuyingInvoiceView extends StatelessWidget {
                     child: SupplierDropdownMenu(),
                   ),
                 ),
-                // Invoice Product List (uses slivers internally)
-                const InvoiceProductList(),
-                // Invoice Totals Card
+                const BuyingInvoiceProductList(),
                 const SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: InvoiceTotalsCard(),
+                    child: BuyingInvoiceTotalsCard(),
                   ),
                 ),
                 // Confirm Button
@@ -80,7 +79,7 @@ class BuyingInvoiceView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 100)),
+                const SliverToBoxAdapter(child: Gap(100)),
               ],
             ),
           ),

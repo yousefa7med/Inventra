@@ -4,21 +4,23 @@ import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/quantity_counter.dart';
+import 'package:Inventra/core/widgets/quantity_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ProductCardWithCounter extends StatefulWidget {
+class SellingProductCardWithCounter extends StatefulWidget {
   final ProductModel product;
 
-  const ProductCardWithCounter({super.key, required this.product});
+  const SellingProductCardWithCounter({super.key, required this.product});
 
   @override
-  State<ProductCardWithCounter> createState() => _ProductCardWithCounterState();
+  State<SellingProductCardWithCounter> createState() =>
+      _SellingProductCardWithCounterState();
 }
 
-class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
+class _SellingProductCardWithCounterState
+    extends State<SellingProductCardWithCounter> {
   late final TextEditingController counterController;
 
   @override

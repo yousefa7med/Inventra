@@ -1,14 +1,15 @@
 import 'dart:developer';
 
 import 'package:Inventra/core/models/customer_model.dart';
-import 'package:Inventra/core/models/product_model.dart';
+import 'package:Inventra/core/models/product_details_argument.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/transitions/page_route_builder_method.dart';
 import 'package:Inventra/core/widgets/customer_form_view.dart';
 import 'package:Inventra/core/widgets/product_form_view.dart';
 import 'package:Inventra/core/widgets/supplier_form_view.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
-import 'package:Inventra/features/buying_invoice/presentation/views/product_selection_view.dart';
+import 'package:Inventra/features/buying_invoice/presentation/views/buying_invoice_view.dart';
+import 'package:Inventra/features/buying_invoice/presentation/views/buying_product_selection_view.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
@@ -16,7 +17,7 @@ import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
-import 'package:Inventra/features/selling_invoice/presentation/views/add_product_to_invoice_view.dart';
+import 'package:Inventra/features/selling_invoice/presentation/views/selling_product_selection_view.dart';
 import 'package:Inventra/features/selling_invoice/presentation/views/selling_invoice_view.dart';
 import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
@@ -37,13 +38,17 @@ class AppRouter {
         );
 
       case AppRoutes.productFormView:
-        final product = settings.arguments as ProductModel?;
+        final arguments = settings.arguments as ProductDetailsArguments?;
+
         return pageRouteBuilderMethod(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
                 value: GetIt.instance<ProductCubit>(),
-                child: ProductFormView(product: product),
+                child: ProductFormView(
+                  product: arguments?.product,
+                  isQuantitiyEditable: arguments?.isQuantitiyEditable,
+                ),
               ),
         );
 
@@ -97,7 +102,7 @@ class AppRouter {
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
                 value: cubit..loadProducts(''),
-                child: const AddProductToInvoiceView(),
+                child: const SellingProductSelectionView(),
               ),
         );
 
@@ -126,7 +131,11 @@ class AppRouter {
         return pageRouteBuilderMethod(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
-              const Scaffold(body: Center(child: Text('فاتورة شراء - قريباً'))),
+              BlocProvider.value(
+                value: GetIt.instance<BuyInvoiceCubit>()
+                  ..loadSuppliers(),
+                child: const BuyingInvoiceView(),
+              ),
         );
 
       case AppRoutes.productSelectionView:
@@ -135,7 +144,7 @@ class AppRouter {
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
                 value: GetIt.instance<BuyInvoiceCubit>()..loadProducts(''),
-                child: const ProductSelectionView(),
+                child: const BuyingProductSelectionView(),
               ),
         );
 

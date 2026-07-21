@@ -181,6 +181,22 @@ flutter pub add <package>
 flutter pub add dev:<package>
 ```
 
+## Git & Push Policy
+
+**NEVER push to main/master directly.** All feature work must be on a `feature/<spec-name>` branch.
+
+- Create feature branch: `git checkout -b feature/buying-invoice-feature`
+- Commit frequently with descriptive messages
+- Push to origin: `git push -u origin feature/<branch-name>`
+- Only merge via Pull Request after review
+- Never force-push to shared branches
+
+**Before pushing:**
+1. Run `flutter analyze` — must pass
+2. Run `flutter test` — must pass  
+3. Run `flutter build apk --debug` — must compile
+4. Run `dart run build_runner build --delete-conflicting-outputs` after model changes
+
 ## Spec Kit Rules
 Before executing any Spec Kit command:
 - Verify the `.specify` directory exists.

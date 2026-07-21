@@ -2,23 +2,27 @@ import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
-import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/quantity_counter.dart';
+import 'package:Inventra/core/widgets/quantity_counter.dart';
+import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class InvoiceItemTile extends StatefulWidget {
+class BuyingInvoiceItemTile extends StatefulWidget {
   final InvoiceItemModel item;
   final int index;
 
-  const InvoiceItemTile({super.key, required this.item, required this.index});
+  const BuyingInvoiceItemTile({
+    super.key,
+    required this.item,
+    required this.index,
+  });
 
   @override
-  State<InvoiceItemTile> createState() => _InvoiceItemTileState();
+  State<BuyingInvoiceItemTile> createState() => _BuyingInvoiceItemTileState();
 }
 
-class _InvoiceItemTileState extends State<InvoiceItemTile> {
+class _BuyingInvoiceItemTileState extends State<BuyingInvoiceItemTile> {
   late final TextEditingController controller;
   @override
   void initState() {
@@ -34,7 +38,7 @@ class _InvoiceItemTileState extends State<InvoiceItemTile> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SellInvoiceCubit>();
+    final cubit = context.read<BuyInvoiceCubit>();
     final product = widget.item.product.target;
 
     return Card(
@@ -65,7 +69,6 @@ class _InvoiceItemTileState extends State<InvoiceItemTile> {
                 ),
                 QuantityCounter(
                   quantity: widget.item.quantity,
-                  maxQuantity: product?.quantity ?? 999,
                   onChanged: (newQty) =>
                       cubit.updateItemQuantity(widget.index, newQty),
                   controller: controller,

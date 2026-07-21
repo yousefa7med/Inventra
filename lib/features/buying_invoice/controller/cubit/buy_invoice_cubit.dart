@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -8,7 +7,8 @@ import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_st
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BuyInvoiceCubit extends Cubit<BuyInvoiceState> implements BuyInvoiceCubitInterface {
+class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
+    implements BuyInvoiceCubitInterface {
   final BuyInvoiceRepository _repository;
 
   final List<InvoiceItemModel> _items = [];
@@ -38,21 +38,13 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState> implements BuyInvoiceCubitI
   List<ProductModel> get products => List.unmodifiable(_products);
 
   // Actions
-  @override
-  Future<void> loadSuppliers() async {
-    try {
-      _suppliers = _repository.getAllSuppliers();
-      emit(BuyInvoiceSuppliersLoaded());
-    } catch (e) {
-      emit(BuyInvoiceError('Failed to load suppliers: $e'));
-    }
-  }
 
   @override
-  Future<void> loadProducts(String search) async {
+  void loadProducts(String search) async {
+    emit(BuyInvoiceProductLoading());
     try {
       final searchText = search.trim().normalizeArabic();
-      emit(BuyInvoiceProductLoading());
+
       _products = _repository.searchProducts(searchText);
       emit(BuyInvoiceProductsLoaded());
     } catch (e) {
@@ -76,19 +68,17 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState> implements BuyInvoiceCubitI
       (i) => i.product.target!.id == product.id,
     );
     if (existingIndex >= 0) {
-      final newQty = (_items[existingIndex].quantity + quantity).clamp(
-        1,
-        product.quantity,
-      );
+      final newQty = (_items[existingIndex].quantity + quantity);
 
       final newItem = _items[existingIndex].copyWith(
         quantity: newQty,
         lineTotal: newQty * _items[existingIndex].unitPrice,
-      )..product.target = product;
+        product: product,
+      );
       _items[existingIndex] = newItem;
       _repository.addItem(newItem);
     } else {
-      final qty = quantity.clamp(1, product.quantity);
+      final qty = quantity;
 
       final newItem = InvoiceItemModel(
         quantity: qty,
@@ -107,10 +97,6 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState> implements BuyInvoiceCubitI
     if (newQuantity < 1) {
       _items.removeAt(itemIndex);
     } else {
-      final product = _items[itemIndex].product.target;
-      if (product != null) {
-        newQuantity = newQuantity.clamp(1, product.quantity);
-      }
       _items[itemIndex] = _items[itemIndex].copyWith(
         quantity: newQuantity,
         lineTotal: newQuantity * _items[itemIndex].unitPrice,
@@ -154,10 +140,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState> implements BuyInvoiceCubitI
 
     emit(BuyInvoiceLoading());
     try {
-      _repository.createBuyInvoice(
-        items: _items,
-        supplier: _selectedSupplier!,
-      );
+      _repository.createBuyInvoice(items: _items, supplier: _selectedSupplier!);
 
       _items.clear();
       _selectedSupplier = null;
@@ -165,5 +148,10 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState> implements BuyInvoiceCubitI
     } catch (e) {
       emit(BuyInvoiceError('Failed to save invoice: $e'));
     }
+  }
+
+  @override
+  void loadSuppliers() {
+    _suppliers = _repository.getAllSuppliers();
   }
 }

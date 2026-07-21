@@ -6,7 +6,6 @@ import 'package:Inventra/core/models/supplier_model.dart';
 abstract class BuyInvoiceRepository {
   // Supplier queries
   List<SupplierModel> getAllSuppliers();
-  SupplierModel? getSupplierById(int id);
 
   // Product queries
   List<ProductModel> getAllProducts();
@@ -18,10 +17,6 @@ abstract class BuyInvoiceRepository {
     required SupplierModel supplier,
   });
 
-  Stream<List<BuyingInvoiceModel>> watchInvoices();
-  List<BuyingInvoiceModel> getAllBuyInvoices();
-  BuyingInvoiceModel? getBuyInvoiceById(int id);
 
-  // Item helpers
   void addItem(InvoiceItemModel item);
 }

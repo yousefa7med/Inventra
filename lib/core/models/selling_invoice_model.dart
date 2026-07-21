@@ -9,8 +9,7 @@ class SellingInvoiceModel {
   final DateTime date;
   final double? discount;
 
-  // New: Items relationship for sell invoice
-  // Backlink points to the 'invoice' field in SellInvoiceItemModel
+
   final ToMany<InvoiceItemModel> items = ToMany<InvoiceItemModel>();
 
   SellingInvoiceModel({required this.date, this.discount});

@@ -1,35 +1,32 @@
 import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/models/product_model.dart';
+import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/widgets/quantity_counter.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
-import 'package:Inventra/features/buying_invoice/presentation/widgets/quantity_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ProductCardWithCounter extends StatefulWidget {
+class BuyingProductCardWithCounter extends StatefulWidget {
   final ProductModel product;
 
-  const ProductCardWithCounter({super.key, required this.product});
+  const BuyingProductCardWithCounter({super.key, required this.product});
 
   @override
-  State<ProductCardWithCounter> createState() => _ProductCardWithCounterState();
+  State<BuyingProductCardWithCounter> createState() =>
+      _BuyingProductCardWithCounterState();
 }
 
-class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
+class _BuyingProductCardWithCounterState
+    extends State<BuyingProductCardWithCounter> {
   late final TextEditingController counterController;
 
   @override
   void initState() {
-    counterController = TextEditingController(text: 0.toString());
+    counterController = TextEditingController(text: 1.toString());
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    counterController.dispose();
-    super.dispose();
   }
 
   @override
@@ -95,23 +92,44 @@ class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(width: 8),
+            const Gap(8),
             Row(
               children: [
-                QuantityCounter(
-                  controller: counterController,
-                  quantity: 0,
-                  maxQuantity: widget.product.quantity,
-                  onChanged: (newQty) {
-                    if (newQty == 0) {
-                      // Remove product from invoice when quantity reaches 0
-                    } else {
-                      cubit.addProductItem(widget.product, newQty);
-                    }
-                  },
+                Expanded(
+                  child: QuantityCounter(
+                    quantity: 1,
+                    controller: counterController,
+                    onChanged: (value) {},
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      cubit.addProductItem(
+                        widget.product,
+                        int.tryParse(counterController.text) ?? 1,
+                      );
+                      AppNavigation.pop(context: context);
+                    },
+                    child: Text(
+                      AppStrings.addToInvoice,
+                      style: AppTextStyle.regular12,
+                    ),
+                  ),
                 ),
               ],
             ),
+            if (widget.product.quantity == 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  AppStrings.outOfStock,
+                  style: AppTextStyle.bold12.copyWith(color: AppColors.error),
+                ),
+              ),
           ],
         ),
       ),

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
@@ -29,10 +28,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     return suppliers;
   }
 
-  @override
-  SupplierModel? getSupplierById(int id) {
-    return _objectBox.suppliersBox.get(id);
-  }
+
 
   @override
   List<ProductModel> getAllProducts() {
@@ -49,7 +45,6 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
   @override
   List<ProductModel> searchProducts(String query) {
     final searchText = query.trim().normalizeArabic();
-    log(searchText);
     if (searchText.isEmpty) {
       return getAllProducts();
     }
@@ -120,31 +115,6 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     return savedInvoice!;
   }
 
-  @override
-  Stream<List<BuyingInvoiceModel>> watchInvoices() {
-    return _objectBox.buyInvoicesBox
-        .query()
-        .order(BuyingInvoiceModel_.date, flags: Order.descending)
-        .watch(triggerImmediately: true)
-        .map((query) => query.find());
-  }
-
-  @override
-  List<BuyingInvoiceModel> getAllBuyInvoices() {
-    final query = _objectBox.buyInvoicesBox
-        .query()
-        .order(BuyingInvoiceModel_.date, flags: Order.descending)
-        .build();
-
-    final invoices = query.find();
-    query.close();
-    return invoices;
-  }
-
-  @override
-  BuyingInvoiceModel? getBuyInvoiceById(int id) {
-    return _objectBox.buyInvoicesBox.get(id);
-  }
 
   @override
   void addItem(InvoiceItemModel item) {
