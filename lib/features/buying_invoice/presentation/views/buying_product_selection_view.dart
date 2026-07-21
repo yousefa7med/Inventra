@@ -37,7 +37,7 @@ class _BuyingProductSelectionViewState
     return Scaffold(
       appBar: const CustomAppBar(title: AppStrings.addProductToInvoice),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: CustomScrollView(
           slivers: [
             SliverPadding(
@@ -68,11 +68,15 @@ class _BuyingProductSelectionViewState
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => AppNavigation.pushName(
-          context: context,
-          route: AppRoutes.productFormView,
-          argument: ProductDetailsArguments(isQuantitiyEditable: false),
-        ),
+        onPressed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+
+          AppNavigation.pushName(
+            context: context,
+            route: AppRoutes.productFormView,
+            argument: ProductDetailsArguments(isQuantitiyEditable: false),
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );

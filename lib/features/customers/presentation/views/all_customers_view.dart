@@ -51,7 +51,7 @@ class _AllCustomersViewState extends State<AllCustomersView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
@@ -139,10 +139,7 @@ class _AllCustomersViewState extends State<AllCustomersView> {
 
                       itemBuilder: (context, index) {
                         final customer = customers[index];
-                        return CustomerCard(
-                          customer: customer,
-            
-                        );
+                        return CustomerCard(customer: customer);
                       },
                     ),
                   );

@@ -53,7 +53,7 @@ class _InventoryViewState extends State<InventoryView> {
   Widget build(BuildContext context) {
     final cubit = context.read<ProductCubit>();
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         body: CustomScrollView(
           slivers: [

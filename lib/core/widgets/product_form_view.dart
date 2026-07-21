@@ -80,7 +80,7 @@ class _ProductFormViewState extends State<ProductFormView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: CustomAppBar(title: isEditing ? 'تعديل المنتج' : 'إضافة منتج'),
         body: SingleChildScrollView(
