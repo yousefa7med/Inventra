@@ -10,6 +10,7 @@ abstract class BuyInvoiceCubitInterface {
   double get total;
   List<SupplierModel> get suppliers;
   List<ProductModel> get products;
+  String searchQuery="";
 
   // Supplier actions
   void selectSupplier(SupplierModel supplier);

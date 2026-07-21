@@ -115,7 +115,10 @@ class _InventoryViewState extends State<InventoryView> {
                           ElevatedButton(
                             onPressed: () =>
                                 context.read<ProductCubit>().loadProducts(),
-                            child: const Text('إعادة المحاولة'),
+                            child: const Text(
+                              'إعادة المحاولة',
+                              style: AppTextStyle.navBar,
+                            ),
                           ),
                         ],
                       ),

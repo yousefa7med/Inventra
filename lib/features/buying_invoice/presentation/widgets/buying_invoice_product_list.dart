@@ -15,7 +15,7 @@ class BuyingInvoiceProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<BuyInvoiceCubit, BuyInvoiceState>(
       buildWhen: (prev, curr) =>
-          curr is BuyInvoiceAddProduct ||
+          curr is BuyInvoiceAddProductItem ||
           curr is BuyInvoiceRemoveProduct ||
           curr is BuyInvoiceUpdateProductQuantity,
       builder: (context, state) {

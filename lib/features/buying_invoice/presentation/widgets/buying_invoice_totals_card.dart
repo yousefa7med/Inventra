@@ -13,7 +13,7 @@ class BuyingInvoiceTotalsCard extends StatelessWidget {
     return BlocBuilder<BuyInvoiceCubit, BuyInvoiceState>(
       buildWhen: (previous, current) =>
           current is BuyInvoiceUpdateProductQuantity ||
-          current is BuyInvoiceAddProduct ||
+          current is BuyInvoiceAddProductItem ||
           current is BuyInvoiceRemoveProduct,
       builder: (context, state) {
         final cubit = context.read<BuyInvoiceCubit>();

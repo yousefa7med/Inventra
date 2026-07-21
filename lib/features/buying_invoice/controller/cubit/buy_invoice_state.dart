@@ -4,13 +4,21 @@ class BuyInvoiceInitial extends BuyInvoiceState {}
 
 class BuyInvoiceLoading extends BuyInvoiceState {}
 
-class BuyInvoiceSuppliersLoaded extends BuyInvoiceState {}
-
+// product state
 class BuyInvoiceProductsLoaded extends BuyInvoiceState {}
 
 class BuyInvoiceProductLoading extends BuyInvoiceState {}
 
-class BuyInvoiceAddProduct extends BuyInvoiceState {}
+class BuyInvoiceAddNewProduct extends BuyInvoiceState {}
+
+class BuyInvoiceProductError extends BuyInvoiceState {
+  final String message;
+
+  BuyInvoiceProductError(this.message);
+}
+
+// invoice state
+class BuyInvoiceAddProductItem extends BuyInvoiceState {}
 
 class BuyInvoiceUpdateProductQuantity extends BuyInvoiceState {}
 
