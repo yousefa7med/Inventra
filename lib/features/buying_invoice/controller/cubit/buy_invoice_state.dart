@@ -9,7 +9,6 @@ class BuyInvoiceProductsLoaded extends BuyInvoiceState {}
 
 class BuyInvoiceProductLoading extends BuyInvoiceState {}
 
-class BuyInvoiceAddNewProduct extends BuyInvoiceState {}
 
 class BuyInvoiceProductError extends BuyInvoiceState {
   final String message;
