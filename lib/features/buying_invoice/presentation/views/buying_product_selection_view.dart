@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/constants/app_strings.dart';
+import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
@@ -67,7 +68,7 @@ class _BuyingProductSelectionViewState
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           FocusManager.instance.primaryFocus?.unfocus();
 
@@ -77,7 +78,8 @@ class _BuyingProductSelectionViewState
             argument: ProductDetailsArguments(isQuantitiyEditable: false),
           );
         },
-        child: const Icon(Icons.add),
+        icon: const Icon(Icons.add),
+        label: const Text(AppStrings.addProduct, style: AppTextStyle.navBar),
       ),
     );
   }

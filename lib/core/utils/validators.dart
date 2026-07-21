@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+
 abstract class Validator {
   static String? validateRequired(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
@@ -54,8 +58,8 @@ abstract class Validator {
       if (value == null || value.isEmpty) {
         return "ادخل الكمية المتاحة";
       }
-      final price = double.tryParse(value);
-      if (price == null || price <= 0) return "رقم غير صحيح";
+      final quantity = int.tryParse(value);
+      if (quantity == null || quantity <= 0) return "رقم غير صحيح";
       return null;
     };
   }
@@ -74,8 +78,8 @@ abstract class Validator {
   }
 
   static String? Function(String? value) validateSellingPrice(
-    String buyingPrice,
-    String wholeSalePrice,
+    TextEditingController buyingPrice,
+    TextEditingController wholeSalePrice,
   ) {
     return (value) {
       if (value == null || value.isEmpty) {
@@ -85,21 +89,24 @@ abstract class Validator {
       if (price == null || price <= 0) {
         return "رقم غير صحيح";
       }
-      final parsedBuyingPrice = double.tryParse(buyingPrice) ?? 0;
-      final parsedWholesalePrice = double.tryParse(wholeSalePrice) ?? 0;
-
+      log(buyingPrice.text);
+      log(wholeSalePrice.text);
+      final parsedBuyingPrice = double.tryParse(buyingPrice.text) ?? 0;
+      final parsedWholesalePrice = double.tryParse(wholeSalePrice.text) ?? 0;
+      log(parsedBuyingPrice.toString());
+      log(parsedWholesalePrice.toString());
       if (price <= parsedBuyingPrice) {
-        return "يجب أن يكون أعلى من سعر الشراء";
+        return "يجب أن يزيد عن سعر الشراء";
       }
       if (price <= parsedWholesalePrice) {
-        return "يجب أن يكون أعلى من سعر الجملة";
+        return "يجب أن يزيد عن سعر الجملة";
       }
       return null;
     };
   }
 
   static String? Function(String? value) validateWholeSalePrice(
-    String buyingPrice,
+    TextEditingController buyingPrice,
   ) {
     return (value) {
       if (value == null || value.isEmpty) {
@@ -109,9 +116,9 @@ abstract class Validator {
       if (price == null || price <= 0) {
         return "رقم غير صحيح";
       }
-      final parsedBuyingPrice = double.tryParse(buyingPrice) ?? 0;
+      final parsedBuyingPrice = double.tryParse(buyingPrice.text) ?? 0;
       if (price <= parsedBuyingPrice) {
-        return "يجب أن يكون أكبر من سعر الشراء";
+        return "يجب أن يزيد عن سعر الشراء";
       }
       return null;
     };

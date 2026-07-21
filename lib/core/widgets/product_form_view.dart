@@ -136,7 +136,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                       validator: Validator.validateQuantaty(),
                     ),
                   ],
-                  const Gap(20),
+                  const Gap(16),
                   Row(
                     children: [
                       Expanded(
@@ -159,26 +159,28 @@ class _ProductFormViewState extends State<ProductFormView> {
                           textInputAction: TextInputAction.next,
                           suffixText: 'ج.م',
                           validator: Validator.validateWholeSalePrice(
-                            bPriceController.text,
-                          ),
-                        ),
-                      ),
-                      Gap(12.w),
-                      Expanded(
-                        child: AppTextField(
-                          controller: sPriceController,
-                          label: "سعر البيع",
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          suffixText: 'ج.م',
-                          validator: Validator.validateSellingPrice(
-                            bPriceController.text,
-                            wPriceController.text,
+                            bPriceController,
                           ),
                         ),
                       ),
                     ],
                   ),
+                  const Gap(16),
+
+                  FractionallySizedBox(
+                    child: AppTextField(
+                      controller: sPriceController,
+                      label: "سعر البيع",
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      suffixText: 'ج.م',
+                      validator: Validator.validateSellingPrice(
+                        bPriceController,
+                        wPriceController,
+                      ),
+                    ),
+                  ),
+
                   Gap(32.h),
                   AppButton(
                     onPressed: () async {
