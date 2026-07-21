@@ -9,8 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-class InvoiceTotalsCard extends StatelessWidget {
-  const InvoiceTotalsCard({super.key});
+class SellingInvoiceTotalsCard extends StatelessWidget {
+  const SellingInvoiceTotalsCard({super.key});
 
   @override
   Widget build(BuildContext context) {

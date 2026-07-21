@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
-import 'package:Inventra/core/models/sell_invoice_item_model.dart';
+import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'sell_invoice_state.dart';
@@ -13,7 +13,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
     implements SellInvoiceCubitInterface {
   final SellInvoiceRepository _repository;
 
-  final List<SellInvoiceItemModel> _items = [];
+  final List<InvoiceItemModel> _items = [];
   CustomerModel? _selectedCustomer;
   double _discount = 0.0;
   List<CustomerModel> _customers = [];
@@ -23,7 +23,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
 
   // Getters for UI
   @override
-  List<SellInvoiceItemModel> get items => List.unmodifiable(_items);
+  List<InvoiceItemModel> get items => List.unmodifiable(_items);
   @override
   CustomerModel? get selectedCustomer => _selectedCustomer;
   @override
@@ -97,7 +97,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
     } else {
       final qty = quantity.clamp(1, product.quantity);
 
-      final newItem = SellInvoiceItemModel(
+      final newItem = InvoiceItemModel(
         // sellInvoiceId: 0,
         quantity: qty,
         unitPrice: product.saleingPrice,

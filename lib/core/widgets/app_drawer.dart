@@ -51,15 +51,15 @@ class AppDrawer extends StatelessWidget {
                   
                     },
                   ),
-                  _DrawerItem(
+_DrawerItem(
                     icon: Icons.receipt_long_outlined,
                     title: 'فواتير المشتريات',
                     onTap: () {
                       AppNavigation.pushName(
                         context: context,
-                        route: AppRoutes.buyInvoices,
+                        route: AppRoutes.buyingInvoiceView,
                       );
-                     
+                      
                     },
                   ),
                   const _DrawerDivider(),

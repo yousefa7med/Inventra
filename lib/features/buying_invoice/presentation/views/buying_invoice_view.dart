@@ -6,29 +6,29 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
-import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
-import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/customer_dropdown_menu.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/selling_invoice_product_list.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/selling_invoice_totals_card.dart';
+import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
+import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_state.dart';
+import 'package:Inventra/features/buying_invoice/presentation/widgets/buying_invoice_product_list.dart';
+import 'package:Inventra/features/buying_invoice/presentation/widgets/buying_invoice_totals_card.dart';
+import 'package:Inventra/features/buying_invoice/presentation/widgets/supplier_dropdown_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class SellingInvoiceView extends StatelessWidget {
-  const SellingInvoiceView({super.key});
+class BuyingInvoiceView extends StatelessWidget {
+  const BuyingInvoiceView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: BlocListener<SellInvoiceCubit, SellInvoiceState>(
+      child: BlocListener<BuyInvoiceCubit, BuyInvoiceState>(
         listenWhen: (prev, curr) =>
-            curr is SellInvoiceError || curr is SellInvoiceConfirmed,
+            curr is BuyInvoiceError || curr is BuyInvoiceConfirmed,
         listener: (context, state) {
-          if (state is SellInvoiceError) {
+          if (state is BuyInvoiceError) {
             showSnackBar(context, state.message, color: AppColors.error);
-          } else if (state is SellInvoiceConfirmed) {
+          } else if (state is BuyInvoiceConfirmed) {
             showSnackBar(
               context,
               "تم اضافة الفاتورة بنجاح",
@@ -41,18 +41,18 @@ class SellingInvoiceView extends StatelessWidget {
           body: SafeArea(
             child: CustomScrollView(
               slivers: [
-                // Customer Dropdown
+                // Supplier Dropdown
                 const SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: CustomerDropdownMenu(),
+                    child: SupplierDropdownMenu(),
                   ),
                 ),
-                const SellingInvoiceProductList(),
+                const BuyingInvoiceProductList(),
                 const SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.all(16),
-                    child: SellingInvoiceTotalsCard(),
+                    child: BuyingInvoiceTotalsCard(),
                   ),
                 ),
                 // Confirm Button
@@ -62,10 +62,10 @@ class SellingInvoiceView extends StatelessWidget {
                     child: AppButton(
                       onPressed: () async {
                         if (context
-                            .read<SellInvoiceCubit>()
-                            .validateSellInvoice()) {
+                            .read<BuyInvoiceCubit>()
+                            .validateBuyInvoice()) {
                           await context
-                              .read<SellInvoiceCubit>()
+                              .read<BuyInvoiceCubit>()
                               .confirmInvoice();
                           if (context.mounted) {
                             AppNavigation.pop(context: context);
@@ -79,14 +79,14 @@ class SellingInvoiceView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child:  Gap(100)),
+                const SliverToBoxAdapter(child: Gap(100)),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => AppNavigation.pushName(
               context: context,
-              route: AppRoutes.addProductToInvoice,
+              route: AppRoutes.productSelectionView,
             ),
             child: const Icon(Icons.add),
           ),

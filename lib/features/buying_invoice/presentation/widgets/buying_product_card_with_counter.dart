@@ -3,22 +3,24 @@ import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
-import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
-import 'package:Inventra/features/selling_invoice/presentation/widgets/quantity_counter.dart';
+import 'package:Inventra/core/widgets/quantity_counter.dart';
+import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ProductCardWithCounter extends StatefulWidget {
+class BuyingProductCardWithCounter extends StatefulWidget {
   final ProductModel product;
 
-  const ProductCardWithCounter({super.key, required this.product});
+  const BuyingProductCardWithCounter({super.key, required this.product});
 
   @override
-  State<ProductCardWithCounter> createState() => _ProductCardWithCounterState();
+  State<BuyingProductCardWithCounter> createState() =>
+      _BuyingProductCardWithCounterState();
 }
 
-class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
+class _BuyingProductCardWithCounterState
+    extends State<BuyingProductCardWithCounter> {
   late final TextEditingController counterController;
 
   @override
@@ -29,7 +31,7 @@ class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SellInvoiceCubit>();
+    final cubit = context.read<BuyInvoiceCubit>();
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -98,7 +100,6 @@ class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
                 Expanded(
                   child: QuantityCounter(
                     quantity: 1,
-                    maxQuantity: widget.product.quantity,
                     controller: counterController,
                     onChanged: (value) {},
                   ),
@@ -106,15 +107,13 @@ class _ProductCardWithCounterState extends State<ProductCardWithCounter> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: widget.product.quantity > 0
-                        ? () {
-                            cubit.addProductItemLine(
-                              widget.product,
-                              int.tryParse(counterController.text) ?? 1,
-                            );
-                            AppNavigation.pop(context: context);
-                          }
-                        : null,
+                    onPressed: () {
+                      cubit.addProductItem(
+                        widget.product,
+                        int.tryParse(counterController.text) ?? 1,
+                      );
+                      AppNavigation.pop(context: context);
+                    },
                     child: Text(
                       AppStrings.addToInvoice,
                       style: AppTextStyle.regular12,

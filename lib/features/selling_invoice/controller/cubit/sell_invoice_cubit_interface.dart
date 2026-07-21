@@ -1,10 +1,10 @@
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
-import 'package:Inventra/core/models/sell_invoice_item_model.dart';
+import 'package:Inventra/core/models/invoice_item_model.dart';
 
 abstract class SellInvoiceCubitInterface {
   // State getters
-  List<SellInvoiceItemModel> get items;
+  List<InvoiceItemModel> get items;
   CustomerModel? get selectedCustomer;
   double get discount;
   double get subtotal;

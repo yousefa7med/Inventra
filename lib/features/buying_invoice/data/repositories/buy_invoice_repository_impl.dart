@@ -1,33 +1,34 @@
-import 'dart:developer';
 
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/balance_audit_entry_model.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
-import 'package:Inventra/core/models/customer_model.dart';
-import 'package:Inventra/core/models/safe_balance_model.dart';
-import 'package:Inventra/core/models/selling_invoice_model.dart';
-import 'package:Inventra/core/models/product_model.dart';
+import 'package:Inventra/core/models/buying_invoice_model.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
-import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
+import 'package:Inventra/core/models/product_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
+import 'package:Inventra/core/models/supplier_model.dart';
+import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
-class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
+class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
   final ObjectBoxServices _objectBox;
 
-  SellInvoiceRepositoryImpl(this._objectBox);
+  BuyInvoiceRepositoryImpl(this._objectBox);
 
   @override
-  List<CustomerModel> getAllCustomers() {
-    final query = _objectBox.customersBox
+  List<SupplierModel> getAllSuppliers() {
+    final query = _objectBox.suppliersBox
         .query()
-        .order(CustomerModel_.name)
+        .order(SupplierModel_.name)
         .build();
 
-    final customers = query.find();
+    final suppliers = query.find();
     query.close();
-    return customers;
+    return suppliers;
   }
+
+
 
   @override
   List<ProductModel> getAllProducts() {
@@ -42,59 +43,54 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
   }
 
   @override
-  List<ProductModel> searchProducts(String search) {
-    final searchText = search.trim().normalizeArabic();
-    log(searchText);
-    late final List<ProductModel> products;
+  List<ProductModel> searchProducts(String query) {
+    final searchText = query.trim().normalizeArabic();
     if (searchText.isEmpty) {
       return getAllProducts();
     }
 
     if (RegExp(r'^\d+$').hasMatch(searchText)) {
-      final query = _objectBox.productsBox
+      final barcodeQuery = _objectBox.productsBox
           .query(ProductModel_.barcode.contains(searchText))
           .build();
-      products = query.find();
-      query.close();
+      final products = barcodeQuery.find();
+      barcodeQuery.close();
 
       return products;
     }
-    final query = _objectBox.productsBox
+    final nameQuery = _objectBox.productsBox
         .query(ProductModel_.name.contains(searchText, caseSensitive: false))
         .order(ProductModel_.name)
         .build();
-    products = query.find();
-    query.close();
+    final products = nameQuery.find();
+    nameQuery.close();
     return products;
   }
 
   @override
-  SellingInvoiceModel createSellInvoice({
+  BuyingInvoiceModel createBuyInvoice({
     required List<InvoiceItemModel> items,
-    required CustomerModel customer,
-    double? discount,
+    required SupplierModel supplier,
   }) {
-    SellingInvoiceModel? savedInvoice;
+    BuyingInvoiceModel? savedInvoice;
     double totalPrice = 0.0;
     _objectBox.store.runInTransaction(TxMode.write, () {
-      final invoice = SellingInvoiceModel(
+      final invoice = BuyingInvoiceModel(
         date: DateTime.now(),
-        discount: discount,
       );
-      customer.invoices.add(invoice);
-      _objectBox.invoicesBox.put(invoice);
-      _objectBox.customersBox.put(customer);
+      invoice.supplier.target = supplier;
+      _objectBox.buyInvoicesBox.put(invoice);
 
       for (final item in items) {
         invoice.items.add(item);
 
         final product = item.product.target!;
-        product.quantity -= item.quantity;
+        product.quantity += item.quantity;
         _objectBox.productsBox.put(product);
 
         totalPrice += item.lineTotal;
       }
-      _objectBox.invoicesBox.put(invoice);
+      _objectBox.buyInvoicesBox.put(invoice);
 
       invoice.items.addAll(items);
       savedInvoice = invoice;
@@ -104,29 +100,21 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         _objectBox.safeBalanceBox.get(1) ??
         SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
 
-    balance.currentBalance += (totalPrice - (discount ?? 0));
+    balance.currentBalance -= totalPrice;
     _objectBox.safeBalanceBox.put(balance);
 
     final auditEntry = BalanceAuditEntryModel(
-      type: BalanceChangeType.sellInvoice.index,
-      amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
+      type: BalanceChangeType.buyInvoice.index,
+      amount: -totalPrice,
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
-      note: 'فاتورة بيع: ${customer.name}',
+      note: 'فاتورة شراء: ${supplier.name}',
     );
     _objectBox.balanceAuditEntryBox.put(auditEntry);
 
     return savedInvoice!;
   }
 
-  @override
-  Stream<List<SellingInvoiceModel>> watchInvoices() {
-    return _objectBox.invoicesBox
-        .query()
-        .order(SellingInvoiceModel_.date, flags: Order.descending)
-        .watch(triggerImmediately: true)
-        .map((query) => query.find());
-  }
 
   @override
   void addItem(InvoiceItemModel item) {

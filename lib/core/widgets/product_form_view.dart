@@ -20,8 +20,9 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 class ProductFormView extends StatefulWidget {
-  const ProductFormView({super.key, this.product});
+  const ProductFormView({super.key, this.product, this.isQuantitiyEditable});
   final ProductModel? product;
+  final bool? isQuantitiyEditable;
   @override
   State<ProductFormView> createState() => _ProductFormViewState();
 }
@@ -32,7 +33,7 @@ class _ProductFormViewState extends State<ProductFormView> {
   XFile? image;
   late final TextEditingController barcodeController;
   late final TextEditingController nameController;
-  late final TextEditingController quantatyController;
+  late final TextEditingController? quantatyController;
   late final TextEditingController bPriceController;
   late final TextEditingController wPriceController;
   late final TextEditingController sPriceController;
@@ -44,9 +45,14 @@ class _ProductFormViewState extends State<ProductFormView> {
     isEditing = widget.product != null;
     barcodeController = TextEditingController(text: widget.product?.barcode);
     nameController = TextEditingController(text: widget.product?.name);
-    quantatyController = TextEditingController(
-      text: widget.product?.quantity.toString(),
-    );
+    if (widget.isQuantitiyEditable ?? true) {
+      quantatyController = TextEditingController(
+        text: widget.product?.quantity.toString(),
+      );
+    } else {
+      quantatyController = null;
+    }
+
     bPriceController = TextEditingController(
       text: widget.product?.buyingPrice.toString(),
     );
@@ -64,7 +70,7 @@ class _ProductFormViewState extends State<ProductFormView> {
   void dispose() {
     barcodeController.dispose();
     nameController.dispose();
-    quantatyController.dispose();
+    quantatyController?.dispose();
     bPriceController.dispose();
     wPriceController.dispose();
     sPriceController.dispose();
@@ -119,17 +125,18 @@ class _ProductFormViewState extends State<ProductFormView> {
                     ),
                     validator: Validator.validateBarcode(),
                   ),
-                  const Gap(16),
 
-                  AppTextField(
-                    controller: quantatyController,
-                    label: "الكمية المتاحة",
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    validator: Validator.validateQuantaty(),
-                  ),
+                  if (widget.isQuantitiyEditable ?? true) ...[
+                    const Gap(16),
+                    AppTextField(
+                      controller: quantatyController,
+                      label: "الكمية المتاحة",
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      validator: Validator.validateQuantaty(),
+                    ),
+                  ],
                   const Gap(20),
-
                   Row(
                     children: [
                       Expanded(
@@ -188,7 +195,9 @@ class _ProductFormViewState extends State<ProductFormView> {
                         if (isEditing) {
                           product = widget.product!.copyWith(
                             name: nameController.text.trim(),
-                            quantity: int.tryParse(quantatyController.text),
+                            quantity: int.tryParse(
+                              quantatyController?.text ?? "0",
+                            ),
                             buyingPrice: double.tryParse(bPriceController.text),
                             saleingPrice: double.tryParse(
                               sPriceController.text,
@@ -203,7 +212,8 @@ class _ProductFormViewState extends State<ProductFormView> {
                           product = ProductModel(
                             name: nameController.text.trim(),
                             quantity:
-                                int.tryParse(quantatyController.text) ?? 0,
+                                int.tryParse(quantatyController?.text ?? "0") ??
+                                0,
                             buyingPrice:
                                 double.tryParse(bPriceController.text) ?? 0,
                             saleingPrice:
@@ -238,7 +248,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                           AppNavigation.pop(context: context);
                         } catch (e) {
                           if (image != null && workingImgPath != null) {
-                          await  deleteImage(workingImgPath);
+                            await deleteImage(workingImgPath);
                             imgPath = oldImagePath;
                           }
 
