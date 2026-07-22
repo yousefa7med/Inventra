@@ -15,7 +15,8 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
   SupplierModel? _selectedSupplier;
   List<SupplierModel> _suppliers = [];
   List<ProductModel> _products = [];
-
+  @override
+  String searchQuery = '';
   BuyInvoiceCubit(this._repository) : super(BuyInvoiceInitial());
 
   // Getters for UI
@@ -40,15 +41,30 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
   // Actions
 
   @override
+  void insertProduct(ProductModel product) {
+    final index = _products.indexWhere((p) => p.id == product.id);
+    if (index != -1) {
+      _products.removeAt(index);
+      _products.insert(index, product);
+    } else {
+      _products.add(product);
+    }
+
+    _repository.insertProduct(product);
+    emit(BuyInvoiceProductsLoaded());
+  }
+
+  @override
   void loadProducts(String search) async {
     emit(BuyInvoiceProductLoading());
+    searchQuery = search;
     try {
       final searchText = search.trim().normalizeArabic();
 
       _products = _repository.searchProducts(searchText);
       emit(BuyInvoiceProductsLoaded());
     } catch (e) {
-      emit(BuyInvoiceError('Failed to load products: $e'));
+      emit(BuyInvoiceProductError('Failed to load products: $e'));
     }
   }
 
@@ -89,7 +105,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
       _repository.addItem(newItem);
     }
 
-    emit(BuyInvoiceAddProduct());
+    emit(BuyInvoiceAddProductItem());
   }
 
   @override

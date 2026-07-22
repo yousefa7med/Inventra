@@ -5,6 +5,7 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/quantity_counter.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
+import 'package:Inventra/features/buying_invoice/presentation/change_product_price_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -26,13 +27,19 @@ class _BuyingProductCardWithCounterState
   @override
   void initState() {
     counterController = TextEditingController(text: 1.toString());
+
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<BuyInvoiceCubit>();
+  void dispose() {
+    counterController.dispose();
 
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -77,7 +84,7 @@ class _BuyingProductCardWithCounterState
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'بيع: ${widget.product.saleingPrice.toStringAsFixed(2)} ${AppStrings.egp}',
+                    'بيع: ${widget.product.sellingPrice.toStringAsFixed(2)} ${AppStrings.egp}',
                     style: AppTextStyle.bold12.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -107,12 +114,21 @@ class _BuyingProductCardWithCounterState
                 const SizedBox(width: 8),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
-                      cubit.addProductItem(
+                    onPressed: () async {
+                      final cubit = context.read<BuyInvoiceCubit>();
+                      final product = await changeProductPriceDialog(
+                        context,
                         widget.product,
+                      );
+                      if (product != null) {
+                        cubit.insertProduct(product);
+                      }
+
+                      cubit.addProductItem(
+                        product ?? widget.product,
                         int.tryParse(counterController.text) ?? 1,
                       );
-                      AppNavigation.pop(context: context);
+                      AppNavigation.pop(context);
                     },
                     child: Text(
                       AppStrings.addToInvoice,

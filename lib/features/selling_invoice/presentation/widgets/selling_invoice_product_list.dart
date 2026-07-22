@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
@@ -16,7 +15,7 @@ class SellingInvoiceProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SellInvoiceCubit, SellInvoiceState>(
       buildWhen: (prev, curr) =>
-          curr is SellInvoiceAddProduct ||
+          curr is SellInvoiceAddProductItem ||
           curr is SellInvoiceRemoveProduct ||
           curr is SellInvoiceUpdateProductQuantity,
       builder: (context, state) {

@@ -77,7 +77,7 @@ class _SellingProductCardWithCounterState
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'بيع: ${widget.product.saleingPrice.toStringAsFixed(2)} ${AppStrings.egp}',
+                    'بيع: ${widget.product.sellingPrice.toStringAsFixed(2)} ${AppStrings.egp}',
                     style: AppTextStyle.bold12.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
@@ -114,7 +114,7 @@ class _SellingProductCardWithCounterState
                               widget.product,
                               int.tryParse(counterController.text) ?? 1,
                             );
-                            AppNavigation.pop(context: context);
+                            AppNavigation.pop( context);
                           }
                         : null,
                     child: Text(

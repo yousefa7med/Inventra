@@ -53,7 +53,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
     if (mounted) {
       setState(() => _isLoading = false);
       if (result is Success<void>) {
-        if (mounted) AppNavigation.pop(context: context);
+        if (mounted) AppNavigation.pop(context);
       } else if (result is Failure<void>) {
         if (mounted) {
           showSnackBar(context, result.message, color: AppColors.error);

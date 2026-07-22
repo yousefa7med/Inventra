@@ -60,7 +60,7 @@ class _ProductFormViewState extends State<ProductFormView> {
       text: widget.product?.wholesalePrice.toString(),
     );
     sPriceController = TextEditingController(
-      text: widget.product?.saleingPrice.toString(),
+      text: widget.product?.sellingPrice.toString(),
     );
     imgPath = widget.product?.imgPath;
     super.initState();
@@ -80,7 +80,7 @@ class _ProductFormViewState extends State<ProductFormView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: CustomAppBar(title: isEditing ? 'تعديل المنتج' : 'إضافة منتج'),
         body: SingleChildScrollView(
@@ -136,7 +136,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                       validator: Validator.validateQuantaty(),
                     ),
                   ],
-                  const Gap(20),
+                  const Gap(16),
                   Row(
                     children: [
                       Expanded(
@@ -159,26 +159,28 @@ class _ProductFormViewState extends State<ProductFormView> {
                           textInputAction: TextInputAction.next,
                           suffixText: 'ج.م',
                           validator: Validator.validateWholeSalePrice(
-                            bPriceController.text,
-                          ),
-                        ),
-                      ),
-                      Gap(12.w),
-                      Expanded(
-                        child: AppTextField(
-                          controller: sPriceController,
-                          label: "سعر البيع",
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          suffixText: 'ج.م',
-                          validator: Validator.validateSellingPrice(
-                            bPriceController.text,
-                            wPriceController.text,
+                            bPriceController,
                           ),
                         ),
                       ),
                     ],
                   ),
+                  const Gap(16),
+
+                  FractionallySizedBox(
+                    child: AppTextField(
+                      controller: sPriceController,
+                      label: "سعر البيع",
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.done,
+                      suffixText: 'ج.م',
+                      validator: Validator.validateSellingPrice(
+                        bPriceController,
+                        wPriceController,
+                      ),
+                    ),
+                  ),
+
                   Gap(32.h),
                   AppButton(
                     onPressed: () async {
@@ -199,7 +201,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                               quantatyController?.text ?? "0",
                             ),
                             buyingPrice: double.tryParse(bPriceController.text),
-                            saleingPrice: double.tryParse(
+                            sellingPrice: double.tryParse(
                               sPriceController.text,
                             ),
                             wholesalePrice: double.tryParse(
@@ -216,7 +218,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                                 0,
                             buyingPrice:
                                 double.tryParse(bPriceController.text) ?? 0,
-                            saleingPrice:
+                            sellingPrice:
                                 double.tryParse(sPriceController.text) ?? 0,
                             wholesalePrice:
                                 double.tryParse(wPriceController.text) ?? 0,
@@ -245,7 +247,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                             color: AppColors.success,
                           );
 
-                          AppNavigation.pop(context: context);
+                          AppNavigation.pop<ProductModel>(context, product);
                         } catch (e) {
                           if (image != null && workingImgPath != null) {
                             await deleteImage(workingImgPath);

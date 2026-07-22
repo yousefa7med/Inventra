@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
 abstract class AppNavigation {
-static void pushName({
-    required BuildContext context,
-    required String route,
-    Object? argument,
-    bool rootNavigator = false,
-  }) {
-    Navigator.of(
-      context,
-      rootNavigator: rootNavigator,
-    ).pushNamed(route, arguments: argument);
-  }
+static Future<T?> pushName<T extends Object?>({
+  required BuildContext context,
+  required String route,
+  Object? argument,
+  bool rootNavigator = false,
+}) {
+  return Navigator.of(
+    context,
+    rootNavigator: rootNavigator,
+  ).pushNamed<T>(
+    route,
+    arguments: argument,
+  );
+}
 
   static void pushWithReplacement({
     required BuildContext context,
@@ -44,7 +47,7 @@ static void pushName({
     });
   }
 
-  static void pop({required BuildContext context}) {
-    Navigator.pop(context);
+  static void pop<T extends Object?>( BuildContext context,[T? result]) {
+    Navigator.pop(context,result);
   }
 }

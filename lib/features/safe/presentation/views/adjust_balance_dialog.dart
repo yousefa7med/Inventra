@@ -44,7 +44,7 @@ class _AdjustBalanceDialogState extends State<AdjustBalanceDialog> {
     if (mounted) {
       setState(() => _isLoading = false);
       if (result is Success<void>) {
-        if (mounted) AppNavigation.pop(context: context);
+        if (mounted) AppNavigation.pop(context);
       } else if (result is Failure<void>) {
         if (mounted) {
           showSnackBar(context, result.message, color: AppColors.error);
@@ -99,9 +99,7 @@ class _AdjustBalanceDialogState extends State<AdjustBalanceDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _isLoading
-              ? null
-              : () => AppNavigation.pop(context: context),
+          onPressed: _isLoading ? null : () => AppNavigation.pop(context),
           child: Text(
             'إلغاء',
             style: AppTextStyle.medium14.copyWith(color: AppColors.grey),

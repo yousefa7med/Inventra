@@ -32,7 +32,7 @@ class _SellingProductSelectionViewState
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: const CustomAppBar(title: AppStrings.addProductToInvoice),
         body: CustomScrollView(

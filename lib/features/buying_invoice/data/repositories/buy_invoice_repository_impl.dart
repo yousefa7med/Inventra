@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/balance_audit_entry_model.dart';
@@ -28,8 +27,6 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     return suppliers;
   }
 
-
-
   @override
   List<ProductModel> getAllProducts() {
     final query = _objectBox.productsBox
@@ -40,6 +37,11 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     final products = query.find();
     query.close();
     return products;
+  }
+
+  @override
+  void insertProduct(ProductModel product) {
+    _objectBox.productsBox.put(product);
   }
 
   @override
@@ -75,9 +77,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     BuyingInvoiceModel? savedInvoice;
     double totalPrice = 0.0;
     _objectBox.store.runInTransaction(TxMode.write, () {
-      final invoice = BuyingInvoiceModel(
-        date: DateTime.now(),
-      );
+      final invoice = BuyingInvoiceModel(date: DateTime.now());
       invoice.supplier.target = supplier;
       _objectBox.buyInvoicesBox.put(invoice);
 
@@ -114,7 +114,6 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
 
     return savedInvoice!;
   }
-
 
   @override
   void addItem(InvoiceItemModel item) {

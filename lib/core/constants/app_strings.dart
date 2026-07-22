@@ -1,4 +1,4 @@
-class AppStrings {
+abstract class AppStrings {
   // Invoice
   static const String invoiceFormTitle = 'فاتورة بيع';
   static const String selectCustomer = 'اختر العميل';
@@ -24,6 +24,13 @@ class AppStrings {
   static const String insufficientStock = 'الكمية غير متوفرة للمنتج: ';
   static const String discountExceedsSubtotal =
       'الخصم لا يمكن أن يتجاوز المجموع';
+  static const String cancel = 'إلغاء';
+
+  // Price Dialog
+  static const String changePrice = 'تغيير السعر';
+  static const String buyingPrice = 'سعر الشراء';
+  static const String wholesalePrice = 'سعر الجملة';
+  static const String sellingPrice = 'سعر البيع';
 
   // Product Search
   static const String startSearchByBarcodeOrName =

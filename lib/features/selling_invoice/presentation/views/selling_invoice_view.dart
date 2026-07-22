@@ -21,7 +21,7 @@ class SellingInvoiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: BlocListener<SellInvoiceCubit, SellInvoiceState>(
         listenWhen: (prev, curr) =>
             curr is SellInvoiceError || curr is SellInvoiceConfirmed,
@@ -68,7 +68,7 @@ class SellingInvoiceView extends StatelessWidget {
                               .read<SellInvoiceCubit>()
                               .confirmInvoice();
                           if (context.mounted) {
-                            AppNavigation.pop(context: context);
+                            AppNavigation.pop( context);
                           }
                         }
                       },
@@ -79,15 +79,19 @@ class SellingInvoiceView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child:  Gap(100)),
+                const SliverToBoxAdapter(child: Gap(100)),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => AppNavigation.pushName(
-              context: context,
-              route: AppRoutes.addProductToInvoice,
-            ),
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+
+              AppNavigation.pushName(
+                context: context,
+                route: AppRoutes.addProductToInvoice,
+              );
+            },
             child: const Icon(Icons.add),
           ),
         ),

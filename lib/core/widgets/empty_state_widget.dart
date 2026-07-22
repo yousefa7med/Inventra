@@ -34,7 +34,11 @@ class EmptyStateWidget extends StatelessWidget {
           if (actionText != null && onAction != null) ...[
             Gap(16.h),
             ElevatedButton(
-              onPressed: onAction,
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+
+                onAction!();
+              },
               child: Text(actionText!, style: AppTextStyle.medium16),
             ),
           ],

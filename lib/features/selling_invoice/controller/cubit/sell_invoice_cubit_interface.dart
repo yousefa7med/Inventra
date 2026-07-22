@@ -11,7 +11,7 @@ abstract class SellInvoiceCubitInterface {
   double get totalAfterDiscount;
   List<CustomerModel> get customers;
   List<ProductModel> get products;
-
+  String searchQuery = "";
   // Customer actions
   Future<void> loadCustomers();
   void selectCustomer(CustomerModel customer);

@@ -17,7 +17,7 @@ class SellingInvoiceTotalsCard extends StatelessWidget {
     return BlocBuilder<SellInvoiceCubit, SellInvoiceState>(
       buildWhen: (previous, current) =>
           current is SellInvoiceUpdateProductQuantity ||
-          current is SellInvoiceAddProduct ||
+          current is SellInvoiceAddProductItem ||
           current is SellInvoiceRemoveProduct ||
           current is SellInvoiceDiscountChanged,
       builder: (context, state) {

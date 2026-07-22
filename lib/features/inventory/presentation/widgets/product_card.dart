@@ -195,7 +195,7 @@ class ProductCard extends StatelessWidget {
 
               _buildPriceRow(
                 label: "بيع",
-                price: product.saleingPrice,
+                price: product.sellingPrice,
                 color: AppColors.primary,
               ),
             ],

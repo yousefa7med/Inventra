@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_details_argument.dart';
+import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/transitions/page_route_builder_method.dart';
 import 'package:Inventra/core/widgets/customer_form_view.dart';
@@ -40,7 +41,7 @@ class AppRouter {
       case AppRoutes.productFormView:
         final arguments = settings.arguments as ProductDetailsArguments?;
 
-        return pageRouteBuilderMethod(
+        return pageRouteBuilderMethod<ProductModel?>(
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
@@ -132,8 +133,7 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
-                value: GetIt.instance<BuyInvoiceCubit>()
-                  ..loadSuppliers(),
+                value: GetIt.instance<BuyInvoiceCubit>()..loadSuppliers(),
                 child: const BuyingInvoiceView(),
               ),
         );

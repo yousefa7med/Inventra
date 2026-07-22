@@ -21,7 +21,7 @@ class BuyingInvoiceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: BlocListener<BuyInvoiceCubit, BuyInvoiceState>(
         listenWhen: (prev, curr) =>
             curr is BuyInvoiceError || curr is BuyInvoiceConfirmed,
@@ -68,7 +68,7 @@ class BuyingInvoiceView extends StatelessWidget {
                               .read<BuyInvoiceCubit>()
                               .confirmInvoice();
                           if (context.mounted) {
-                            AppNavigation.pop(context: context);
+                            AppNavigation.pop( context);
                           }
                         }
                       },
@@ -84,10 +84,14 @@ class BuyingInvoiceView extends StatelessWidget {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => AppNavigation.pushName(
-              context: context,
-              route: AppRoutes.productSelectionView,
-            ),
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+
+              AppNavigation.pushName(
+                context: context,
+                route: AppRoutes.productSelectionView,
+              );
+            },
             child: const Icon(Icons.add),
           ),
         ),

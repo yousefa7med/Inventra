@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -22,6 +20,8 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
   SellInvoiceCubit(this._repository) : super(const SellInvoiceInitial());
 
   // Getters for UI
+  @override
+  String searchQuery = "";
   @override
   List<InvoiceItemModel> get items => List.unmodifiable(_items);
   @override
@@ -50,13 +50,14 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
 
   @override
   Future<void> loadProducts(String search) async {
+    searchQuery = search;
     try {
       final searchText = search.trim().normalizeArabic();
       emit(const SellInvoiceProductLoading());
       _products = _repository.searchProducts(searchText);
       emit(const SellInvoiceProductSuccessed());
     } catch (e) {
-      emit(SellInvoiceError('Failed to load products: $e'));
+      emit(SellInvoiceProductError('Failed to load products: $e'));
     }
   }
 
@@ -100,19 +101,18 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
       final newItem = InvoiceItemModel(
         // sellInvoiceId: 0,
         quantity: qty,
-        unitPrice: product.saleingPrice,
-        lineTotal: qty * product.saleingPrice,
+        unitPrice: product.sellingPrice,
+        lineTotal: qty * product.sellingPrice,
       )..product.target = product;
       _items.add(newItem);
       _repository.addItem(newItem);
     }
 
-    emit(const SellInvoiceAddProduct());
+    emit(const SellInvoiceAddProductItem());
   }
 
   @override
   void updateItemQuantity(int itemIndex, int newQuantity) {
-    log("message");
     if (newQuantity < 1) {
       _items.removeAt(itemIndex);
     } else {
@@ -125,7 +125,6 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
         lineTotal: newQuantity * _items[itemIndex].unitPrice,
       );
     }
-    log("message");
 
     // ignore: prefer_const_constructors
     emit(SellInvoiceUpdateProductQuantity());

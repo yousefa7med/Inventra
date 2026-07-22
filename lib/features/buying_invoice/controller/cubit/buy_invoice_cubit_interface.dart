@@ -10,6 +10,7 @@ abstract class BuyInvoiceCubitInterface {
   double get total;
   List<SupplierModel> get suppliers;
   List<ProductModel> get products;
+  String searchQuery="";
 
   // Supplier actions
   void selectSupplier(SupplierModel supplier);
@@ -18,6 +19,7 @@ abstract class BuyInvoiceCubitInterface {
 
   // Product actions
   void loadProducts(String query);
+  void insertProduct(ProductModel product);
   void addProductItem(ProductModel product, int quantity);
   void updateItemQuantity(int itemIndex, int newQuantity);
   void removeItem(int index);

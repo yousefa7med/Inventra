@@ -717,7 +717,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(2, imgPathOffset);
         fbb.addInt64(3, object.quantity);
         fbb.addFloat64(4, object.buyingPrice);
-        fbb.addFloat64(5, object.saleingPrice);
+        fbb.addFloat64(5, object.sellingPrice);
         fbb.addFloat64(6, object.wholesalePrice);
         fbb.addOffset(7, barcodeOffset);
         fbb.finish(fbb.endTable());
@@ -764,7 +764,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           imgPath: imgPathParam,
           quantity: quantityParam,
           buyingPrice: buyingPriceParam,
-          saleingPrice: saleingPriceParam,
+          sellingPrice: saleingPriceParam,
           wholesalePrice: wholesalePriceParam,
           barcode: barcodeParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
@@ -1068,7 +1068,7 @@ class ProductModel_ {
     _entities[5].properties[4],
   );
 
-  /// See [ProductModel.saleingPrice].
+  /// See [ProductModel.sellingPrice].
   static final saleingPrice = obx.QueryDoubleProperty<ProductModel>(
     _entities[5].properties[5],
   );

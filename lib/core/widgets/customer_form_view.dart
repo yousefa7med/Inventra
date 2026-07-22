@@ -51,7 +51,7 @@ class _CustomerFormViewState extends State<CustomerFormView> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: CustomAppBar(title: isEditing ? 'تعديل العميل' : "اضافة عميل"),
         body: SingleChildScrollView(
@@ -131,7 +131,7 @@ class _CustomerFormViewState extends State<CustomerFormView> {
                           );
                         }
 
-                        AppNavigation.pop(context: context);
+                        AppNavigation.pop(context);
                       }
                     },
                     child: Text(

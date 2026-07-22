@@ -14,7 +14,7 @@ class SafeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: const CustomAppBar(title: 'الخزنة', showDrawerButton: true),
         body: RefreshIndicator(
