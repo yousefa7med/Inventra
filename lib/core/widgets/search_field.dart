@@ -9,13 +9,11 @@ class SearchField extends StatefulWidget {
     required this.searchFunction,
     required this.clearFunction,
     required this.hintText,
-    this.focusNode,
   });
   final TextEditingController searchController;
   final void Function(String q) searchFunction;
   final void Function() clearFunction;
   final String? hintText;
-  final FocusNode? focusNode;
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -51,7 +49,6 @@ class _SearchFieldState extends State<SearchField> {
         }
         widget.searchFunction(q);
       },
-      focusNode: widget.focusNode,
     );
   }
 }

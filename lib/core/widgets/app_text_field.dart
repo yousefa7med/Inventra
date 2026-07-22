@@ -2,7 +2,7 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:flutter/material.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     this.label,
@@ -15,7 +15,6 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.onChanged,
     this.hintText,
-    this.focusNode,
     this.onSuffixTap,
   });
   final String? label;
@@ -28,26 +27,60 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final String? suffixText;
   final void Function(String)? onChanged;
-  final FocusNode? focusNode;
   final VoidCallback? onSuffixTap;
+
+  @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  late final FocusNode focusNode;
+
+  @override
+  void initState() {
+    focusNode = FocusNode();
+
+    if (widget.controller != null) {
+      focusNode.addListener(_onfocusListener);
+    }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    focusNode.removeListener(_onfocusListener);
+    focusNode.dispose();
+
+    super.dispose();
+  }
+
+  void _onfocusListener() {
+    if (focusNode.hasFocus) {
+      widget.controller!.selection = TextSelection.fromPosition(
+        TextPosition(offset: widget.controller!.text.length),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: onChanged,
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      validator: validator,
-      controller: controller,
+      onChanged: widget.onChanged,
+      keyboardType: widget.keyboardType,
+      textInputAction: widget.textInputAction,
+      validator: widget.validator,
+      controller: widget.controller,
       focusNode: focusNode,
       decoration: InputDecoration(
-        suffixIcon: (suffixIcon != null || onSuffixTap != null)
+        suffixIcon: (widget.suffixIcon != null || widget.onSuffixTap != null)
             ? InkWell(
-                onTap: onSuffixTap,
-                child: suffixIcon ?? const Icon(Icons.arrow_drop_down),
+                onTap: widget.onSuffixTap,
+                child: widget.suffixIcon ?? const Icon(Icons.arrow_drop_down),
               )
             : null,
-        suffixText: suffixText,
-        prefixIcon: prefixIcon,
+        suffixText: widget.suffixText,
+        prefixIcon: widget.prefixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(width: 1),
@@ -64,9 +97,9 @@ class AppTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: AppColors.error, width: 2),
         ),
-        labelText: label,
+        labelText: widget.label,
         labelStyle: AppTextStyle.regular14,
-        hintText: hintText,
+        hintText: widget.hintText,
         hintStyle: AppTextStyle.regular14,
       ),
     );

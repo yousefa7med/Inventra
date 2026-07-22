@@ -13,9 +13,7 @@ import 'package:intl/intl.dart';
 class SafeSearchAndFilter extends StatefulWidget {
   const SafeSearchAndFilter({
     super.key,
-    this.searchFocusNode,
   });
-  final FocusNode? searchFocusNode;
   @override
   State<SafeSearchAndFilter> createState() => _SafeSearchAndFilterState();
 }
@@ -89,7 +87,6 @@ class _SafeSearchAndFilterState extends State<SafeSearchAndFilter> {
             context.read<SafeCubit>().setSearchFilter(null);
           },
           hintText: 'بحث بالملاحظة...',
-          focusNode: widget.searchFocusNode,
         ),
         const Gap(8),
         Row(

@@ -19,44 +19,17 @@ class SafeLoadedBody extends StatefulWidget {
 }
 
 class _SafeLoadedBodyState extends State<SafeLoadedBody> {
-  final _searchFocusNode = FocusNode();
   final _scrollController = ScrollController();
   final GlobalKey _searchKey = GlobalKey();
   @override
   void initState() {
     super.initState();
-    _searchFocusNode.addListener(_onSearchFocusChange);
   }
 
   @override
   void dispose() {
-    _searchFocusNode.removeListener(_onSearchFocusChange);
-    _searchFocusNode.dispose();
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _onSearchFocusChange() {
-    if (_searchFocusNode.hasFocus) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scrollController.hasClients) {
-          final renderBox =
-              _searchKey.currentContext?.findRenderObject() as RenderBox?;
-          if (renderBox != null) {
-            final searchPosition = renderBox.localToGlobal(
-              Offset.zero,
-              ancestor: context.findRenderObject(),
-            );
-            final targetOffset = _scrollController.offset + searchPosition.dy;
-            _scrollController.animateTo(
-              targetOffset - 12,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        }
-      });
-    }
   }
 
   @override
@@ -76,10 +49,7 @@ class _SafeLoadedBodyState extends State<SafeLoadedBody> {
                   onEditTap: () => _showAdjustBalanceDialog(context),
                 ),
                 const Gap(16),
-                SafeSearchAndFilter(
-                  searchFocusNode: _searchFocusNode,
-                  key: _searchKey,
-                ),
+                SafeSearchAndFilter(key: _searchKey),
                 const Gap(12),
                 _buildExpensesHeader(),
                 const Gap(8),
