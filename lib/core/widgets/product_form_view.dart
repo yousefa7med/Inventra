@@ -60,7 +60,7 @@ class _ProductFormViewState extends State<ProductFormView> {
       text: widget.product?.wholesalePrice.toString(),
     );
     sPriceController = TextEditingController(
-      text: widget.product?.saleingPrice.toString(),
+      text: widget.product?.sellingPrice.toString(),
     );
     imgPath = widget.product?.imgPath;
     super.initState();
@@ -201,7 +201,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                               quantatyController?.text ?? "0",
                             ),
                             buyingPrice: double.tryParse(bPriceController.text),
-                            saleingPrice: double.tryParse(
+                            sellingPrice: double.tryParse(
                               sPriceController.text,
                             ),
                             wholesalePrice: double.tryParse(
@@ -218,7 +218,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                                 0,
                             buyingPrice:
                                 double.tryParse(bPriceController.text) ?? 0,
-                            saleingPrice:
+                            sellingPrice:
                                 double.tryParse(sPriceController.text) ?? 0,
                             wholesalePrice:
                                 double.tryParse(wPriceController.text) ?? 0,
@@ -247,7 +247,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                             color: AppColors.success,
                           );
 
-                          AppNavigation.pop(context: context);
+                          AppNavigation.pop<ProductModel>(context, product);
                         } catch (e) {
                           if (image != null && workingImgPath != null) {
                             await deleteImage(workingImgPath);

@@ -131,7 +131,7 @@ class _CustomerFormViewState extends State<CustomerFormView> {
                           );
                         }
 
-                        AppNavigation.pop(context: context);
+                        AppNavigation.pop(context);
                       }
                     },
                     child: Text(

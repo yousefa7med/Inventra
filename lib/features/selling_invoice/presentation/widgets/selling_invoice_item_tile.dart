@@ -59,7 +59,7 @@ class _SellingInvoiceItemTileState extends State<SellingInvoiceItemTile> {
                       ),
                       if (product != null)
                         Text(
-                          '${product.saleingPrice.toStringAsFixed(2)} ${AppStrings.egp}',
+                          '${product.sellingPrice.toStringAsFixed(2)} ${AppStrings.egp}',
                           style: AppTextStyle.regular12.copyWith(
                             color: AppColors.grey,
                           ),

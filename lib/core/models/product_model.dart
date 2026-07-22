@@ -8,7 +8,7 @@ class ProductModel {
   final String? imgPath;
   int quantity;
   final double buyingPrice;
-  final double saleingPrice;
+  final double sellingPrice;
   final double wholesalePrice;
   final String? barcode;
 
@@ -17,7 +17,7 @@ class ProductModel {
     String? imgPath,
     int? quantity,
     double? buyingPrice,
-    double? saleingPrice,
+    double? sellingPrice,
     double? wholesalePrice,
     String? barcode,
   }) {
@@ -25,7 +25,7 @@ class ProductModel {
       name: name ?? this.name,
       quantity: quantity ?? this.quantity,
       buyingPrice: buyingPrice ?? this.buyingPrice,
-      saleingPrice: saleingPrice ?? this.saleingPrice,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
       wholesalePrice: wholesalePrice ?? this.wholesalePrice,
       imgPath: imgPath ?? this.imgPath,
       barcode: barcode ?? this.barcode,
@@ -37,7 +37,7 @@ class ProductModel {
     this.imgPath,
     required this.quantity,
     required this.buyingPrice,
-    required this.saleingPrice,
+    required this.sellingPrice,
     required this.wholesalePrice,
     this.barcode,
   });

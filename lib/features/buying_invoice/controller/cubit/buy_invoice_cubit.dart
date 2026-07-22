@@ -41,6 +41,20 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
   // Actions
 
   @override
+  void insertProduct(ProductModel product) {
+    final index = _products.indexWhere((p) => p.id == product.id);
+    if (index != -1) {
+      _products.removeAt(index);
+      _products.insert(index, product);
+    } else {
+      _products.add(product);
+    }
+
+    _repository.insertProduct(product);
+    emit(BuyInvoiceProductsLoaded());
+  }
+
+  @override
   void loadProducts(String search) async {
     emit(BuyInvoiceProductLoading());
     searchQuery = search;

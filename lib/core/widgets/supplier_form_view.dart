@@ -150,7 +150,7 @@ class _SupplierFormViewState extends State<SupplierFormView> {
 
                         context.read<SupplierCubit>().updateSupplier(supplier);
 
-                        AppNavigation.pop(context: context);
+                        AppNavigation.pop(context);
                       }
                     },
                     child: Text(

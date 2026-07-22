@@ -1,5 +1,3 @@
-
-
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -103,8 +101,8 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
       final newItem = InvoiceItemModel(
         // sellInvoiceId: 0,
         quantity: qty,
-        unitPrice: product.saleingPrice,
-        lineTotal: qty * product.saleingPrice,
+        unitPrice: product.sellingPrice,
+        lineTotal: qty * product.sellingPrice,
       )..product.target = product;
       _items.add(newItem);
       _repository.addItem(newItem);

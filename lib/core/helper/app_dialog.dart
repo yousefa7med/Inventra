@@ -21,7 +21,7 @@ void appDialog({
       actions: [
         TextButton(
           onPressed: () {
-            AppNavigation.pop(context: ctx);
+            AppNavigation.pop(ctx);
           },
           child: const Text(
             "إلغاء",
@@ -30,7 +30,7 @@ void appDialog({
         ),
         TextButton(
           onPressed: () async {
-            AppNavigation.pop(context: ctx);
+            AppNavigation.pop(ctx);
 
             action();
           },

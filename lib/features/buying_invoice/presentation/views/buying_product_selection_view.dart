@@ -1,4 +1,5 @@
 import 'package:Inventra/core/models/product_details_argument.dart';
+import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'dart:async';
 
@@ -69,14 +70,17 @@ class _BuyingProductSelectionViewState
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           FocusManager.instance.primaryFocus?.unfocus();
 
-          AppNavigation.pushName(
+          final product = await AppNavigation.pushName<ProductModel>(
             context: context,
             route: AppRoutes.productFormView,
             argument: ProductDetailsArguments(isQuantitiyEditable: false),
           );
+          if (product != null) {
+            context.read<BuyInvoiceCubit>().insertProduct(product);
+          }
         },
         icon: const Icon(Icons.add),
         label: const Text(AppStrings.addProduct, style: AppTextStyle.navBar),

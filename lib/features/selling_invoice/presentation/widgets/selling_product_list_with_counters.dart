@@ -1,3 +1,6 @@
+import 'package:Inventra/core/config/configrations.dart';
+import 'package:Inventra/core/constants/app_strings.dart';
+import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
@@ -63,6 +66,13 @@ class SellingProductListWithCounters extends StatelessWidget {
                 message: cubit.searchQuery.isNotEmpty
                     ? 'لا توجد نتائج للبحث'
                     : 'لا يوجد منتجات',
+                actionText: AppStrings.addProduct,
+                onAction: () {
+                  AppNavigation.pushName(
+                    context: context,
+                    route: AppRoutes.productFormView,
+                  );
+                },
               ),
             );
           }
