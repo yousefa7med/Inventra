@@ -7,11 +7,9 @@ class OperationsInitial extends OperationsState {}
 class OperationsLoading extends OperationsState {}
 
 class OperationsLoaded extends OperationsState {
-  OperationsLoaded();
-}
+  final List<BalanceAuditEntryModel> transactions;
 
-class OperationsFilterApplyed extends OperationsState {
-  OperationsFilterApplyed();
+  OperationsLoaded({required this.transactions});
 }
 
 class OperationsError extends OperationsState {

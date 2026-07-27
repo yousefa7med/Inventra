@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1207969961411599869",
-      "lastPropertyId": "6:7727042965044083560",
+      "lastPropertyId": "7:5227921985410566069",
       "name": "BalanceAuditEntryModel",
       "properties": [
         {
@@ -39,8 +39,8 @@
           "flags": 8
         },
         {
-          "id": "6:7727042965044083560",
-          "name": "note",
+          "id": "7:5227921985410566069",
+          "name": "userName",
           "type": 9
         }
       ],
@@ -106,13 +106,7 @@
           "type": 9
         }
       ],
-      "relations": [
-        {
-          "id": "2:5053591065719948882",
-          "name": "invoices",
-          "targetId": "8:537983289106764398"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "4:3246336924639973503",
@@ -184,7 +178,7 @@
     },
     {
       "id": "6:8711636882801036865",
-      "lastPropertyId": "8:3294482119739885208",
+      "lastPropertyId": "9:7881785610241647125",
       "name": "ProductModel",
       "properties": [
         {
@@ -214,11 +208,6 @@
           "type": 8
         },
         {
-          "id": "6:5166066243020365702",
-          "name": "saleingPrice",
-          "type": 8
-        },
-        {
           "id": "7:5824331283481038842",
           "name": "wholesalePrice",
           "type": 8
@@ -227,6 +216,11 @@
           "id": "8:3294482119739885208",
           "name": "barcode",
           "type": 9
+        },
+        {
+          "id": "9:7881785610241647125",
+          "name": "sellingPrice",
+          "type": 8
         }
       ],
       "relations": []
@@ -257,7 +251,7 @@
     },
     {
       "id": "8:537983289106764398",
-      "lastPropertyId": "3:5024482723427805621",
+      "lastPropertyId": "4:7281652548644004053",
       "name": "SellingInvoiceModel",
       "properties": [
         {
@@ -275,6 +269,14 @@
           "id": "3:5024482723427805621",
           "name": "discount",
           "type": 8
+        },
+        {
+          "id": "4:7281652548644004053",
+          "name": "customerId",
+          "indexId": "7:2542401844819244147",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "CustomerModel"
         }
       ],
       "relations": [
@@ -321,7 +323,7 @@
     }
   ],
   "lastEntityId": "9:7408553853324572548",
-  "lastIndexId": "6:644280928665244392",
+  "lastIndexId": "7:2542401844819244147",
   "lastRelationId": "3:2528445483058024405",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -331,8 +333,12 @@
     644280928665244392
   ],
   "retiredPropertyUids": [
-    3464908874652263421
+    3464908874652263421,
+    5166066243020365702,
+    7727042965044083560
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    5053591065719948882
+  ],
   "version": 1
 }

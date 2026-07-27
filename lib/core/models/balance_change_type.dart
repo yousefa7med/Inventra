@@ -1,7 +1,7 @@
 enum BalanceChangeType {
+  buyingInvoice,
+  sellingInvoice,
   expense,
-  buyInvoice,
-  sellInvoice,
   returnReceipt,
   manualAdjustment,
 }

@@ -6,22 +6,22 @@ class BalanceAuditEntryModel {
   int id = 0;
 
   @Index()
- final int type;
+  final int type;
 
- final double amount;
+  final double amount;
 
-final  int referenceId;
+  final int referenceId;
 
   @Index()
- final DateTime timestamp;
+  final DateTime timestamp;
 
- final String? note;
+  final String? userName;
 
   BalanceAuditEntryModel({
     required this.type,
     required this.amount,
     required this.referenceId,
     required this.timestamp,
-    this.note,
+    this.userName,
   });
 }

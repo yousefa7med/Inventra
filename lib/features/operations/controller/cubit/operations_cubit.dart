@@ -26,7 +26,7 @@ class OperationsCubit extends Cubit<OperationsState>
     emit(OperationsLoading());
     try {
       _operations = _repository.getOperations(type: type, dateRange: dateRange);
-      emit(OperationsLoaded());
+      emit(OperationsLoaded(transactions: operations));
     } catch (e) {
       emit(OperationsError(e.toString()));
     }
@@ -39,7 +39,7 @@ class OperationsCubit extends Cubit<OperationsState>
     emit(OperationsLoading());
     try {
       loadOperations();
-      emit(OperationsLoaded());
+      emit(OperationsLoaded(transactions: operations));
     } catch (e) {
       emit(OperationsError(e.toString()));
     }
