@@ -17,7 +17,7 @@ abstract class SafeRepository {
   void addExpense(ExpenseModel expense);
   Stream<List<ExpenseModel>> watchExpenses();
 
-  List<BalanceAuditEntryModel> getAuditEntries({BalanceChangeType? type});
-  void addAuditEntry(BalanceAuditEntryModel entry);
-  Stream<List<BalanceAuditEntryModel>> watchAuditEntries();
+  List<TransactionsEntry> getAuditEntries({BalanceChangeType? type});
+  void addAuditEntry(TransactionsEntry entry);
+  Stream<List<TransactionsEntry>> watchAuditEntries();
 }

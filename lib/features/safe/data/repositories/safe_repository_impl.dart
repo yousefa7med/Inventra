@@ -90,8 +90,8 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  List<BalanceAuditEntryModel> getAuditEntries({BalanceChangeType? type}) {
-    var entries = _objectBox.balanceAuditEntryBox.getAll();
+  List<TransactionsEntry> getAuditEntries({BalanceChangeType? type}) {
+    var entries = _objectBox.transactionsEntryBox.getAll();
     entries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
     if (type != null) {
@@ -102,15 +102,15 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  void addAuditEntry(BalanceAuditEntryModel entry) {
-    _objectBox.balanceAuditEntryBox.put(entry);
+  void addAuditEntry(TransactionsEntry entry) {
+    _objectBox.transactionsEntryBox.put(entry);
   }
 
   @override
-  Stream<List<BalanceAuditEntryModel>> watchAuditEntries() {
-    return _objectBox.balanceAuditEntryBox
+  Stream<List<TransactionsEntry>> watchAuditEntries() {
+    return _objectBox.transactionsEntryBox
         .query()
-        .order(BalanceAuditEntryModel_.timestamp, flags: Order.descending)
+        .order(TransactionsEntry_.timestamp, flags: Order.descending)
         .watch(triggerImmediately: true)
         .map((query) => query.find());
   }

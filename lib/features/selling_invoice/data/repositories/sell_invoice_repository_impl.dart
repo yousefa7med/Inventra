@@ -108,14 +108,14 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     balance.currentBalance += (totalPrice - (discount ?? 0));
     _objectBox.safeBalanceBox.put(balance);
 
-    final auditEntry = BalanceAuditEntryModel(
+    final auditEntry = TransactionsEntry(
       type: BalanceChangeType.sellingInvoice.index,
       amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
       userName: customer.name,
     );
-    _objectBox.balanceAuditEntryBox.put(auditEntry);
+    _objectBox.transactionsEntryBox.put(auditEntry);
 
     return savedInvoice!;
   }

@@ -28,54 +28,6 @@ export 'package:objectbox/objectbox.dart'; // so that callers only have to impor
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-    id: const obx_int.IdUid(1, 1207969961411599869),
-    name: 'BalanceAuditEntryModel',
-    lastPropertyId: const obx_int.IdUid(7, 5227921985410566069),
-    flags: 0,
-    properties: <obx_int.ModelProperty>[
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(1, 1543262477846497508),
-        name: 'id',
-        type: 6,
-        flags: 1,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 3622203093617426965),
-        name: 'type',
-        type: 6,
-        flags: 8,
-        indexId: const obx_int.IdUid(1, 764059228253861419),
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 2840101002925301580),
-        name: 'amount',
-        type: 8,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(4, 7978173406368120247),
-        name: 'referenceId',
-        type: 6,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(5, 8338098549628054250),
-        name: 'timestamp',
-        type: 10,
-        flags: 8,
-        indexId: const obx_int.IdUid(2, 2179094448976667040),
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(7, 5227921985410566069),
-        name: 'userName',
-        type: 9,
-        flags: 0,
-      ),
-    ],
-    relations: <obx_int.ModelRelation>[],
-    backlinks: <obx_int.ModelBacklink>[],
-  ),
-  obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 7404789058678390977),
     name: 'BuyingInvoiceModel',
     lastPropertyId: const obx_int.IdUid(3, 2047517275180633959),
@@ -399,6 +351,54 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(10, 4619521982065349046),
+    name: 'TransactionsEntry',
+    lastPropertyId: const obx_int.IdUid(6, 8297995075222169350),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 9185619619074211615),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 5626366382907125239),
+        name: 'type',
+        type: 6,
+        flags: 8,
+        indexId: const obx_int.IdUid(8, 6027171614437595435),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 1927919349330023791),
+        name: 'amount',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 7646390602949430750),
+        name: 'referenceId',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 6768180114823487599),
+        name: 'timestamp',
+        type: 10,
+        flags: 8,
+        indexId: const obx_int.IdUid(9, 1617320129231709899),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 8297995075222169350),
+        name: 'userName',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -444,16 +444,22 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(9, 7408553853324572548),
-    lastIndexId: const obx_int.IdUid(7, 2542401844819244147),
+    lastEntityId: const obx_int.IdUid(10, 4619521982065349046),
+    lastIndexId: const obx_int.IdUid(9, 1617320129231709899),
     lastRelationId: const obx_int.IdUid(3, 2528445483058024405),
     lastSequenceId: const obx_int.IdUid(0, 0),
-    retiredEntityUids: const [],
+    retiredEntityUids: const [1207969961411599869],
     retiredIndexUids: const [644280928665244392],
     retiredPropertyUids: const [
       3464908874652263421,
       5166066243020365702,
       7727042965044083560,
+      1543262477846497508,
+      3622203093617426965,
+      2840101002925301580,
+      7978173406368120247,
+      8338098549628054250,
+      5227921985410566069,
     ],
     retiredRelationUids: const [5053591065719948882],
     modelVersion: 5,
@@ -462,68 +468,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
   );
 
   final bindings = <Type, obx_int.EntityDefinition>{
-    BalanceAuditEntryModel: obx_int.EntityDefinition<BalanceAuditEntryModel>(
-      model: _entities[0],
-      toOneRelations: (BalanceAuditEntryModel object) => [],
-      toManyRelations: (BalanceAuditEntryModel object) => {},
-      getId: (BalanceAuditEntryModel object) => object.id,
-      setId: (BalanceAuditEntryModel object, int id) {
-        object.id = id;
-      },
-      objectToFB: (BalanceAuditEntryModel object, fb.Builder fbb) {
-        final userNameOffset = object.userName == null
-            ? null
-            : fbb.writeString(object.userName!);
-        fbb.startTable(8);
-        fbb.addInt64(0, object.id);
-        fbb.addInt64(1, object.type);
-        fbb.addFloat64(2, object.amount);
-        fbb.addInt64(3, object.referenceId);
-        fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
-        fbb.addOffset(6, userNameOffset);
-        fbb.finish(fbb.endTable());
-        return object.id;
-      },
-      objectFromFB: (obx.Store store, ByteData fbData) {
-        final buffer = fb.BufferContext(fbData);
-        final rootOffset = buffer.derefObject(0);
-        final typeParam = const fb.Int64Reader().vTableGet(
-          buffer,
-          rootOffset,
-          6,
-          0,
-        );
-        final amountParam = const fb.Float64Reader().vTableGet(
-          buffer,
-          rootOffset,
-          8,
-          0,
-        );
-        final referenceIdParam = const fb.Int64Reader().vTableGet(
-          buffer,
-          rootOffset,
-          10,
-          0,
-        );
-        final timestampParam = DateTime.fromMillisecondsSinceEpoch(
-          const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0),
-        );
-        final userNameParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGetNullable(buffer, rootOffset, 16);
-        final object = BalanceAuditEntryModel(
-          type: typeParam,
-          amount: amountParam,
-          referenceId: referenceIdParam,
-          timestamp: timestampParam,
-          userName: userNameParam,
-        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-
-        return object;
-      },
-    ),
     BuyingInvoiceModel: obx_int.EntityDefinition<BuyingInvoiceModel>(
-      model: _entities[1],
+      model: _entities[0],
       toOneRelations: (BuyingInvoiceModel object) => [object.supplier],
       toManyRelations: (BuyingInvoiceModel object) => {
         obx_int.RelInfo<BuyingInvoiceModel>.toMany(1, object.id): object.items,
@@ -564,7 +510,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     CustomerModel: obx_int.EntityDefinition<CustomerModel>(
-      model: _entities[2],
+      model: _entities[1],
       toOneRelations: (CustomerModel object) => [],
       toManyRelations: (CustomerModel object) => {
         obx_int.RelInfo<SellingInvoiceModel>.toOneBacklink(
@@ -621,7 +567,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     ExpenseModel: obx_int.EntityDefinition<ExpenseModel>(
-      model: _entities[3],
+      model: _entities[2],
       toOneRelations: (ExpenseModel object) => [],
       toManyRelations: (ExpenseModel object) => {},
       getId: (ExpenseModel object) => object.id,
@@ -663,7 +609,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     InvoiceItemModel: obx_int.EntityDefinition<InvoiceItemModel>(
-      model: _entities[4],
+      model: _entities[3],
       toOneRelations: (InvoiceItemModel object) => [object.product],
       toManyRelations: (InvoiceItemModel object) => {},
       getId: (InvoiceItemModel object) => object.id,
@@ -717,7 +663,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     ProductModel: obx_int.EntityDefinition<ProductModel>(
-      model: _entities[5],
+      model: _entities[4],
       toOneRelations: (ProductModel object) => [],
       toManyRelations: (ProductModel object) => {},
       getId: (ProductModel object) => object.id,
@@ -794,7 +740,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     SafeBalanceModel: obx_int.EntityDefinition<SafeBalanceModel>(
-      model: _entities[6],
+      model: _entities[5],
       toOneRelations: (SafeBalanceModel object) => [],
       toManyRelations: (SafeBalanceModel object) => {},
       getId: (SafeBalanceModel object) => object.id,
@@ -830,7 +776,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     SellingInvoiceModel: obx_int.EntityDefinition<SellingInvoiceModel>(
-      model: _entities[7],
+      model: _entities[6],
       toOneRelations: (SellingInvoiceModel object) => [object.customer],
       toManyRelations: (SellingInvoiceModel object) => {
         obx_int.RelInfo<SellingInvoiceModel>.toMany(3, object.id): object.items,
@@ -879,7 +825,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     SupplierModel: obx_int.EntityDefinition<SupplierModel>(
-      model: _entities[8],
+      model: _entities[7],
       toOneRelations: (SupplierModel object) => [],
       toManyRelations: (SupplierModel object) => {},
       getId: (SupplierModel object) => object.id,
@@ -927,66 +873,93 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    TransactionsEntry: obx_int.EntityDefinition<TransactionsEntry>(
+      model: _entities[8],
+      toOneRelations: (TransactionsEntry object) => [],
+      toManyRelations: (TransactionsEntry object) => {},
+      getId: (TransactionsEntry object) => object.id,
+      setId: (TransactionsEntry object, int id) {
+        object.id = id;
+      },
+      objectToFB: (TransactionsEntry object, fb.Builder fbb) {
+        final userNameOffset = object.userName == null
+            ? null
+            : fbb.writeString(object.userName!);
+        fbb.startTable(7);
+        fbb.addInt64(0, object.id);
+        fbb.addInt64(1, object.type);
+        fbb.addFloat64(2, object.amount);
+        fbb.addInt64(3, object.referenceId);
+        fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
+        fbb.addOffset(5, userNameOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final typeParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final amountParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        final referenceIdParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          0,
+        );
+        final timestampParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0),
+        );
+        final userNameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 14);
+        final object = TransactionsEntry(
+          type: typeParam,
+          amount: amountParam,
+          referenceId: referenceIdParam,
+          timestamp: timestampParam,
+          userName: userNameParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
-}
-
-/// [BalanceAuditEntryModel] entity fields to define ObjectBox queries.
-class BalanceAuditEntryModel_ {
-  /// See [BalanceAuditEntryModel.id].
-  static final id = obx.QueryIntegerProperty<BalanceAuditEntryModel>(
-    _entities[0].properties[0],
-  );
-
-  /// See [BalanceAuditEntryModel.type].
-  static final type = obx.QueryIntegerProperty<BalanceAuditEntryModel>(
-    _entities[0].properties[1],
-  );
-
-  /// See [BalanceAuditEntryModel.amount].
-  static final amount = obx.QueryDoubleProperty<BalanceAuditEntryModel>(
-    _entities[0].properties[2],
-  );
-
-  /// See [BalanceAuditEntryModel.referenceId].
-  static final referenceId = obx.QueryIntegerProperty<BalanceAuditEntryModel>(
-    _entities[0].properties[3],
-  );
-
-  /// See [BalanceAuditEntryModel.timestamp].
-  static final timestamp = obx.QueryDateProperty<BalanceAuditEntryModel>(
-    _entities[0].properties[4],
-  );
-
-  /// See [BalanceAuditEntryModel.userName].
-  static final userName = obx.QueryStringProperty<BalanceAuditEntryModel>(
-    _entities[0].properties[5],
-  );
 }
 
 /// [BuyingInvoiceModel] entity fields to define ObjectBox queries.
 class BuyingInvoiceModel_ {
   /// See [BuyingInvoiceModel.id].
   static final id = obx.QueryIntegerProperty<BuyingInvoiceModel>(
-    _entities[1].properties[0],
+    _entities[0].properties[0],
   );
 
   /// See [BuyingInvoiceModel.date].
   static final date = obx.QueryDateProperty<BuyingInvoiceModel>(
-    _entities[1].properties[1],
+    _entities[0].properties[1],
   );
 
   /// See [BuyingInvoiceModel.supplier].
   static final supplier =
       obx.QueryRelationToOne<BuyingInvoiceModel, SupplierModel>(
-        _entities[1].properties[2],
+        _entities[0].properties[2],
       );
 
   /// see [BuyingInvoiceModel.items]
   static final items =
       obx.QueryRelationToMany<BuyingInvoiceModel, InvoiceItemModel>(
-        _entities[1].relations[0],
+        _entities[0].relations[0],
       );
 }
 
@@ -994,22 +967,22 @@ class BuyingInvoiceModel_ {
 class CustomerModel_ {
   /// See [CustomerModel.id].
   static final id = obx.QueryIntegerProperty<CustomerModel>(
-    _entities[2].properties[0],
+    _entities[1].properties[0],
   );
 
   /// See [CustomerModel.name].
   static final name = obx.QueryStringProperty<CustomerModel>(
-    _entities[2].properties[1],
+    _entities[1].properties[1],
   );
 
   /// See [CustomerModel.address].
   static final address = obx.QueryStringProperty<CustomerModel>(
-    _entities[2].properties[2],
+    _entities[1].properties[2],
   );
 
   /// See [CustomerModel.phoneNum].
   static final phoneNum = obx.QueryStringProperty<CustomerModel>(
-    _entities[2].properties[3],
+    _entities[1].properties[3],
   );
 
   /// see [CustomerModel.invoices]
@@ -1023,22 +996,22 @@ class CustomerModel_ {
 class ExpenseModel_ {
   /// See [ExpenseModel.id].
   static final id = obx.QueryIntegerProperty<ExpenseModel>(
-    _entities[3].properties[0],
+    _entities[2].properties[0],
   );
 
   /// See [ExpenseModel.date].
   static final date = obx.QueryDateProperty<ExpenseModel>(
-    _entities[3].properties[1],
+    _entities[2].properties[1],
   );
 
   /// See [ExpenseModel.value].
   static final value = obx.QueryDoubleProperty<ExpenseModel>(
-    _entities[3].properties[2],
+    _entities[2].properties[2],
   );
 
   /// See [ExpenseModel.note].
   static final note = obx.QueryStringProperty<ExpenseModel>(
-    _entities[3].properties[3],
+    _entities[2].properties[3],
   );
 }
 
@@ -1046,27 +1019,27 @@ class ExpenseModel_ {
 class InvoiceItemModel_ {
   /// See [InvoiceItemModel.id].
   static final id = obx.QueryIntegerProperty<InvoiceItemModel>(
-    _entities[4].properties[0],
+    _entities[3].properties[0],
   );
 
   /// See [InvoiceItemModel.product].
   static final product = obx.QueryRelationToOne<InvoiceItemModel, ProductModel>(
-    _entities[4].properties[1],
+    _entities[3].properties[1],
   );
 
   /// See [InvoiceItemModel.quantity].
   static final quantity = obx.QueryIntegerProperty<InvoiceItemModel>(
-    _entities[4].properties[2],
+    _entities[3].properties[2],
   );
 
   /// See [InvoiceItemModel.unitPrice].
   static final unitPrice = obx.QueryDoubleProperty<InvoiceItemModel>(
-    _entities[4].properties[3],
+    _entities[3].properties[3],
   );
 
   /// See [InvoiceItemModel.lineTotal].
   static final lineTotal = obx.QueryDoubleProperty<InvoiceItemModel>(
-    _entities[4].properties[4],
+    _entities[3].properties[4],
   );
 }
 
@@ -1074,42 +1047,42 @@ class InvoiceItemModel_ {
 class ProductModel_ {
   /// See [ProductModel.id].
   static final id = obx.QueryIntegerProperty<ProductModel>(
-    _entities[5].properties[0],
+    _entities[4].properties[0],
   );
 
   /// See [ProductModel.name].
   static final name = obx.QueryStringProperty<ProductModel>(
-    _entities[5].properties[1],
+    _entities[4].properties[1],
   );
 
   /// See [ProductModel.imgPath].
   static final imgPath = obx.QueryStringProperty<ProductModel>(
-    _entities[5].properties[2],
+    _entities[4].properties[2],
   );
 
   /// See [ProductModel.quantity].
   static final quantity = obx.QueryIntegerProperty<ProductModel>(
-    _entities[5].properties[3],
+    _entities[4].properties[3],
   );
 
   /// See [ProductModel.buyingPrice].
   static final buyingPrice = obx.QueryDoubleProperty<ProductModel>(
-    _entities[5].properties[4],
+    _entities[4].properties[4],
   );
 
   /// See [ProductModel.wholesalePrice].
   static final wholesalePrice = obx.QueryDoubleProperty<ProductModel>(
-    _entities[5].properties[5],
+    _entities[4].properties[5],
   );
 
   /// See [ProductModel.barcode].
   static final barcode = obx.QueryStringProperty<ProductModel>(
-    _entities[5].properties[6],
+    _entities[4].properties[6],
   );
 
   /// See [ProductModel.sellingPrice].
   static final sellingPrice = obx.QueryDoubleProperty<ProductModel>(
-    _entities[5].properties[7],
+    _entities[4].properties[7],
   );
 }
 
@@ -1117,17 +1090,17 @@ class ProductModel_ {
 class SafeBalanceModel_ {
   /// See [SafeBalanceModel.id].
   static final id = obx.QueryIntegerProperty<SafeBalanceModel>(
-    _entities[6].properties[0],
+    _entities[5].properties[0],
   );
 
   /// See [SafeBalanceModel.currentBalance].
   static final currentBalance = obx.QueryDoubleProperty<SafeBalanceModel>(
-    _entities[6].properties[1],
+    _entities[5].properties[1],
   );
 
   /// See [SafeBalanceModel.lastUpdated].
   static final lastUpdated = obx.QueryDateProperty<SafeBalanceModel>(
-    _entities[6].properties[2],
+    _entities[5].properties[2],
   );
 }
 
@@ -1135,29 +1108,29 @@ class SafeBalanceModel_ {
 class SellingInvoiceModel_ {
   /// See [SellingInvoiceModel.id].
   static final id = obx.QueryIntegerProperty<SellingInvoiceModel>(
-    _entities[7].properties[0],
+    _entities[6].properties[0],
   );
 
   /// See [SellingInvoiceModel.date].
   static final date = obx.QueryDateProperty<SellingInvoiceModel>(
-    _entities[7].properties[1],
+    _entities[6].properties[1],
   );
 
   /// See [SellingInvoiceModel.discount].
   static final discount = obx.QueryDoubleProperty<SellingInvoiceModel>(
-    _entities[7].properties[2],
+    _entities[6].properties[2],
   );
 
   /// See [SellingInvoiceModel.customer].
   static final customer =
       obx.QueryRelationToOne<SellingInvoiceModel, CustomerModel>(
-        _entities[7].properties[3],
+        _entities[6].properties[3],
       );
 
   /// see [SellingInvoiceModel.items]
   static final items =
       obx.QueryRelationToMany<SellingInvoiceModel, InvoiceItemModel>(
-        _entities[7].relations[0],
+        _entities[6].relations[0],
       );
 }
 
@@ -1165,26 +1138,59 @@ class SellingInvoiceModel_ {
 class SupplierModel_ {
   /// See [SupplierModel.id].
   static final id = obx.QueryIntegerProperty<SupplierModel>(
-    _entities[8].properties[0],
+    _entities[7].properties[0],
   );
 
   /// See [SupplierModel.name].
   static final name = obx.QueryStringProperty<SupplierModel>(
-    _entities[8].properties[1],
+    _entities[7].properties[1],
   );
 
   /// See [SupplierModel.storeAdd].
   static final storeAdd = obx.QueryStringProperty<SupplierModel>(
-    _entities[8].properties[2],
+    _entities[7].properties[2],
   );
 
   /// See [SupplierModel.storeName].
   static final storeName = obx.QueryStringProperty<SupplierModel>(
-    _entities[8].properties[3],
+    _entities[7].properties[3],
   );
 
   /// See [SupplierModel.phoneNum].
   static final phoneNum = obx.QueryStringProperty<SupplierModel>(
+    _entities[7].properties[4],
+  );
+}
+
+/// [TransactionsEntry] entity fields to define ObjectBox queries.
+class TransactionsEntry_ {
+  /// See [TransactionsEntry.id].
+  static final id = obx.QueryIntegerProperty<TransactionsEntry>(
+    _entities[8].properties[0],
+  );
+
+  /// See [TransactionsEntry.type].
+  static final type = obx.QueryIntegerProperty<TransactionsEntry>(
+    _entities[8].properties[1],
+  );
+
+  /// See [TransactionsEntry.amount].
+  static final amount = obx.QueryDoubleProperty<TransactionsEntry>(
+    _entities[8].properties[2],
+  );
+
+  /// See [TransactionsEntry.referenceId].
+  static final referenceId = obx.QueryIntegerProperty<TransactionsEntry>(
+    _entities[8].properties[3],
+  );
+
+  /// See [TransactionsEntry.timestamp].
+  static final timestamp = obx.QueryDateProperty<TransactionsEntry>(
     _entities[8].properties[4],
+  );
+
+  /// See [TransactionsEntry.userName].
+  static final userName = obx.QueryStringProperty<TransactionsEntry>(
+    _entities[8].properties[5],
   );
 }

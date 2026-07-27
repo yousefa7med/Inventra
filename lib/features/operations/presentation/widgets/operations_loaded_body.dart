@@ -11,7 +11,7 @@ import 'package:gap/gap.dart';
 
 class OperationsLoadedBody extends StatelessWidget {
   const OperationsLoadedBody({super.key, required this.transactions});
-  final List<BalanceAuditEntryModel> transactions;
+  final List<TransactionsEntry> transactions;
   @override
   Widget build(BuildContext context) {
     log("build transactions list");

@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class TransactionCard extends StatelessWidget {
-  final BalanceAuditEntryModel invoice;
+  final TransactionsEntry invoice;
   final VoidCallback onTap;
   final Color color;
   final String title;

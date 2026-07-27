@@ -11,14 +11,14 @@ class OperationsRepositoryImpl implements OperationsRepository {
   OperationsRepositoryImpl({required this._objectBox});
 
   @override
-  List<BalanceAuditEntryModel> getOperations({
+  List<TransactionsEntry> getOperations({
     BalanceChangeType? type,
     DateTimeRange? dateRange,
   }) {
-    Condition<BalanceAuditEntryModel>? condition;
+    Condition<TransactionsEntry>? condition;
 
     if (type != null) {
-      condition = BalanceAuditEntryModel_.type.equals(type.index);
+      condition = TransactionsEntry_.type.equals(type.index);
     }
 
     if (dateRange != null) {
@@ -33,14 +33,19 @@ class OperationsRepositoryImpl implements OperationsRepository {
         999,
       );
 
-      final dateCondition = BalanceAuditEntryModel_.timestamp.betweenDate(start, end);
-      
-      condition = (condition == null) ? dateCondition : condition.and(dateCondition);
+      final dateCondition = TransactionsEntry_.timestamp.betweenDate(
+        start,
+        end,
+      );
+
+      condition = (condition == null)
+          ? dateCondition
+          : condition.and(dateCondition);
     }
 
-    final query = _objectBox.balanceAuditEntryBox
+    final query = _objectBox.transactionsEntryBox
         .query(condition)
-        .order(BalanceAuditEntryModel_.timestamp, flags: Order.descending) 
+        .order(TransactionsEntry_.timestamp, flags: Order.descending)
         .build();
 
     final results = query.find();

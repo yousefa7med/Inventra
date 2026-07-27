@@ -103,7 +103,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       balance.lastUpdated = DateTime.now();
       _repository.updateBalance(newBalance);
 
-      final auditEntry = BalanceAuditEntryModel(
+      final auditEntry = TransactionsEntry(
         type: BalanceChangeType.expense.index,
         amount: -value,
         referenceId: expense.id,
@@ -202,7 +202,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
       _repository.updateBalance(newBalance);
 
-      final auditEntry = BalanceAuditEntryModel(
+      final auditEntry = TransactionsEntry(
         type: BalanceChangeType.manualAdjustment.index,
         amount: delta,
         referenceId: 0,
@@ -281,7 +281,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
     final newBalance = current.currentBalance + amount;
     _repository.updateBalance(newBalance);
 
-    final auditEntry = BalanceAuditEntryModel(
+    final auditEntry = TransactionsEntry(
       type: BalanceChangeType.sellingInvoice.index,
       amount: amount,
       referenceId: 0, // Will be set by caller

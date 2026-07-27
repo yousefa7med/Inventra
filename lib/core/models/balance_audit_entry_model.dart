@@ -1,7 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class BalanceAuditEntryModel {
+class TransactionsEntry {
   @Id()
   int id = 0;
 
@@ -17,7 +17,7 @@ class BalanceAuditEntryModel {
 
   final String? userName;
 
-  BalanceAuditEntryModel({
+  TransactionsEntry({
     required this.type,
     required this.amount,
     required this.referenceId,

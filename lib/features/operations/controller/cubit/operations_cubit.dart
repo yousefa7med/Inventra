@@ -12,7 +12,7 @@ class OperationsCubit extends Cubit<OperationsState>
 
   OperationsCubit(this._repository) : super(OperationsInitial());
 
-  List<BalanceAuditEntryModel> _operations = [];
+  List<TransactionsEntry> _operations = [];
   DateTimeRange<DateTime>? _selectedDateRange;
   int? _selectedType;
 
@@ -46,7 +46,7 @@ class OperationsCubit extends Cubit<OperationsState>
   }
 
   @override
-  List<BalanceAuditEntryModel> get operations => _operations;
+  List<TransactionsEntry> get operations => _operations;
 
   @override
   DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;

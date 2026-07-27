@@ -103,14 +103,14 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     balance.currentBalance -= totalPrice;
     _objectBox.safeBalanceBox.put(balance);
 
-    final auditEntry = BalanceAuditEntryModel(
+    final auditEntry = TransactionsEntry(
       type: BalanceChangeType.buyingInvoice.index,
       amount: -totalPrice,
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
       userName: supplier.name,
     );
-    _objectBox.balanceAuditEntryBox.put(auditEntry);
+    _objectBox.transactionsEntryBox.put(auditEntry);
 
     return savedInvoice!;
   }

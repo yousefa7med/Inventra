@@ -4,7 +4,7 @@ import 'package:Inventra/core/models/balance_change_type.dart';
 
 abstract class OperationsCubitInterface {
   // State getters
-  List<BalanceAuditEntryModel> get operations;
+  List<TransactionsEntry> get operations;
   int? get selectedType;
   DateTimeRange? get selectedDateRange;
 
