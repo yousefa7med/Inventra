@@ -1,5 +1,5 @@
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 
@@ -17,7 +17,7 @@ abstract class SafeRepository {
   void addExpense(ExpenseModel expense);
   Stream<List<ExpenseModel>> watchExpenses();
 
-  List<BalanceAuditEntryModel> getAuditEntries({BalanceChangeType? type});
-  void addAuditEntry(BalanceAuditEntryModel entry);
-  Stream<List<BalanceAuditEntryModel>> watchAuditEntries();
+  List<TransactionsEntry> getAuditEntries({TransactionType? type});
+  void addAuditEntry(TransactionsEntry entry);
+  Stream<List<TransactionsEntry>> watchAuditEntries();
 }

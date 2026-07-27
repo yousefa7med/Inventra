@@ -9,6 +9,7 @@ class CustomerModel {
   final String name;
   final String? address;
   final String phoneNum;
+  @Backlink('customer')
   final ToMany<SellingInvoiceModel> invoices = ToMany<SellingInvoiceModel>();
 
   CustomerModel copyWith({String? name, String? address, String? phoneNum}) {
@@ -18,8 +19,7 @@ class CustomerModel {
       phoneNum: phoneNum ?? this.phoneNum,
     );
     newCustomer.id = id;
-    newCustomer.invoices.addAll(invoices);
-    return newCustomer;
+      return newCustomer;
   }
 
   CustomerModel({

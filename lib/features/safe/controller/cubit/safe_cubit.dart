@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/utils/result.dart';
@@ -103,12 +103,12 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       balance.lastUpdated = DateTime.now();
       _repository.updateBalance(newBalance);
 
-      final auditEntry = BalanceAuditEntryModel(
-        type: BalanceChangeType.expense.index,
+      final auditEntry = TransactionsEntry(
+        type: TransactionType.expense.index,
         amount: -value,
         referenceId: expense.id,
         timestamp: DateTime.now(),
-        note: note.trim(),
+        userName: note.trim(),
       );
       _repository.addAuditEntry(auditEntry);
 
@@ -202,12 +202,12 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
       _repository.updateBalance(newBalance);
 
-      final auditEntry = BalanceAuditEntryModel(
-        type: BalanceChangeType.manualAdjustment.index,
+      final auditEntry = TransactionsEntry(
+        type: TransactionType.manualAdjustment.index,
         amount: delta,
         referenceId: 0,
         timestamp: DateTime.now(),
-        note: note?.trim(),
+        userName: note?.trim(),
       );
       _repository.addAuditEntry(auditEntry);
 
@@ -281,12 +281,12 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
     final newBalance = current.currentBalance + amount;
     _repository.updateBalance(newBalance);
 
-    final auditEntry = BalanceAuditEntryModel(
-      type: BalanceChangeType.sellInvoice.index,
+    final auditEntry = TransactionsEntry(
+      type: TransactionType.sellingInvoice.index,
       amount: amount,
       referenceId: 0, // Will be set by caller
       timestamp: DateTime.now(),
-      note: 'فاتورة بيع',
+      userName: 'فاتورة بيع',
     );
     _repository.addAuditEntry(auditEntry);
 

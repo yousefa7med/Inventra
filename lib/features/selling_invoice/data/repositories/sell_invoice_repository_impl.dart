@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
@@ -81,6 +81,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         date: DateTime.now(),
         discount: discount,
       );
+      invoice.customer.target = customer;
       customer.invoices.add(invoice);
       _objectBox.invoicesBox.put(invoice);
       _objectBox.customersBox.put(customer);
@@ -107,14 +108,14 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     balance.currentBalance += (totalPrice - (discount ?? 0));
     _objectBox.safeBalanceBox.put(balance);
 
-    final auditEntry = BalanceAuditEntryModel(
-      type: BalanceChangeType.sellInvoice.index,
+    final auditEntry = TransactionsEntry(
+      type: TransactionType.sellingInvoice.index,
       amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
-      note: 'فاتورة بيع: ${customer.name}',
+      userName: customer.name,
     );
-    _objectBox.balanceAuditEntryBox.put(auditEntry);
+    _objectBox.transactionsEntryBox.put(auditEntry);
 
     return savedInvoice!;
   }
