@@ -2,17 +2,17 @@ import 'package:Inventra/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
-import 'package:Inventra/features/operations/data/repositories/operations_repository.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
+import 'package:Inventra/features/transactions/data/repositories/transactions_repository.dart';
 
-class OperationsRepositoryImpl implements OperationsRepository {
+class TransactionsRepositoryImpl implements TransactionsRepository {
   final ObjectBoxServices _objectBox;
 
-  OperationsRepositoryImpl({required this._objectBox});
+  TransactionsRepositoryImpl({required this._objectBox});
 
   @override
-  List<TransactionsEntry> getOperations({
-    BalanceChangeType? type,
+  List<TransactionsEntry> getTransactions({
+    TransactionType? type,
     DateTimeRange? dateRange,
   }) {
     Condition<TransactionsEntry>? condition;

@@ -1,7 +1,7 @@
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/buying_invoice_model.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -104,7 +104,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     _objectBox.safeBalanceBox.put(balance);
 
     final auditEntry = TransactionsEntry(
-      type: BalanceChangeType.buyingInvoice.index,
+      type: TransactionType.buyingInvoice.index,
       amount: -totalPrice,
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,

@@ -1,7 +1,7 @@
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
-import 'package:Inventra/features/operations/controller/cubit/operations_cubit.dart';
+import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,7 +37,7 @@ class _TransactionsFilterState extends State<TransactionsFilter> {
         _filterTo = picked.end;
       });
       if (context.mounted) {
-        context.read<OperationsCubit>().loadOperations(dateRange: picked);
+        context.read<TransactionsCubit>().loadTransactions(dateRange: picked);
       }
     }
   }
@@ -47,7 +47,7 @@ class _TransactionsFilterState extends State<TransactionsFilter> {
       _filterFrom = null;
       _filterTo = null;
     });
-    context.read<OperationsCubit>().clearDateFilter();
+    context.read<TransactionsCubit>().clearDateFilter();
   }
 
   @override
@@ -142,10 +142,10 @@ class _FilterChipsState extends State<FilterChips> {
                   _selectedIndex = index;
                 });
                 if (_selectedIndex == 0) {
-                  context.read<OperationsCubit>().clearTypeFilter();
+                  context.read<TransactionsCubit>().clearTypeFilter();
                 } else {
-                  context.read<OperationsCubit>().loadOperations(
-                    type: BalanceChangeType.values[_selectedIndex - 1],
+                  context.read<TransactionsCubit>().loadTransactions(
+                    type: TransactionType.values[_selectedIndex - 1],
                   );
                 }
               },

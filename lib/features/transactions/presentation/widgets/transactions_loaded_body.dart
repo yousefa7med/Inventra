@@ -5,12 +5,12 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Inventra/features/operations/controller/cubit/operations_cubit.dart';
-import 'package:Inventra/features/operations/presentation/widgets/transaction_card.dart';
+import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
+import 'package:Inventra/features/transactions/presentation/widgets/transaction_card.dart';
 import 'package:gap/gap.dart';
 
-class OperationsLoadedBody extends StatelessWidget {
-  const OperationsLoadedBody({super.key, required this.transactions});
+class TransactionsLoadedBody extends StatelessWidget {
+  const TransactionsLoadedBody({super.key, required this.transactions});
   final List<TransactionsEntry> transactions;
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,8 @@ class OperationsLoadedBody extends StatelessWidget {
     }
 
     return RefreshIndicator(
-      onRefresh: () async => context.read<OperationsCubit>().loadOperations(),
+      onRefresh: () async =>
+          context.read<TransactionsCubit>().loadTransactions(),
       child: ListView.separated(
         itemCount: transactions.length,
         itemBuilder: (context, index) {

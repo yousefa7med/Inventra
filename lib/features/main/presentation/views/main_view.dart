@@ -7,8 +7,8 @@ import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_drawer.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
-import 'package:Inventra/features/operations/controller/cubit/operations_cubit.dart';
-import 'package:Inventra/features/operations/presentation/views/operations_view.dart';
+import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
+import 'package:Inventra/features/transactions/presentation/views/operations_view.dart';
 import 'package:Inventra/features/inventory/presentation/views/inventory_view.dart';
 import 'package:Inventra/features/safe/presentation/views/safe_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
@@ -29,7 +29,7 @@ class MainView extends StatelessWidget {
       body: PersistentTabView(
         onTabChanged: (value) {
           if (value == 1) {
-            GetIt.instance<OperationsCubit>().loadOperations();
+            GetIt.instance<TransactionsCubit>().loadTransactions();
           }
           if (value == 2) {
             GetIt.instance<ProductCubit>().loadProducts();
@@ -67,8 +67,8 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
   ),
   PersistentTabConfig(
     screen: BlocProvider.value(
-      value: GetIt.instance<OperationsCubit>(),
-      child: const OperationsView(),
+      value: GetIt.instance<TransactionsCubit>(),
+      child: const TransactionsView(),
     ),
     item: ItemConfig(
       icon: const Icon(Icons.history_sharp),

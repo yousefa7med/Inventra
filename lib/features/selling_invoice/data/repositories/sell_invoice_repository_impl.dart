@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
@@ -109,7 +109,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     _objectBox.safeBalanceBox.put(balance);
 
     final auditEntry = TransactionsEntry(
-      type: BalanceChangeType.sellingInvoice.index,
+      type: TransactionType.sellingInvoice.index,
       amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,

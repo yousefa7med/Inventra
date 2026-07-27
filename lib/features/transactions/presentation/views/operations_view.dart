@@ -1,15 +1,15 @@
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
-import 'package:Inventra/features/operations/presentation/widgets/operations_loaded_body.dart';
-import 'package:Inventra/features/operations/presentation/widgets/transactions_filter.dart';
+import 'package:Inventra/features/transactions/presentation/widgets/transactions_loaded_body.dart';
+import 'package:Inventra/features/transactions/presentation/widgets/transactions_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Inventra/features/operations/controller/cubit/operations_cubit.dart';
-import 'package:Inventra/features/operations/controller/cubit/operations_state.dart';
+import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
+import 'package:Inventra/features/transactions/controller/cubit/transactions_state.dart';
 
-class OperationsView extends StatelessWidget {
-  const OperationsView({super.key});
+class TransactionsView extends StatelessWidget {
+  const TransactionsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +20,24 @@ class OperationsView extends StatelessWidget {
           const TransactionsFilter(),
 
           Expanded(
-            child: BlocBuilder<OperationsCubit, OperationsState>(
+            child: BlocBuilder<TransactionsCubit, TransactionsState>(
               buildWhen: (previous, current) =>
-                  current is OperationsLoading ||
-                  current is OperationsLoaded ||
-                  current is OperationsError,
+                  current is TransactionsLoading ||
+                  current is TransactionsLoaded ||
+                  current is TransactionsError,
               builder: (context, state) {
-                if (state is OperationsLoading) {
+                if (state is TransactionsLoading) {
                   return const Center(child: CircularProgressIndicator());
-                } else if (state is OperationsError) {
+                } else if (state is TransactionsError) {
                   return ErrorStateWidget(
                     message: state.message,
                     onPressed: () =>
-                        context.read<OperationsCubit>().loadOperations(),
+                        context.read<TransactionsCubit>().loadTransactions(),
                   );
-                } else if (state is OperationsLoaded) {
-                  return OperationsLoadedBody(transactions: state.transactions);
+                } else if (state is TransactionsLoaded) {
+                  return TransactionsLoadedBody(
+                    transactions: state.transactions,
+                  );
                 }
                 return const EmptyStateWidget(
                   message: "لا يوجد عمليات سابقة",

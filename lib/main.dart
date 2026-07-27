@@ -21,9 +21,9 @@ import 'package:Inventra/features/safe/data/repositories/safe_repository_impl.da
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository_impl.dart';
-import 'package:Inventra/features/operations/data/repositories/operations_repository_impl.dart';
-import 'package:Inventra/features/operations/data/repositories/operations_repository.dart';
-import 'package:Inventra/features/operations/controller/cubit/operations_cubit.dart';
+import 'package:Inventra/features/transactions/data/repositories/transactions_repository_impl.dart';
+import 'package:Inventra/features/transactions/data/repositories/transactions_repository.dart';
+import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -124,15 +124,15 @@ Future<void> configureDependencies() async {
     () => buyInvoiceRepository,
   );
 
-  final operationsRepository = OperationsRepositoryImpl(
+  final transactionsRepository = TransactionsRepositoryImpl(
     objectBox: objectBoxServices,
   );
-  GetIt.instance.registerLazySingleton<OperationsRepository>(
-    () => operationsRepository,
+  GetIt.instance.registerLazySingleton<TransactionsRepository>(
+    () => transactionsRepository,
   );
 
-  GetIt.instance.registerLazySingleton<OperationsCubit>(
-    () => OperationsCubit(GetIt.instance<OperationsRepository>()),
+  GetIt.instance.registerLazySingleton<TransactionsCubit>(
+    () => TransactionsCubit(GetIt.instance<TransactionsRepository>()),
   );
 
   // 4. Cubits (LazySingletons for app-wide state)

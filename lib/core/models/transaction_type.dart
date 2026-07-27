@@ -1,4 +1,4 @@
-enum BalanceChangeType {
+enum TransactionType {
   buyingInvoice,
   sellingInvoice,
   expense,

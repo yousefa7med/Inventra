@@ -1,15 +1,15 @@
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:flutter/material.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 
-abstract class OperationsCubitInterface {
+abstract class TransactionsCubitInterface {
   // State getters
-  List<TransactionsEntry> get operations;
+  List<TransactionsEntry> get transactions;
   int? get selectedType;
   DateTimeRange? get selectedDateRange;
 
   // Filter actions
-  void loadOperations({BalanceChangeType? type, DateTimeRange? dateRange});
+  void loadTransactions({TransactionType? type, DateTimeRange? dateRange});
 
   void clearFilters();
   void clearTypeFilter();

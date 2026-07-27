@@ -1,6 +1,6 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
@@ -90,7 +90,7 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  List<TransactionsEntry> getAuditEntries({BalanceChangeType? type}) {
+  List<TransactionsEntry> getAuditEntries({TransactionType? type}) {
     var entries = _objectBox.transactionsEntryBox.getAll();
     entries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
 

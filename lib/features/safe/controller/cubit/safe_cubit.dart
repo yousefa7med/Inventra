@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/balance_change_type.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/utils/result.dart';
@@ -104,7 +104,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       _repository.updateBalance(newBalance);
 
       final auditEntry = TransactionsEntry(
-        type: BalanceChangeType.expense.index,
+        type: TransactionType.expense.index,
         amount: -value,
         referenceId: expense.id,
         timestamp: DateTime.now(),
@@ -203,7 +203,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       _repository.updateBalance(newBalance);
 
       final auditEntry = TransactionsEntry(
-        type: BalanceChangeType.manualAdjustment.index,
+        type: TransactionType.manualAdjustment.index,
         amount: delta,
         referenceId: 0,
         timestamp: DateTime.now(),
@@ -282,7 +282,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
     _repository.updateBalance(newBalance);
 
     final auditEntry = TransactionsEntry(
-      type: BalanceChangeType.sellingInvoice.index,
+      type: TransactionType.sellingInvoice.index,
       amount: amount,
       referenceId: 0, // Will be set by caller
       timestamp: DateTime.now(),
