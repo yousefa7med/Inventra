@@ -47,7 +47,7 @@ class _TransactionsFilterState extends State<TransactionsFilter> {
       _filterFrom = null;
       _filterTo = null;
     });
-    context.read<OperationsCubit>().loadOperations();
+    context.read<OperationsCubit>().clearDateFilter();
   }
 
   @override
@@ -142,7 +142,7 @@ class _FilterChipsState extends State<FilterChips> {
                   _selectedIndex = index;
                 });
                 if (_selectedIndex == 0) {
-                  context.read<OperationsCubit>().loadOperations();
+                  context.read<OperationsCubit>().clearTypeFilter();
                 } else {
                   context.read<OperationsCubit>().loadOperations(
                     type: BalanceChangeType.values[_selectedIndex - 1],

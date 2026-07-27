@@ -12,6 +12,8 @@ abstract class OperationsCubitInterface {
   void loadOperations({BalanceChangeType? type, DateTimeRange? dateRange});
 
   void clearFilters();
+  void clearTypeFilter();
+  void clearDateFilter();
 
   // Navigation
 }

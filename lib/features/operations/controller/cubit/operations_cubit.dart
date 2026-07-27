@@ -17,12 +17,33 @@ class OperationsCubit extends Cubit<OperationsState>
   int? _selectedType;
 
   @override
+  List<TransactionsEntry> get operations => _operations;
+
+  @override
+  DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;
+
+  @override
+  int? get selectedType => _selectedType;
+
+  @override
   void loadOperations({
     BalanceChangeType? type,
     DateTimeRange<DateTime>? dateRange,
   }) async {
-    _selectedDateRange = dateRange;
-    _selectedType = type?.index;
+    if (type == null) {
+      type = _selectedType == null
+          ? null
+          : BalanceChangeType.values[_selectedType!];
+    } else {
+      _selectedType = type.index;
+    }
+
+    if (dateRange == null) {
+      dateRange = _selectedDateRange;
+    } else {
+      _selectedDateRange = dateRange;
+    }
+
     emit(OperationsLoading());
     try {
       _operations = _repository.getOperations(type: type, dateRange: dateRange);
@@ -38,7 +59,22 @@ class OperationsCubit extends Cubit<OperationsState>
     _selectedDateRange = null;
     emit(OperationsLoading());
     try {
-      loadOperations();
+      _operations = _repository.getOperations();
+      emit(OperationsLoaded(transactions: operations));
+    } catch (e) {
+      emit(OperationsError(e.toString()));
+    }
+  }
+  @override
+  void clearDateFilter() {
+    _selectedDateRange = null;
+    emit(OperationsLoading());
+    try {
+      _operations = _repository.getOperations(
+        type: _selectedType == null
+            ? null
+            : BalanceChangeType.values[_selectedType!],
+      );
       emit(OperationsLoaded(transactions: operations));
     } catch (e) {
       emit(OperationsError(e.toString()));
@@ -46,11 +82,14 @@ class OperationsCubit extends Cubit<OperationsState>
   }
 
   @override
-  List<TransactionsEntry> get operations => _operations;
-
-  @override
-  DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;
-
-  @override
-  int? get selectedType => _selectedType;
+  void clearTypeFilter() {
+    _selectedType = null;
+    emit(OperationsLoading());
+    try {
+      _operations = _repository.getOperations(dateRange: _selectedDateRange);
+      emit(OperationsLoaded(transactions: operations));
+    } catch (e) {
+      emit(OperationsError(e.toString()));
+    }
+  }
 }
