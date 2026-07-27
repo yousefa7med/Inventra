@@ -81,6 +81,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         date: DateTime.now(),
         discount: discount,
       );
+      invoice.customer.target = customer;
       customer.invoices.add(invoice);
       _objectBox.invoicesBox.put(invoice);
       _objectBox.customersBox.put(customer);
@@ -108,11 +109,11 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     _objectBox.safeBalanceBox.put(balance);
 
     final auditEntry = BalanceAuditEntryModel(
-      type: BalanceChangeType.sellInvoice.index,
+      type: BalanceChangeType.sellingInvoice.index,
       amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
-      note: 'فاتورة بيع: ${customer.name}',
+      userName: customer.name,
     );
     _objectBox.balanceAuditEntryBox.put(auditEntry);
 
