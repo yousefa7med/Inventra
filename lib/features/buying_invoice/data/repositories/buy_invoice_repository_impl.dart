@@ -1,6 +1,6 @@
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
 import 'package:Inventra/core/models/buying_invoice_model.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';

@@ -5,7 +5,7 @@ import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:shared_preferences/shared_preferences.dart';

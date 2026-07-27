@@ -1,4 +1,4 @@
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 
 sealed class OperationsState {}
 

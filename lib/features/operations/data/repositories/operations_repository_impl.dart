@@ -1,7 +1,7 @@
 import 'package:Inventra/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
 import 'package:Inventra/features/operations/data/repositories/operations_repository.dart';
 

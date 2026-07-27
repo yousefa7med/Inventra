@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:flutter/material.dart';

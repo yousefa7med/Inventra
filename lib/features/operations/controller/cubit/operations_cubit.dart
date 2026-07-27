@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Inventra/core/models/balance_audit_entry_model.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/models/balance_change_type.dart';
 import 'package:Inventra/features/operations/controller/cubit/operations_cubit_interface.dart';
 import 'package:Inventra/features/operations/controller/cubit/operations_state.dart';

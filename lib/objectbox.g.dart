@@ -14,7 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'core/models/balance_audit_entry_model.dart';
+import 'core/models/transactions_entry.dart';
 import 'core/models/buying_invoice_model.dart';
 import 'core/models/customer_model.dart';
 import 'core/models/expense_model.dart';
