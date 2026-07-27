@@ -8,7 +8,7 @@ import 'package:Inventra/core/widgets/app_drawer.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
-import 'package:Inventra/features/transactions/presentation/views/operations_view.dart';
+import 'package:Inventra/features/transactions/presentation/views/transactions_view.dart';
 import 'package:Inventra/features/inventory/presentation/views/inventory_view.dart';
 import 'package:Inventra/features/safe/presentation/views/safe_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';

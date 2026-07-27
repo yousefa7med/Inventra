@@ -82,10 +82,13 @@ class TransactionCard extends StatelessWidget {
                                 color: Colors.black45,
                               ),
                             ),
-                            Text(
-                              invoice.userName ?? "",
-                              style: AppTextStyle.semiBold12.copyWith(
-                                color: color,
+                            Expanded(
+                              child: Text(
+                                invoice.userName ?? "",
+                                style: AppTextStyle.semiBold12.copyWith(
+                                  color: color,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
@@ -101,7 +104,7 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    formatCurrency(invoice.amount),
+                    invoice.amount.toString(),
                     style: AppTextStyle.semiBold14.copyWith(
                       color: invoice.amount > 0
                           ? AppColors.success
