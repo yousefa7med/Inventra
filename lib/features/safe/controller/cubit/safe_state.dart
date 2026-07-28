@@ -13,11 +13,3 @@ class SafeError extends SafeState {
   SafeError(this.message);
 }
 
-class ExpensesLoading extends SafeState {}
-
-class ExpensesLoaded extends SafeState {}
-
-class ExpensesError extends SafeState {
-  final String message;
-  ExpensesError(this.message);
-}

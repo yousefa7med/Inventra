@@ -11,6 +11,8 @@ abstract class SafeCubitInterface {
 
   void addExpense({required double value, required String note});
   void getExpenses({DateTimeRange<DateTime>? dateRange, String? searchText});
+  void clearDateFilter();
+  void clearSearchFilter();
 
   void adjustBalance({required double newBalance, String? note});
 }

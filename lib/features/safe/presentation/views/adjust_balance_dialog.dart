@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
-import 'package:Inventra/core/utils/result.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
@@ -19,7 +17,6 @@ class _AdjustBalanceDialogState extends State<AdjustBalanceDialog> {
   final _formKey = GlobalKey<FormState>();
   final _valueController = TextEditingController();
   final _noteController = TextEditingController();
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -28,29 +25,16 @@ class _AdjustBalanceDialogState extends State<AdjustBalanceDialog> {
     super.dispose();
   }
 
-  Future<void> _adjustBalance() async {
+  void _adjustBalance() {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
-
     final cubit = context.read<SafeCubit>();
-    final result = await cubit.adjustBalance(
+    cubit.adjustBalance(
       newBalance: double.parse(_valueController.text.trim()),
       note: _noteController.text.trim().isEmpty
           ? null
           : _noteController.text.trim(),
     );
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (result is Success<void>) {
-        if (mounted) AppNavigation.pop(context);
-      } else if (result is Failure<void>) {
-        if (mounted) {
-          showSnackBar(context, result.message, color: AppColors.error);
-        }
-      }
-    }
   }
 
   @override
@@ -99,33 +83,40 @@ class _AdjustBalanceDialogState extends State<AdjustBalanceDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: _isLoading ? null : () => AppNavigation.pop(context),
+          onPressed:
+              // _isLoading ? null :
+              () => AppNavigation.pop(context),
           child: Text(
             'إلغاء',
             style: AppTextStyle.medium14.copyWith(color: AppColors.grey),
           ),
         ),
         ElevatedButton(
-          onPressed: _isLoading ? null : _adjustBalance,
+          onPressed: () {
+            _adjustBalance();
+            AppNavigation.pop(context);
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: _isLoading
-              ? const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
-                )
-              : Text(
-                  'تأكيد',
-                  style: AppTextStyle.medium14.copyWith(color: Colors.white),
-                ),
+          child:
+              // _isLoading
+              //     ? const SizedBox(
+              //         width: 20,
+              //         height: 20,
+              //         child: CircularProgressIndicator(
+              //           strokeWidth: 2,
+              //           color: Colors.white,
+              //         ),
+              //       )
+              //     :
+              Text(
+                'تأكيد',
+                style: AppTextStyle.medium14.copyWith(color: Colors.white),
+              ),
         ),
       ],
     );

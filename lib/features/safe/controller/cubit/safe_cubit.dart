@@ -9,7 +9,7 @@ part 'safe_state.dart';
 class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   final SafeRepository _repository;
   DateTimeRange<DateTime>? _selectedDateRange;
-  double? _currentBalance;
+  double _currentBalance = 0;
 
   List<ExpenseModel> _expenses = [];
 
@@ -18,7 +18,7 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   SafeCubit(this._repository) : super(SafeInitial());
 
   @override
-  double get currentBalance => _currentBalance ?? 0;
+  double get currentBalance => _currentBalance;
 
   @override
   DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;
@@ -28,23 +28,24 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   @override
   String? get searchText => _searchText;
 
-  @override
-  void addExpense({required double value, required String note}) {
-    // if (value <= 0) {
-    //   // return const Failure(
-    //   //   'قيمة المصروف يجب أن تكون موجبة',
-    //   //   code: FailureCode.validationError,
-    //   // );
-    // }
-    // if (note.trim().isEmpty) {
-    //   return const Failure(
-    //     'ملاحظة المصروف مطلوبة',
-    //     code: FailureCode.validationError,
-    //   );
-    // }
+  void init() {
+    emit(SafeLoading());
 
     try {
-      emit(ExpensesLoading());
+      _currentBalance = _repository.getBalance().currentBalance;
+      _expenses = _repository.loadExpenses();
+      emit(SafeLoaded());
+    } catch (e) {
+      emit(SafeError("فشل في تحميل بايانات الخزنة"));
+    }
+  }
+
+  @override
+  void addExpense({required double value, required String note}) {
+  
+
+    try {
+      emit(SafeLoading());
       final expense = ExpenseModel(
         date: DateTime.now(),
         value: -value,
@@ -52,22 +53,19 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       );
       _expenses.add(expense);
       _repository.addExpense(expense);
-      emit(ExpensesLoaded());
+      _currentBalance -= value;
+      emit(SafeLoaded());
     } catch (e) {
-      emit(ExpensesError('فشل إضافة المصروف: $e'));
+      emit(SafeError('فشل إضافة المصروف: $e'));
     }
   }
 
   @override
   void adjustBalance({required double newBalance, String? note}) {
-    // if (newBalance > 999999999.99 || newBalance < -999999999.99) {
-    //   return const Failure('رصيد غير صالح', code: FailureCode.validationError);
-    // }
-
     try {
       emit(SafeLoading());
       _repository.adjustBalance(newAmount: newBalance, newNote: note);
-
+      _currentBalance = newBalance;
       emit(SafeLoaded());
     } catch (e) {
       emit(SafeError('فشل تعديل الرصيد: $e'));
@@ -87,14 +85,38 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
       _searchText = searchText;
     }
     try {
-      emit(ExpensesLoading());
+      emit(SafeLoading());
       _expenses = _repository.loadExpenses(
         dateRange: dateRange,
         searchText: searchText,
       );
-      emit(ExpensesLoaded());
+      emit(SafeLoaded());
     } catch (e) {
-      emit(ExpensesError("فشل في تحميل المصاريف"));
+      emit(SafeError("فشل في تحميل المصاريف"));
+    }
+  }
+
+  @override
+  void clearDateFilter() {
+    _selectedDateRange = null;
+    try {
+      emit(SafeLoading());
+      _expenses = _repository.loadExpenses(searchText: _searchText);
+      emit(SafeLoaded());
+    } catch (e) {
+      emit(SafeError("فشل في تحميل المصاريف"));
+    }
+  }
+
+  @override
+  void clearSearchFilter() {
+    _searchText = null;
+    try {
+      emit(SafeLoading());
+      _expenses = _repository.loadExpenses(dateRange: _selectedDateRange);
+      emit(SafeLoaded());
+    } catch (e) {
+      emit(SafeError("فشل في تحميل المصاريف"));
     }
   }
 }
