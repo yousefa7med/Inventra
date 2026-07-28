@@ -8,7 +8,8 @@ class TransactionsEntry {
   @Index()
   final int type;
 
-  final double amount;
+  final double value;
+  final double? oldValue;
 
   final int referenceId;
 
@@ -19,9 +20,10 @@ class TransactionsEntry {
 
   TransactionsEntry({
     required this.type,
-    required this.amount,
+    required this.value,
     required this.referenceId,
     required this.timestamp,
     this.userName,
+    this.oldValue,
   });
 }

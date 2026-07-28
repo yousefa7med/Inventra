@@ -14,15 +14,16 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'core/models/transactions_entry.dart';
 import 'core/models/buying_invoice_model.dart';
 import 'core/models/customer_model.dart';
 import 'core/models/expense_model.dart';
 import 'core/models/invoice_item_model.dart';
+import 'core/models/manual_adjustment_model.dart';
 import 'core/models/product_model.dart';
 import 'core/models/safe_balance_model.dart';
 import 'core/models/selling_invoice_model.dart';
 import 'core/models/supplier_model.dart';
+import 'core/models/transactions_entry.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -243,7 +244,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(7, 544091790987256582),
     name: 'SafeBalanceModel',
-    lastPropertyId: const obx_int.IdUid(3, 4426982627598649372),
+    lastPropertyId: const obx_int.IdUid(4, 3091760458090423919),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -262,6 +263,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(3, 4426982627598649372),
         name: 'lastUpdated',
         type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 3091760458090423919),
+        name: 'note',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -354,7 +361,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(10, 4619521982065349046),
     name: 'TransactionsEntry',
-    lastPropertyId: const obx_int.IdUid(6, 8297995075222169350),
+    lastPropertyId: const obx_int.IdUid(8, 4481517062250954594),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -369,12 +376,6 @@ final _entities = <obx_int.ModelEntity>[
         type: 6,
         flags: 8,
         indexId: const obx_int.IdUid(8, 6027171614437595435),
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 1927919349330023791),
-        name: 'amount',
-        type: 8,
-        flags: 0,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(4, 7646390602949430750),
@@ -392,6 +393,58 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(6, 8297995075222169350),
         name: 'userName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 5607830759256193537),
+        name: 'value',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 4481517062250954594),
+        name: 'oldValue',
+        type: 8,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(11, 1820214550625151348),
+    name: 'ManualAdjustmentModel',
+    lastPropertyId: const obx_int.IdUid(5, 7102745299645279860),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 3292396021731562777),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 7574565308587778549),
+        name: 'prevBalanceValue',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 5190355402858592240),
+        name: 'newBalanceValue',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 6274846259923515021),
+        name: 'date',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 7102745299645279860),
+        name: 'note',
         type: 9,
         flags: 0,
       ),
@@ -444,7 +497,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(10, 4619521982065349046),
+    lastEntityId: const obx_int.IdUid(11, 1820214550625151348),
     lastIndexId: const obx_int.IdUid(9, 1617320129231709899),
     lastRelationId: const obx_int.IdUid(3, 2528445483058024405),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -460,6 +513,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       7978173406368120247,
       8338098549628054250,
       5227921985410566069,
+      1927919349330023791,
     ],
     retiredRelationUids: const [5053591065719948882],
     modelVersion: 5,
@@ -748,10 +802,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (SafeBalanceModel object, fb.Builder fbb) {
-        fbb.startTable(4);
+        final noteOffset = object.note == null
+            ? null
+            : fbb.writeString(object.note!);
+        fbb.startTable(5);
         fbb.addInt64(0, object.id);
         fbb.addFloat64(1, object.currentBalance);
         fbb.addInt64(2, object.lastUpdated.millisecondsSinceEpoch);
+        fbb.addOffset(3, noteOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -767,9 +825,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final lastUpdatedParam = DateTime.fromMillisecondsSinceEpoch(
           const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0),
         );
+        final noteParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 10);
         final object = SafeBalanceModel(
           currentBalance: currentBalanceParam,
           lastUpdated: lastUpdatedParam,
+          note: noteParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
         return object;
@@ -885,13 +947,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final userNameOffset = object.userName == null
             ? null
             : fbb.writeString(object.userName!);
-        fbb.startTable(7);
+        fbb.startTable(9);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.type);
-        fbb.addFloat64(2, object.amount);
         fbb.addInt64(3, object.referenceId);
         fbb.addInt64(4, object.timestamp.millisecondsSinceEpoch);
         fbb.addOffset(5, userNameOffset);
+        fbb.addFloat64(6, object.value);
+        fbb.addFloat64(7, object.oldValue);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -904,10 +967,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           6,
           0,
         );
-        final amountParam = const fb.Float64Reader().vTableGet(
+        final valueParam = const fb.Float64Reader().vTableGet(
           buffer,
           rootOffset,
-          8,
+          16,
           0,
         );
         final referenceIdParam = const fb.Int64Reader().vTableGet(
@@ -922,12 +985,70 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final userNameParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 14);
+        final oldValueParam = const fb.Float64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          18,
+        );
         final object = TransactionsEntry(
           type: typeParam,
-          amount: amountParam,
+          value: valueParam,
           referenceId: referenceIdParam,
           timestamp: timestampParam,
           userName: userNameParam,
+          oldValue: oldValueParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+        return object;
+      },
+    ),
+    ManualAdjustmentModel: obx_int.EntityDefinition<ManualAdjustmentModel>(
+      model: _entities[9],
+      toOneRelations: (ManualAdjustmentModel object) => [],
+      toManyRelations: (ManualAdjustmentModel object) => {},
+      getId: (ManualAdjustmentModel object) => object.id,
+      setId: (ManualAdjustmentModel object, int id) {
+        object.id = id;
+      },
+      objectToFB: (ManualAdjustmentModel object, fb.Builder fbb) {
+        final noteOffset = object.note == null
+            ? null
+            : fbb.writeString(object.note!);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addFloat64(1, object.prevBalanceValue);
+        fbb.addFloat64(2, object.newBalanceValue);
+        fbb.addInt64(3, object.date.millisecondsSinceEpoch);
+        fbb.addOffset(4, noteOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final prevBalanceValueParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final newBalanceValueParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        final dateParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0),
+        );
+        final noteParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 12);
+        final object = ManualAdjustmentModel(
+          prevBalanceValue: prevBalanceValueParam,
+          newBalanceValue: newBalanceValueParam,
+          date: dateParam,
+          note: noteParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
         return object;
@@ -1102,6 +1223,11 @@ class SafeBalanceModel_ {
   static final lastUpdated = obx.QueryDateProperty<SafeBalanceModel>(
     _entities[5].properties[2],
   );
+
+  /// See [SafeBalanceModel.note].
+  static final note = obx.QueryStringProperty<SafeBalanceModel>(
+    _entities[5].properties[3],
+  );
 }
 
 /// [SellingInvoiceModel] entity fields to define ObjectBox queries.
@@ -1174,23 +1300,57 @@ class TransactionsEntry_ {
     _entities[8].properties[1],
   );
 
-  /// See [TransactionsEntry.amount].
-  static final amount = obx.QueryDoubleProperty<TransactionsEntry>(
-    _entities[8].properties[2],
-  );
-
   /// See [TransactionsEntry.referenceId].
   static final referenceId = obx.QueryIntegerProperty<TransactionsEntry>(
-    _entities[8].properties[3],
+    _entities[8].properties[2],
   );
 
   /// See [TransactionsEntry.timestamp].
   static final timestamp = obx.QueryDateProperty<TransactionsEntry>(
-    _entities[8].properties[4],
+    _entities[8].properties[3],
   );
 
   /// See [TransactionsEntry.userName].
   static final userName = obx.QueryStringProperty<TransactionsEntry>(
+    _entities[8].properties[4],
+  );
+
+  /// See [TransactionsEntry.value].
+  static final value = obx.QueryDoubleProperty<TransactionsEntry>(
     _entities[8].properties[5],
+  );
+
+  /// See [TransactionsEntry.oldValue].
+  static final oldValue = obx.QueryDoubleProperty<TransactionsEntry>(
+    _entities[8].properties[6],
+  );
+}
+
+/// [ManualAdjustmentModel] entity fields to define ObjectBox queries.
+class ManualAdjustmentModel_ {
+  /// See [ManualAdjustmentModel.id].
+  static final id = obx.QueryIntegerProperty<ManualAdjustmentModel>(
+    _entities[9].properties[0],
+  );
+
+  /// See [ManualAdjustmentModel.prevBalanceValue].
+  static final prevBalanceValue =
+      obx.QueryDoubleProperty<ManualAdjustmentModel>(
+        _entities[9].properties[1],
+      );
+
+  /// See [ManualAdjustmentModel.newBalanceValue].
+  static final newBalanceValue = obx.QueryDoubleProperty<ManualAdjustmentModel>(
+    _entities[9].properties[2],
+  );
+
+  /// See [ManualAdjustmentModel.date].
+  static final date = obx.QueryDateProperty<ManualAdjustmentModel>(
+    _entities[9].properties[3],
+  );
+
+  /// See [ManualAdjustmentModel.note].
+  static final note = obx.QueryStringProperty<ManualAdjustmentModel>(
+    _entities[9].properties[4],
   );
 }

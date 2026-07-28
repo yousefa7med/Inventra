@@ -9,34 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-class SafeLoadedBody extends StatefulWidget {
-  const SafeLoadedBody({super.key, required this.state});
-
-  final SafeLoaded state;
-
-  @override
-  State<SafeLoadedBody> createState() => _SafeLoadedBodyState();
-}
-
-class _SafeLoadedBodyState extends State<SafeLoadedBody> {
-  final _scrollController = ScrollController();
-  final GlobalKey _searchKey = GlobalKey();
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+class SafeLoadedBody extends StatelessWidget {
+  const SafeLoadedBody({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
-      controller: _scrollController,
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
@@ -44,20 +23,20 @@ class _SafeLoadedBodyState extends State<SafeLoadedBody> {
             child: Column(
               children: [
                 BalanceCard(
-                  balance: widget.state.balance,
-                  isNegative: widget.state.isNegativeBalance,
+                  balance: context.read<SafeCubit>().currentBalance,
+                  isNegative: false,
                   onEditTap: () => _showAdjustBalanceDialog(context),
                 ),
                 const Gap(16),
-                SafeSearchAndFilter(key: _searchKey),
-                const Gap(12),
-                _buildExpensesHeader(),
+                const SafeSearchAndFilter(),
+                // const Gap(12),
+                // _buildExpensesHeader(),
                 const Gap(8),
               ],
             ),
           ),
         ),
-        if (widget.state.filteredExpenses.isEmpty)
+        if (context.read<SafeCubit>().expenses.isEmpty)
           const SliverFillRemaining(
             child: EmptyStateWidget(
               icon: Icons.receipt_long_outlined,
@@ -68,11 +47,11 @@ class _SafeLoadedBodyState extends State<SafeLoadedBody> {
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             sliver: SliverList.separated(
-              itemCount: widget.state.filteredExpenses.length,
+              itemCount: context.read<SafeCubit>().expenses.length,
               separatorBuilder: (context, index) => const Gap(8),
               itemBuilder: (context, index) {
                 return ExpenseCard(
-                  expense: widget.state.filteredExpenses[index],
+                  expense: context.read<SafeCubit>().expenses[index],
                 );
               },
             ),
@@ -81,17 +60,17 @@ class _SafeLoadedBodyState extends State<SafeLoadedBody> {
     );
   }
 
-  Widget _buildExpensesHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('المصروفات'),
-        Text(
-          '(${widget.state.filteredExpenses.length} من ${widget.state.expenses.length})',
-        ),
-      ],
-    );
-  }
+  // Widget _buildExpensesHeader() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       const Text('المصروفات'),
+  //       Text(
+  //         '(${widget.state.filteredExpenses.length} من ${widget.state.expenses.length})',
+  //       ),
+  //     ],
+  //   );
+  // }
 
   void _showAdjustBalanceDialog(BuildContext context) {
     showDialog(

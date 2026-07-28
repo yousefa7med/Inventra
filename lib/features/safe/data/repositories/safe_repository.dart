@@ -1,23 +1,14 @@
-import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
+import 'package:flutter/material.dart';
 
 abstract class SafeRepository {
   SafeBalanceModel getBalance();
-  void updateBalance(double newAmount);
-  // void initializeBalance(double initialAmount);
-
-  List<ExpenseModel> getAllExpenses();
-  List<ExpenseModel> getExpensesFiltered({
-    DateTime? fromDate,
-    DateTime? toDate,
+  void adjustBalance({required double newAmount, String? newNote});
+  List<ExpenseModel> loadExpenses({
     String? searchText,
+    DateTimeRange<DateTime>? dateRange,
   });
-  void addExpense(ExpenseModel expense);
-  Stream<List<ExpenseModel>> watchExpenses();
 
-  List<TransactionsEntry> getAuditEntries({TransactionType? type});
-  void addAuditEntry(TransactionsEntry entry);
-  Stream<List<TransactionsEntry>> watchAuditEntries();
+  void addExpense(ExpenseModel expense);
 }

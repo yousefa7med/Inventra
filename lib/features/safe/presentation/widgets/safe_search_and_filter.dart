@@ -11,9 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 class SafeSearchAndFilter extends StatefulWidget {
-  const SafeSearchAndFilter({
-    super.key,
-  });
+  const SafeSearchAndFilter({super.key});
   @override
   State<SafeSearchAndFilter> createState() => _SafeSearchAndFilterState();
 }
@@ -32,11 +30,10 @@ class _SafeSearchAndFilterState extends State<SafeSearchAndFilter> {
   }
 
   Future<void> _selectDateRange(BuildContext context) async {
-    final now = DateTime.now();
     final picked = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2020),
-      lastDate: now,
+      lastDate: DateTime.now(),
       initialDateRange: _filterFrom != null && _filterTo != null
           ? DateTimeRange(start: _filterFrom!, end: _filterTo!)
           : null,
@@ -49,10 +46,7 @@ class _SafeSearchAndFilterState extends State<SafeSearchAndFilter> {
         _filterTo = picked.end;
       });
       if (context.mounted) {
-        context.read<SafeCubit>().setDateFilter(
-          from: picked.start,
-          to: picked.end,
-        );
+        context.read<SafeCubit>().getExpenses(dateRange: picked);
       }
     }
   }
@@ -62,7 +56,7 @@ class _SafeSearchAndFilterState extends State<SafeSearchAndFilter> {
       _filterFrom = null;
       _filterTo = null;
     });
-    context.read<SafeCubit>().setDateFilter(from: null, to: null);
+    context.read<SafeCubit>().clearDateFilter();
   }
 
   @override
@@ -76,15 +70,13 @@ class _SafeSearchAndFilterState extends State<SafeSearchAndFilter> {
               timer!.cancel();
             }
             timer = Timer(const Duration(milliseconds: 300), () {
-              context.read<SafeCubit>().setSearchFilter(
-                query.isEmpty ? null : query,
-              );
+              context.read<SafeCubit>().getExpenses(searchText: query);
             });
           },
           clearFunction: () {
             _searchController.clear();
 
-            context.read<SafeCubit>().setSearchFilter(null);
+            context.read<SafeCubit>().clearSearchFilter();
           },
           hintText: 'بحث بالملاحظة...',
         ),

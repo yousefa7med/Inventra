@@ -2,8 +2,8 @@ import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
+import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
-import 'package:Inventra/features/safe/presentation/widgets/safe_error_body.dart';
 import 'package:Inventra/features/safe/presentation/widgets/safe_loaded_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +18,7 @@ class SafeView extends StatelessWidget {
       child: Scaffold(
         appBar: const CustomAppBar(title: 'الخزنة', showDrawerButton: true),
         body: RefreshIndicator(
-          onRefresh: () => context.read<SafeCubit>().load(),
+          onRefresh: () async => context.read<SafeCubit>().init(),
           child: BlocBuilder<SafeCubit, SafeState>(
             builder: (context, state) {
               if (state is SafeLoading) {
@@ -26,14 +26,14 @@ class SafeView extends StatelessWidget {
               }
 
               if (state is SafeError) {
-                return SafeErrorBody(
+                return ErrorStateWidget(
                   message: state.message,
-                  onRetry: () => context.read<SafeCubit>().load(),
+                  onPressed: () => context.read<SafeCubit>().init(),
                 );
               }
 
               if (state is SafeLoaded) {
-                return SafeLoadedBody(state: state);
+                return  SafeLoadedBody();
               }
 
               return const Center(child: CircularProgressIndicator());

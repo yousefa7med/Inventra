@@ -35,7 +35,7 @@ class MainView extends StatelessWidget {
             GetIt.instance<ProductCubit>().loadProducts();
           }
           if (value == 3) {
-            GetIt.instance<SafeCubit>().load();
+            GetIt.instance<SafeCubit>().init();
           }
           log(value.toString());
         },
@@ -82,7 +82,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
   ),
   PersistentTabConfig(
     screen: BlocProvider.value(
-      value: GetIt.instance<ProductCubit>()..loadProducts(),
+      value: GetIt.instance<ProductCubit>(),
       child: const InventoryView(),
     ),
     item: ItemConfig(
@@ -97,7 +97,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
   ),
   PersistentTabConfig(
     screen: BlocProvider.value(
-      value: GetIt.instance<SafeCubit>()..load(),
+      value: GetIt.instance<SafeCubit>(),
       child: const SafeView(),
     ),
     item: ItemConfig(

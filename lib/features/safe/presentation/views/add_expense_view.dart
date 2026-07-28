@@ -1,9 +1,8 @@
+import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Inventra/core/helper/functions.dart';
-import 'package:Inventra/core/navigations/navigations.dart';
-import 'package:Inventra/core/utils/result.dart';
+
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
@@ -30,7 +29,6 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   final _formKey = GlobalKey<FormState>();
   final _valueController = TextEditingController();
   final _noteController = TextEditingController();
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -39,27 +37,14 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
     super.dispose();
   }
 
-  Future<void> _saveExpense() async {
+  void _saveExpense() {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isLoading = true);
-
     final cubit = context.read<SafeCubit>();
-    final result = await cubit.addExpense(
+    cubit.addExpense(
       value: double.parse(_valueController.text),
       note: _noteController.text.trim(),
     );
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (result is Success<void>) {
-        if (mounted) AppNavigation.pop(context);
-      } else if (result is Failure<void>) {
-        if (mounted) {
-          showSnackBar(context, result.message, color: AppColors.error);
-        }
-      }
-    }
   }
 
   @override
@@ -117,21 +102,26 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
               ),
               const Spacer(),
               AppButton(
-                onPressed: _isLoading ? () {} : _saveExpense,
+                onPressed: () {
+                  _saveExpense();
+                  AppNavigation.pop(context);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : Text(
-                        'حفظ',
-                        style: AppTextStyle.medium20.copyWith(
-                          color: Colors.white,
-                        ),
+                child:
+                    //  _isLoading
+                    //     ? const CircularProgressIndicator(color: Colors.white)
+                    //     :
+                    Text(
+                      'حفظ',
+                      style: AppTextStyle.medium20.copyWith(
+                        color: Colors.white,
                       ),
+                    ),
               ),
             ],
           ),

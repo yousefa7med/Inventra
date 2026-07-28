@@ -104,9 +104,9 @@ class TransactionCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    invoice.amount.toString(),
+                    invoice.value.toString(),
                     style: AppTextStyle.semiBold14.copyWith(
-                      color: invoice.amount > 0
+                      color: invoice.value > 0
                           ? AppColors.success
                           : AppColors.error,
                     ),
