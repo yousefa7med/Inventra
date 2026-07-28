@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
 import 'package:Inventra/features/transactions/controller/cubit/transactions_state.dart';
+import 'package:gap/gap.dart';
 
 class TransactionsView extends StatelessWidget {
   const TransactionsView({super.key});
@@ -17,6 +18,7 @@ class TransactionsView extends StatelessWidget {
       appBar: const CustomAppBar(title: 'سجل العمليات', showDrawerButton: true),
       body: Column(
         children: [
+          const Gap(8),
           const TransactionsFilter(),
 
           Expanded(

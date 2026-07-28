@@ -47,7 +47,7 @@ class _TransactionsFilterState extends State<TransactionsFilter> {
       _filterFrom = null;
       _filterTo = null;
     });
-    context.read<TransactionsCubit>().clearDateFilter();
+    context.read<TransactionsCubit>().clearDateFilterAndGetTransactions();
   }
 
   @override
@@ -57,7 +57,7 @@ class _TransactionsFilterState extends State<TransactionsFilter> {
       child: Column(
         children: [
           const FilterChips(),
-
+          const Gap(8),
           Row(
             children: [
               Expanded(
@@ -100,6 +100,7 @@ class _TransactionsFilterState extends State<TransactionsFilter> {
               ],
             ],
           ),
+          const Gap(8),
         ],
       ),
     );
@@ -142,7 +143,9 @@ class _FilterChipsState extends State<FilterChips> {
                   _selectedIndex = index;
                 });
                 if (_selectedIndex == 0) {
-                  context.read<TransactionsCubit>().clearTypeFilter();
+                  context
+                      .read<TransactionsCubit>()
+                      .clearTypeFilterAndGetTransactions();
                 } else {
                   context.read<TransactionsCubit>().loadTransactions(
                     type: TransactionType.values[_selectedIndex - 1],

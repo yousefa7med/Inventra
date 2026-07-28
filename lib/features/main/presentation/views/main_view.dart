@@ -29,7 +29,8 @@ class MainView extends StatelessWidget {
       body: PersistentTabView(
         onTabChanged: (value) {
           if (value == 1) {
-            GetIt.instance<TransactionsCubit>().loadTransactions();
+            GetIt.instance<TransactionsCubit>()
+                .clearFiltersAndGetTransactions();
           }
           if (value == 2) {
             GetIt.instance<ProductCubit>().loadProducts();

@@ -11,9 +11,9 @@ abstract class TransactionsCubitInterface {
   // Filter actions
   void loadTransactions({TransactionType? type, DateTimeRange? dateRange});
 
-  void clearFilters();
-  void clearTypeFilter();
-  void clearDateFilter();
+  void clearFiltersAndGetTransactions();
+  void clearTypeFilterAndGetTransactions();
+  void clearDateFilterAndGetTransactions();
 
   // Navigation
 }

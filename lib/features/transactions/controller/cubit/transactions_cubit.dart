@@ -57,7 +57,7 @@ class TransactionsCubit extends Cubit<TransactionsState>
   }
 
   @override
-  void clearFilters() async {
+  void clearFiltersAndGetTransactions() async {
     _selectedType = null;
     _selectedDateRange = null;
     emit(TransactionsLoading());
@@ -70,7 +70,7 @@ class TransactionsCubit extends Cubit<TransactionsState>
   }
 
   @override
-  void clearDateFilter() {
+  void clearDateFilterAndGetTransactions() {
     _selectedDateRange = null;
     emit(TransactionsLoading());
     try {
@@ -86,7 +86,7 @@ class TransactionsCubit extends Cubit<TransactionsState>
   }
 
   @override
-  void clearTypeFilter() {
+  void clearTypeFilterAndGetTransactions() {
     _selectedType = null;
     emit(TransactionsLoading());
     try {
