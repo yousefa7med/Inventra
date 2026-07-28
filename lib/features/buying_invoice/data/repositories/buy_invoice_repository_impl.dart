@@ -99,13 +99,14 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     final balance =
         _objectBox.safeBalanceBox.get(1) ??
         SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
-
-    balance.currentBalance -= totalPrice;
-    _objectBox.safeBalanceBox.put(balance);
+    final newBalance = balance.copyWith(
+      currentBalance: balance.currentBalance - totalPrice,
+    );
+    _objectBox.safeBalanceBox.put(newBalance);
 
     final auditEntry = TransactionsEntry(
       type: TransactionType.buyingInvoice.index,
-      amount: -totalPrice,
+      value: -totalPrice,
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
       userName: supplier.name,

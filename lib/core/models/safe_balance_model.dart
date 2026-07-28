@@ -5,9 +5,23 @@ class SafeBalanceModel {
   @Id()
   int id = 0;
 
-  double currentBalance;
+  final double currentBalance;
 
-  DateTime lastUpdated;
+  final DateTime lastUpdated;
+  final String? note;
+  SafeBalanceModel({
+    required this.currentBalance,
+    required this.lastUpdated,
+    this.note,
+  });
 
-  SafeBalanceModel({required this.currentBalance, required this.lastUpdated});
+  SafeBalanceModel copyWith({
+    double? currentBalance,
+    DateTime? lastUpdated,
+    String? note,
+  }) => SafeBalanceModel(
+    currentBalance: currentBalance ?? this.currentBalance,
+    lastUpdated: lastUpdated ?? this.lastUpdated,
+    note: note ?? this.note,
+  )..id = id;
 }

@@ -1,10 +1,12 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
-import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
+import 'package:flutter/material.dart';
 
 class SafeRepositoryImpl implements SafeRepository {
   final ObjectBoxServices _objectBox;
@@ -19,99 +21,89 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  void updateBalance(double newAmount) {
+  void adjustBalance({required double newAmount, String? newNote}) {
     final balance = getBalance();
-    balance.currentBalance = newAmount;
-    balance.lastUpdated = DateTime.now();
-    _objectBox.safeBalanceBox.put(balance);
+    final newBalance = balance.copyWith(
+      currentBalance: newAmount,
+      lastUpdated: DateTime.now(),
+      note: newNote,
+    );
+    _objectBox.safeBalanceBox.put(newBalance);
+
+    final adjustmentId = _objectBox.manualAdjustmentBox.put(
+      ManualAdjustmentModel(
+        prevBalanceValue: balance.currentBalance,
+        newBalanceValue: newBalance.currentBalance,
+        date: newBalance.lastUpdated,
+        note: newBalance.note,
+      ),
+    );
+    _objectBox.transactionsEntryBox.put(
+      TransactionsEntry(
+        type: TransactionType.manualAdjustment.index,
+        value: newBalance.currentBalance,
+        referenceId: adjustmentId,
+        timestamp: newBalance.lastUpdated,
+        userName: newBalance.note,
+      ),
+    );
   }
 
-  // @override
-  // void iniializeBalance(double initialAmount) {
-  //   final existing = _objectBox.safeBalanceBox.get(1);
-  //   if (existing == null) {
-  //     _objectBox.safeBalanceBox.put(
-  //       SafeBalanceModel(currentAmount: initialAmount, lastUpdated: DateTime.now()),
-  //     );
-  //   }
-  // }
-
   @override
-  List<ExpenseModel> getAllExpenses() {
-    final expenses = _objectBox.expensesBox.getAll();
-    expenses.sort((a, b) => b.date.compareTo(a.date));
+  List<ExpenseModel> loadExpenses({
+    String? searchText,
+    DateTimeRange<DateTime>? dateRange,
+  }) {
+    Condition<ExpenseModel>? condition;
+    if (searchText != null && searchText.trim().isNotEmpty) {
+      condition = ExpenseModel_.note.contains(searchText);
+    }
+    if (dateRange != null) {
+      final start = dateRange.start;
+      final end = DateTime(
+        dateRange.end.year,
+        dateRange.end.month,
+        dateRange.end.day,
+        23,
+        59,
+        59,
+        999,
+      );
+
+      final dateCondition = ExpenseModel_.date.betweenDate(start, end);
+
+      condition = (condition == null)
+          ? dateCondition
+          : condition.and(dateCondition);
+    }
+    final query = _objectBox.expensesBox
+        .query(condition)
+        .order(ExpenseModel_.date, flags: Order.descending)
+        .build();
+    final expenses = query.find();
+    query.close();
+
     return expenses;
   }
 
   @override
-  List<ExpenseModel> getExpensesFiltered({
-    DateTime? fromDate,
-    DateTime? toDate,
-    String? searchText,
-  }) {
-    final expenses = getAllExpenses();
-
-    var filtered = expenses;
-
-    if (fromDate != null) {
-      final from = DateTime(fromDate.year, fromDate.month, fromDate.day);
-      filtered = filtered
-          .where((e) => e.date.isAfter(from) || e.date.isAtSameMomentAs(from))
-          .toList();
-    }
-    if (toDate != null) {
-      final to = DateTime(toDate.year, toDate.month, toDate.day, 23, 59, 59);
-      filtered = filtered
-          .where((e) => e.date.isBefore(to) || e.date.isAtSameMomentAs(to))
-          .toList();
-    }
-    if (searchText != null && searchText.isNotEmpty) {
-      final lowerSearch = searchText.toLowerCase();
-      filtered = filtered
-          .where((e) => e.note.toLowerCase().contains(lowerSearch))
-          .toList();
-    }
-
-    return filtered;
-  }
-
-  @override
   void addExpense(ExpenseModel expense) {
-    _objectBox.expensesBox.put(expense);
-  }
+    final expenseId = _objectBox.expensesBox.put(expense);
+    final balance = getBalance();
+    final newbalance = balance.copyWith(
+      currentBalance: balance.currentBalance + expense.value,
+      lastUpdated: DateTime.now(),
+    );
 
-  @override
-  Stream<List<ExpenseModel>> watchExpenses() {
-    return _objectBox.expensesBox
-        .query()
-        .order(ExpenseModel_.date, flags: Order.descending)
-        .watch(triggerImmediately: true)
-        .map((query) => query.find());
-  }
-
-  @override
-  List<TransactionsEntry> getAuditEntries({TransactionType? type}) {
-    var entries = _objectBox.transactionsEntryBox.getAll();
-    entries.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-
-    if (type != null) {
-      entries = entries.where((e) => e.type == type.index).toList();
-    }
-
-    return entries;
-  }
-
-  @override
-  void addAuditEntry(TransactionsEntry entry) {
-    _objectBox.transactionsEntryBox.put(entry);
-  }
-
-  @override
-  Stream<List<TransactionsEntry>> watchAuditEntries() {
-    return _objectBox.transactionsEntryBox
-        .query()
-        .order(TransactionsEntry_.timestamp, flags: Order.descending)
-        .watch(triggerImmediately: true)
-        .map((query) => query.find());
+    _objectBox.safeBalanceBox.put(newbalance);
+    _objectBox.transactionsEntryBox.put(
+      TransactionsEntry(
+        type: TransactionType.expense.index,
+        value: expense.value,
+        referenceId: expenseId,
+        timestamp: expense.date,
+        userName: expense.note.trim(),
+      ),
+    );
   }
 }

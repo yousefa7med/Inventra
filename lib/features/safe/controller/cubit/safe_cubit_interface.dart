@@ -1,33 +1,16 @@
 import 'package:Inventra/core/models/expense_model.dart';
-import 'package:Inventra/core/utils/result.dart';
+import 'package:flutter/material.dart';
 
 abstract class SafeCubitInterface {
   double get currentBalance;
 
-  List<ExpenseModel> get filteredExpenses;
+  List<ExpenseModel> get expenses;
 
-  DateTime? get filterFromDate;
-  DateTime? get filterToDate;
+  DateTimeRange<DateTime>? get selectedDateRange;
   String? get searchText;
 
-  Future<Result<void>> load();
-  Future<Result<void>> addExpense({
-    required double value,
-    required String note,
-  });
-  void setDateFilter({DateTime? from, DateTime? to});
-  void setSearchFilter(String? text);
-  void clearFilters();
+  void addExpense({required double value, required String note});
+  void getExpenses({DateTimeRange<DateTime>? dateRange, String? searchText});
 
-  Future<Result<void>> adjustBalance({
-    required double newBalance,
-    String? note,
-  });
-
-  // Future<Result<void>> adjustBalanceForTransaction({
-  //   required double amount,
-  //   required BalanceChangeType type,
-  //   required int referenceId,
-  //   String? note,
-  // });
+  void adjustBalance({required double newBalance, String? note});
 }

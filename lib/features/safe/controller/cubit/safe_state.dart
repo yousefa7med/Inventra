@@ -6,33 +6,18 @@ class SafeInitial extends SafeState {}
 
 class SafeLoading extends SafeState {}
 
-class SafeLoaded extends SafeState {
-  final double balance;
-  final List<ExpenseModel> expenses;
-  final List<ExpenseModel> filteredExpenses;
-  final DateTime? filterFrom;
-  final DateTime? filterTo;
-  final String? searchText;
-  final bool isNegativeBalance;
-
-  SafeLoaded({
-    required this.balance,
-    required this.expenses,
-    required this.filteredExpenses,
-    this.filterFrom,
-    this.filterTo,
-    this.searchText,
-    required this.isNegativeBalance,
-  });
-}
+class SafeLoaded extends SafeState {}
 
 class SafeError extends SafeState {
   final String message;
   SafeError(this.message);
 }
 
+class ExpensesLoading extends SafeState {}
 
-class SafeBalanceAdjusting extends SafeState {
-  final SafeLoaded previousState;
-  SafeBalanceAdjusting(this.previousState);
+class ExpensesLoaded extends SafeState {}
+
+class ExpensesError extends SafeState {
+  final String message;
+  ExpensesError(this.message);
 }

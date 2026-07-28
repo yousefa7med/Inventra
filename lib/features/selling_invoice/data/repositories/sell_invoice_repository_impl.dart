@@ -104,13 +104,15 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     final balance =
         _objectBox.safeBalanceBox.get(1) ??
         SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
+    final newBalance = balance.copyWith(
+      currentBalance: balance.currentBalance + (totalPrice - (discount ?? 0)),
+    );
 
-    balance.currentBalance += (totalPrice - (discount ?? 0));
-    _objectBox.safeBalanceBox.put(balance);
+    _objectBox.safeBalanceBox.put(newBalance);
 
     final auditEntry = TransactionsEntry(
       type: TransactionType.sellingInvoice.index,
-      amount: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
+      value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
       userName: customer.name,
