@@ -1,5 +1,14 @@
 <!--
 ## Sync Impact Report
+- **Version change**: 1.10.0 → 1.10.1 (PATCH — corrected Flutter SDK version, removed non-existent FVM reference)
+- **Modified principles**: 
+  - Technology Stack Constraints (corrected Flutter version from 3.22.x to 3.44.x, removed missing .fvm/fvm_config.json reference)
+- **Added sections**: None
+- **Removed sections**: None
+- **Templates requiring updates**: None
+- **Follow-up TODOs**: Create CHANGELOG.md per Quality Gates Definition of Done
+
+## Previous Sync Impact Report
 - **Version change**: 1.9.0 → 1.10.0 (MINOR — added Spec Branch Naming requirement to Governance section)
 - **Modified principles**: 
   - Governance (added mandatory spec branch naming convention: feature/<spec-name>)
@@ -77,7 +86,7 @@ NEVER hardcode `BoxDecoration`, `InputDecoration`, `ButtonStyle`, `MenuStyle`, `
 - [ ] CHANGELOG.md entry under `## [Unreleased]` with type (feat/fix/perf/refactor)
 
 ### Technology Stack Constraints
-- Flutter SDK: pinned in `.fvm/fvm_config.json` (currently 3.22.x)
+- Flutter SDK: 3.44.x (stable channel)
 - State: `flutter_bloc` ^9.1.1 (Cubit pattern only)
 - DI: `get_it` ^9.2.1 (LazySingleton registrations in `main.dart`)
 - DB: `objectbox` ^5.3.2 + `objectbox_generator` (codegen mandatory)
@@ -103,4 +112,4 @@ NEVER push to remote without explicit user instruction. All commits and pushes M
 
 All PR reviews MUST verify compliance with Core Principles I–VIII and Quality Gates. Complexity (new deps, patterns, files >300 LOC) MUST be justified in PR description. Runtime guidance lives in `AGENTS.md`—keep both docs in sync.
 
-**Version**: 1.10.0 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-15
+**Version**: 1.10.1 | **Ratified**: 2026-07-06 | **Last Amended**: 2026-07-29
