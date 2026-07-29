@@ -109,7 +109,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
       value: -totalPrice,
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
-      userName: supplier.name,
+      description: supplier.name,
     );
     _objectBox.transactionsEntryBox.put(auditEntry);
 

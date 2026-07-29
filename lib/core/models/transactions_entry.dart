@@ -16,14 +16,14 @@ class TransactionsEntry {
   @Index()
   final DateTime timestamp;
 
-  final String? userName;
+  final String? description;
 
   TransactionsEntry({
     required this.type,
     required this.value,
     required this.referenceId,
     required this.timestamp,
-    this.userName,
+    this.description,
     this.oldValue,
   });
 }

@@ -83,7 +83,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
       );
       invoice.customer.target = customer;
       customer.invoices.add(invoice);
-      _objectBox.invoicesBox.put(invoice);
+      _objectBox.sellingInvoicesBox.put(invoice);
       _objectBox.customersBox.put(customer);
 
       for (final item in items) {
@@ -95,7 +95,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
 
         totalPrice += item.lineTotal;
       }
-      _objectBox.invoicesBox.put(invoice);
+      _objectBox.sellingInvoicesBox.put(invoice);
 
       invoice.items.addAll(items);
       savedInvoice = invoice;
@@ -115,7 +115,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
       value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
-      userName: customer.name,
+      description: customer.name,
     );
     _objectBox.transactionsEntryBox.put(auditEntry);
 
@@ -124,7 +124,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
 
   @override
   Stream<List<SellingInvoiceModel>> watchInvoices() {
-    return _objectBox.invoicesBox
+    return _objectBox.sellingInvoicesBox
         .query()
         .order(SellingInvoiceModel_.date, flags: Order.descending)
         .watch(triggerImmediately: true)

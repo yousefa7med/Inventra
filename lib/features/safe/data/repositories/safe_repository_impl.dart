@@ -44,7 +44,7 @@ class SafeRepositoryImpl implements SafeRepository {
         value: newBalance.currentBalance,
         referenceId: adjustmentId,
         timestamp: newBalance.lastUpdated,
-        userName: newBalance.note,
+        description: newBalance.note,
       ),
     );
   }
@@ -102,7 +102,7 @@ class SafeRepositoryImpl implements SafeRepository {
         value: expense.value,
         referenceId: expenseId,
         timestamp: expense.date,
-        userName: expense.note.trim(),
+        description: expense.note.trim(),
       ),
     );
   }
