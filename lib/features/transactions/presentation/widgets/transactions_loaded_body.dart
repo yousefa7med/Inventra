@@ -30,7 +30,6 @@ class TransactionsLoadedBody extends StatelessWidget {
         itemCount: transactions.length,
         itemBuilder: (context, index) {
           final transaction = transactions[index];
-
           switch (transaction.type) {
             case TransactionType.buyingInvoice:
               return TransactionCard(

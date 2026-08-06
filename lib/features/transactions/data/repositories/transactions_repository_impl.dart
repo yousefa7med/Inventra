@@ -1,4 +1,5 @@
 import 'package:Inventra/core/models/buying_invoice_model.dart';
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:flutter/material.dart';
@@ -65,4 +66,13 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
   SellingInvoiceModel getSellingInvoice(int id) {
     return _objectBox.sellingInvoicesBox.get(id)!;
   }
+
+  @override
+  ManualAdjustmentModel getManualAdjustment(int id) {
+    return _objectBox.manualAdjustmentBox.get(id)!;
+  }
+
+  //  getReturnReciept(int id){
+
+  // }
 }

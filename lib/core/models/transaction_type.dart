@@ -1,6 +1,6 @@
 enum TransactionType {
-  buyingInvoice,
   sellingInvoice,
+  buyingInvoice,
   expense,
   returnReceipt,
   manualAdjustment,

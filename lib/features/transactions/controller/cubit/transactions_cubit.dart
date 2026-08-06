@@ -1,3 +1,4 @@
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -116,10 +117,16 @@ class TransactionsCubit extends Cubit<TransactionsState>
 
       invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
     } else {
-      final entity = _repository.getSellingInvoice(id);
+      // TODO:
+      // final entity = _repository.getSellingInvoice(id);
 
-      invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
+      // invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
     }
     return invoice;
+  }
+
+  @override
+  ManualAdjustmentModel getManualAdjustment(int id) {
+    return _repository.getManualAdjustment(id);
   }
 }

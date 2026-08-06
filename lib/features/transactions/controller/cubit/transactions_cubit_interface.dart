@@ -1,3 +1,4 @@
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,10 @@ abstract class TransactionsCubitInterface {
   void clearFiltersAndGetTransactions();
   void clearTypeFilterAndGetTransactions();
   void clearDateFilterAndGetTransactions();
-  InvoiceDetailsModel getInvoiceDetails({    required TransactionType type,
- required int id});
+  InvoiceDetailsModel getInvoiceDetails({
+    required TransactionType type,
+    required int id,
+  });
 
-  // Navigation
+  ManualAdjustmentModel getManualAdjustment(int id);
 }

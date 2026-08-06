@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
+
 abstract class TransactionsRepository {
   List<TransactionsEntry> getTransactions({
     TransactionType? type,
@@ -13,4 +15,7 @@ abstract class TransactionsRepository {
   BuyingInvoiceModel getBuyingInvoice(int id);
 
   SellingInvoiceModel getSellingInvoice(int id);
+  //  getReturnReciept(int id);
+
+  ManualAdjustmentModel getManualAdjustment(int id);
 }

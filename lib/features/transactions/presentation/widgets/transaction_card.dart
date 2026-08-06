@@ -1,9 +1,12 @@
 import 'package:Inventra/core/config/configrations.dart';
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utils/formatters.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,16 +40,29 @@ class TransactionCard extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-            final invoice = context.read<TransactionsCubit>().getInvoiceDetails(
-              type: transaction.type,
-              id: transaction.referenceId,
-            );
-            AppNavigation.pushName(
-              rootNavigator: true,
-              context: context,
-              route: AppRoutes.invoiceDetailsView,
-              argument: invoice,
-            );
+            if (transaction.type == TransactionType.sellingInvoice ||
+                transaction.type == TransactionType.buyingInvoice ||
+                transaction.type == TransactionType.returnReceipt) {
+              final invoice = context
+                  .read<TransactionsCubit>()
+                  .getInvoiceDetails(
+                    type: transaction.type,
+                    id: transaction.referenceId,
+                  );
+              AppNavigation.pushName(
+                rootNavigator: true,
+                context: context,
+                route: AppRoutes.invoiceDetailsView,
+                argument: invoice,
+              );
+            } else if (transaction.type == TransactionType.manualAdjustment) {
+              final adjustment = context
+                  .read<TransactionsCubit>()
+                  .getManualAdjustment(transaction.referenceId);
+              _showManualAdjustmentDialog(context, adjustment);
+            } else {
+              // TODO:
+            }
           },
           borderRadius: BorderRadius.circular(12.r),
           child: Padding(
@@ -127,6 +143,152 @@ class TransactionCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showManualAdjustmentDialog(
+    BuildContext context,
+    ManualAdjustmentModel adjustment,
+  ) {
+    final isIncrease = adjustment.newBalanceValue > adjustment.prevBalanceValue;
+    final difference =
+        (adjustment.newBalanceValue - adjustment.prevBalanceValue).abs();
+    final arrowColor = isIncrease ? AppColors.success : AppColors.error;
+    final arrowIcon = isIncrease ? Icons.arrow_upward : Icons.arrow_downward;
+    final diffText = isIncrease ? '+$difference' : '-$difference';
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(20.w),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('تعديل يدوي', style: AppTextStyle.bold16),
+                Gap(20.h),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Previous Balance
+                      Column(
+                        children: [
+                          Text(
+                            'الرصيد السابق',
+                            style: AppTextStyle.regular14.copyWith(
+                              color: AppColors.grey,
+                            ),
+                          ),
+                          Gap(4.h),
+                          Text(
+                            formatCurrency(adjustment.prevBalanceValue),
+                            style: AppTextStyle.semiBold16,
+                          ),
+                        ],
+                      ),
+                      Gap(16.w),
+                      // Arrow
+                      Container(
+                        padding: EdgeInsets.all(8.w),
+                        decoration: BoxDecoration(
+                          color: arrowColor.withAlpha(30),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(arrowIcon, color: arrowColor, size: 28.r),
+                      ),
+                      Gap(16.w),
+                      // New Balance
+                      Column(
+                        children: [
+                          Text(
+                            'الرصيد الجديد',
+                            style: AppTextStyle.regular14.copyWith(
+                              color: AppColors.grey,
+                            ),
+                          ),
+                          Gap(4.h),
+                          Text(
+                            formatCurrency(adjustment.newBalanceValue),
+                            style: AppTextStyle.semiBold16,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Gap(16.h),
+                // Difference
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 8.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: arrowColor.withAlpha(30),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(arrowIcon, color: arrowColor, size: 20.r),
+                      Gap(8.w),
+                      Text(
+                        diffText,
+                        style: AppTextStyle.semiBold16.copyWith(
+                          color: arrowColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Gap(20.h),
+                // Note if exists
+                if (adjustment.note != null && adjustment.note!.isNotEmpty) ...[
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(12.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.grey.withAlpha(20),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ملاحظة',
+                          style: AppTextStyle.regular12.copyWith(
+                            color: AppColors.grey,
+                          ),
+                        ),
+                        Gap(4.h),
+                        Text(adjustment.note!, style: AppTextStyle.regular14),
+                      ],
+                    ),
+                  ),
+                  Gap(16.h),
+                ],
+
+                // Close button
+                AppButton(
+                  child: Text(
+                    'إغلاق',
+                    style: AppTextStyle.semiBold16.copyWith(
+                      color: AppColors.white,
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
             ),
