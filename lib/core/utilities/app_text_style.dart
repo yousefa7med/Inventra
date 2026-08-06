@@ -6,10 +6,20 @@ abstract class AppTextStyle {
   static const TextStyle navBar = TextStyle(fontFamily: "Cairo");
 
   // <========================= Regular style ==============================>
-    static TextStyle regular12 = TextStyle(
+  static TextStyle regular11 = TextStyle(
+    fontFamily: "Cairo",
+    fontWeight: FontWeight.normal,
+    fontSize: 11.sp,
+  );
+  static TextStyle regular12 = TextStyle(
     fontFamily: "Cairo",
     fontWeight: FontWeight.normal,
     fontSize: 12.sp,
+  );
+  static TextStyle regular13 = TextStyle(
+    fontFamily: "Cairo",
+    fontWeight: FontWeight.normal,
+    fontSize: 13.sp,
   );
   static TextStyle regular14 = TextStyle(
     fontFamily: "Cairo",
@@ -47,10 +57,20 @@ abstract class AppTextStyle {
     fontSize: 26.sp,
   );
   // <========================= Medium style ==============================>
+  static TextStyle medium11 = TextStyle(
+    fontFamily: "Cairo",
+    fontWeight: FontWeight.w500,
+    fontSize: 11.sp,
+  );
   static TextStyle medium12 = TextStyle(
     fontFamily: "Cairo",
     fontWeight: FontWeight.w500,
     fontSize: 12.sp,
+  );
+  static TextStyle medium13 = TextStyle(
+    fontFamily: "Cairo",
+    fontWeight: FontWeight.w500,
+    fontSize: 13.sp,
   );
   static TextStyle medium14 = TextStyle(
     fontFamily: "Cairo",

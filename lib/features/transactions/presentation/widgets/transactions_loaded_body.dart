@@ -33,8 +33,7 @@ class TransactionsLoadedBody extends StatelessWidget {
           switch (transaction.type) {
             case 0:
               return TransactionCard(
-                onTap: () {},
-                invoice: transaction,
+                transaction: transaction,
                 color: AppColors.secondary,
                 title: 'فاتورة شراء',
                 subTitle: 'المورد: ',
@@ -42,18 +41,16 @@ class TransactionsLoadedBody extends StatelessWidget {
               );
             case 1:
               return TransactionCard(
-                onTap: () {},
+                transaction: transaction,
                 title: 'فاتورة بيع',
                 subTitle: 'العميل: ',
-                invoice: transaction,
                 color: AppColors.success,
 
                 icon: Icons.shopping_cart_checkout_rounded,
               );
             case 2:
               return TransactionCard(
-                onTap: () {},
-                invoice: transaction,
+                transaction: transaction,
                 color: AppColors.error,
                 title: 'مصروفات',
                 subTitle: 'ملحوظة: ',
@@ -61,8 +58,7 @@ class TransactionsLoadedBody extends StatelessWidget {
               );
             case 3:
               return TransactionCard(
-                onTap: () {},
-                invoice: transaction,
+                transaction: transaction,
                 color: AppColors.warning,
                 title: 'مرتجع',
                 subTitle: 'المورد: ',
@@ -70,8 +66,7 @@ class TransactionsLoadedBody extends StatelessWidget {
               );
             case 4:
               return TransactionCard(
-                onTap: () {},
-                invoice: transaction,
+                transaction: transaction,
                 color: AppColors.lightBlue,
                 title: 'تعديل يدوي',
                 subTitle: 'المورد: ',

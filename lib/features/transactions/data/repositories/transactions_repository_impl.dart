@@ -1,3 +1,5 @@
+import 'package:Inventra/core/models/buying_invoice_model.dart';
+import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:flutter/material.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
@@ -52,5 +54,15 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     query.close();
 
     return results;
+  }
+
+  @override
+  BuyingInvoiceModel getBuyingInvoice(int id) {
+    return _objectBox.buyInvoicesBox.get(id)!;
+  }
+
+  @override
+  SellingInvoiceModel getSellingInvoice(int id) {
+    return _objectBox.sellingInvoicesBox.get(id)!;
   }
 }

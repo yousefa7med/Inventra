@@ -1,3 +1,4 @@
+import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
@@ -97,5 +98,29 @@ class TransactionsCubit extends Cubit<TransactionsState>
     } catch (e) {
       emit(TransactionsError(e.toString()));
     }
+  }
+
+  @override
+  InvoiceDetailsModel getInvoiceDetails({
+    required int typeIndex,
+    required int id,
+  }) {
+    late final InvoiceDetailsModel invoice;
+    final type = TransactionType.values[typeIndex];
+
+    if (type == TransactionType.buyingInvoice) {
+      final entity = _repository.getBuyingInvoice(id);
+
+      invoice = InvoiceDetailsModel.fromBuyingInvoice(invoice: entity);
+    } else if (type == TransactionType.sellingInvoice) {
+      final entity = _repository.getSellingInvoice(id);
+
+      invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
+    } else {
+      final entity = _repository.getSellingInvoice(id);
+
+      invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
+    }
+    return invoice;
   }
 }

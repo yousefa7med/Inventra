@@ -37,4 +37,20 @@ abstract class AppStrings {
       'ابدأ البحث بالباركود أو الاسم';
   static const String searchByBarcodeOrName = 'بحث بالباركود أو الاسم';
   static const String outOfStock = 'نفذ من المخزن';
+
+  // Invoice Details
+  static const String sellInvoiceDetails = 'تفاصيل فاتورة بيع';
+  static const String buyInvoiceDetails = 'تفاصيل فاتورة شراء';
+  static const String pcs = 'قطعة';
+  static const String sellInvoice = 'فاتورة بيع';
+  static const String buyInvoice = 'فاتورة شراء';
+  static const String customer = 'العميل';
+  static const String supplier = 'المورد';
+  static const String unknownCustomer = 'عميل غير معروف';
+  static const String unknownSupplier = 'مورد غير معروف';
+  static const String noProductsInSellInvoice = 'لا توجد منتجات في فاتورة البيع';
+  static const String noProductsInBuyInvoice = 'لا توجد منتجات في فاتورة الشراء';
+  static const String lineTotal = 'إجمالي السطر';
+  static const String items = 'أصناف';
+  static const String call = 'اتصال';
 }

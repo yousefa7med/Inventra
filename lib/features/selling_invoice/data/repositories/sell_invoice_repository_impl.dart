@@ -82,7 +82,6 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         discount: discount,
       );
       invoice.customer.target = customer;
-      customer.invoices.add(invoice);
       _objectBox.sellingInvoicesBox.put(invoice);
       _objectBox.customersBox.put(customer);
 
