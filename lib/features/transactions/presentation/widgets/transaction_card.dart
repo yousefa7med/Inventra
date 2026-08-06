@@ -38,7 +38,7 @@ class TransactionCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             final invoice = context.read<TransactionsCubit>().getInvoiceDetails(
-              typeIndex: transaction.type,
+              type: transaction.type,
               id: transaction.referenceId,
             );
             AppNavigation.pushName(

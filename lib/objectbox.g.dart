@@ -401,7 +401,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(10, 2673145065607541686),
     name: 'TransactionsEntry',
-    lastPropertyId: const obx_int.IdUid(7, 4239504050887946482),
+    lastPropertyId: const obx_int.IdUid(8, 3404404139153214929),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -409,13 +409,6 @@ final _entities = <obx_int.ModelEntity>[
         name: 'id',
         type: 6,
         flags: 1,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 4861406852852011222),
-        name: 'type',
-        type: 6,
-        flags: 8,
-        indexId: const obx_int.IdUid(5, 678944039431675711),
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(3, 3795603177294591158),
@@ -447,6 +440,13 @@ final _entities = <obx_int.ModelEntity>[
         name: 'description',
         type: 9,
         flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 3404404139153214929),
+        name: 'typeIndex',
+        type: 6,
+        flags: 8,
+        indexId: const obx_int.IdUid(7, 6614958534555509790),
       ),
     ],
     relations: <obx_int.ModelRelation>[],
@@ -498,12 +498,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
     lastEntityId: const obx_int.IdUid(10, 2673145065607541686),
-    lastIndexId: const obx_int.IdUid(6, 2126770124478601145),
+    lastIndexId: const obx_int.IdUid(7, 6614958534555509790),
     lastRelationId: const obx_int.IdUid(2, 5798390198136500020),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
-    retiredIndexUids: const [],
-    retiredPropertyUids: const [],
+    retiredIndexUids: const [678944039431675711],
+    retiredPropertyUids: const [4861406852852011222],
     retiredRelationUids: const [],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
@@ -988,24 +988,24 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final descriptionOffset = object.description == null
             ? null
             : fbb.writeString(object.description!);
-        fbb.startTable(8);
+        fbb.startTable(9);
         fbb.addInt64(0, object.id);
-        fbb.addInt64(1, object.type);
         fbb.addFloat64(2, object.value);
         fbb.addFloat64(3, object.oldValue);
         fbb.addInt64(4, object.referenceId);
         fbb.addInt64(5, object.timestamp.millisecondsSinceEpoch);
         fbb.addOffset(6, descriptionOffset);
+        fbb.addInt64(7, object.typeIndex);
         fbb.finish(fbb.endTable());
         return object.id;
       },
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final typeParam = const fb.Int64Reader().vTableGet(
+        final typeIndexParam = const fb.Int64Reader().vTableGet(
           buffer,
           rootOffset,
-          6,
+          18,
           0,
         );
         final valueParam = const fb.Float64Reader().vTableGet(
@@ -1032,7 +1032,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           10,
         );
         final object = TransactionsEntry(
-          type: typeParam,
+          typeIndex: typeIndexParam,
           value: valueParam,
           referenceId: referenceIdParam,
           timestamp: timestampParam,
@@ -1313,33 +1313,33 @@ class TransactionsEntry_ {
     _entities[9].properties[0],
   );
 
-  /// See [TransactionsEntry.type].
-  static final type = obx.QueryIntegerProperty<TransactionsEntry>(
-    _entities[9].properties[1],
-  );
-
   /// See [TransactionsEntry.value].
   static final value = obx.QueryDoubleProperty<TransactionsEntry>(
-    _entities[9].properties[2],
+    _entities[9].properties[1],
   );
 
   /// See [TransactionsEntry.oldValue].
   static final oldValue = obx.QueryDoubleProperty<TransactionsEntry>(
-    _entities[9].properties[3],
+    _entities[9].properties[2],
   );
 
   /// See [TransactionsEntry.referenceId].
   static final referenceId = obx.QueryIntegerProperty<TransactionsEntry>(
-    _entities[9].properties[4],
+    _entities[9].properties[3],
   );
 
   /// See [TransactionsEntry.timestamp].
   static final timestamp = obx.QueryDateProperty<TransactionsEntry>(
-    _entities[9].properties[5],
+    _entities[9].properties[4],
   );
 
   /// See [TransactionsEntry.description].
   static final description = obx.QueryStringProperty<TransactionsEntry>(
+    _entities[9].properties[5],
+  );
+
+  /// See [TransactionsEntry.typeIndex].
+  static final typeIndex = obx.QueryIntegerProperty<TransactionsEntry>(
     _entities[9].properties[6],
   );
 }

@@ -102,11 +102,10 @@ class TransactionsCubit extends Cubit<TransactionsState>
 
   @override
   InvoiceDetailsModel getInvoiceDetails({
-    required int typeIndex,
+    required TransactionType type,
     required int id,
   }) {
     late final InvoiceDetailsModel invoice;
-    final type = TransactionType.values[typeIndex];
 
     if (type == TransactionType.buyingInvoice) {
       final entity = _repository.getBuyingInvoice(id);

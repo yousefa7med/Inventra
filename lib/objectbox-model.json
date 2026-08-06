@@ -319,7 +319,7 @@
     },
     {
       "id": "10:2673145065607541686",
-      "lastPropertyId": "7:4239504050887946482",
+      "lastPropertyId": "8:3404404139153214929",
       "name": "TransactionsEntry",
       "properties": [
         {
@@ -327,13 +327,6 @@
           "name": "id",
           "type": 6,
           "flags": 1
-        },
-        {
-          "id": "2:4861406852852011222",
-          "name": "type",
-          "indexId": "5:678944039431675711",
-          "type": 6,
-          "flags": 8
         },
         {
           "id": "3:3795603177294591158",
@@ -361,20 +354,31 @@
           "id": "7:4239504050887946482",
           "name": "description",
           "type": 9
+        },
+        {
+          "id": "8:3404404139153214929",
+          "name": "typeIndex",
+          "indexId": "7:6614958534555509790",
+          "type": 6,
+          "flags": 8
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "10:2673145065607541686",
-  "lastIndexId": "6:2126770124478601145",
+  "lastIndexId": "7:6614958534555509790",
   "lastRelationId": "2:5798390198136500020",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    678944039431675711
+  ],
+  "retiredPropertyUids": [
+    4861406852852011222
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

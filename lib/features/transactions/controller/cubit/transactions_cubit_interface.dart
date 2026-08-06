@@ -15,7 +15,8 @@ abstract class TransactionsCubitInterface {
   void clearFiltersAndGetTransactions();
   void clearTypeFilterAndGetTransactions();
   void clearDateFilterAndGetTransactions();
-  InvoiceDetailsModel getInvoiceDetails({required int typeIndex, required int id});
+  InvoiceDetailsModel getInvoiceDetails({    required TransactionType type,
+ required int id});
 
   // Navigation
 }

@@ -20,7 +20,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     Condition<TransactionsEntry>? condition;
 
     if (type != null) {
-      condition = TransactionsEntry_.type.equals(type.index);
+      condition = TransactionsEntry_.typeIndex.equals(type.index);
     }
 
     if (dateRange != null) {

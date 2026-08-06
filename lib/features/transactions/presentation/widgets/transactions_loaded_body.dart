@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
@@ -31,7 +32,7 @@ class TransactionsLoadedBody extends StatelessWidget {
           final transaction = transactions[index];
 
           switch (transaction.type) {
-            case 0:
+            case TransactionType.buyingInvoice:
               return TransactionCard(
                 transaction: transaction,
                 color: AppColors.secondary,
@@ -39,7 +40,7 @@ class TransactionsLoadedBody extends StatelessWidget {
                 subTitle: 'المورد: ',
                 icon: Icons.inventory_2_rounded,
               );
-            case 1:
+            case TransactionType.sellingInvoice:
               return TransactionCard(
                 transaction: transaction,
                 title: 'فاتورة بيع',
@@ -48,7 +49,8 @@ class TransactionsLoadedBody extends StatelessWidget {
 
                 icon: Icons.shopping_cart_checkout_rounded,
               );
-            case 2:
+
+            case TransactionType.expense:
               return TransactionCard(
                 transaction: transaction,
                 color: AppColors.error,
@@ -56,7 +58,8 @@ class TransactionsLoadedBody extends StatelessWidget {
                 subTitle: 'ملحوظة: ',
                 icon: Icons.receipt_long_rounded,
               );
-            case 3:
+
+            case TransactionType.returnReceipt:
               return TransactionCard(
                 transaction: transaction,
                 color: AppColors.warning,
@@ -64,7 +67,8 @@ class TransactionsLoadedBody extends StatelessWidget {
                 subTitle: 'المورد: ',
                 icon: Icons.swap_horiz_rounded,
               );
-            case 4:
+
+            case TransactionType.manualAdjustment:
               return TransactionCard(
                 transaction: transaction,
                 color: AppColors.lightBlue,
@@ -73,7 +77,6 @@ class TransactionsLoadedBody extends StatelessWidget {
                 icon: Icons.tune_rounded,
               );
           }
-          return null;
         },
         separatorBuilder: (BuildContext context, int index) => const Gap(6),
       ),

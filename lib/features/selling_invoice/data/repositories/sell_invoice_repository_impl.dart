@@ -110,7 +110,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
     _objectBox.safeBalanceBox.put(newBalance);
 
     final auditEntry = TransactionsEntry(
-      type: TransactionType.sellingInvoice.index,
+      typeIndex: TransactionType.sellingInvoice.index,
       value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
       timestamp: savedInvoice!.date,
