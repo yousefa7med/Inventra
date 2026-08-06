@@ -1,5 +1,6 @@
 import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
+import 'package:Inventra/features/transactions/data/models/list_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
@@ -14,12 +15,12 @@ class TransactionsCubit extends Cubit<TransactionsState>
 
   TransactionsCubit(this._repository) : super(TransactionsInitial());
 
-  List<TransactionsEntry> _transactions = [];
+  final List<ListItemModel> _listItems = [];
   DateTimeRange<DateTime>? _selectedDateRange;
   int? _selectedType;
 
   @override
-  List<TransactionsEntry> get transactions => _transactions;
+  List<ListItemModel> get listItems => _listItems;
 
   @override
   DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;
@@ -48,13 +49,49 @@ class TransactionsCubit extends Cubit<TransactionsState>
 
     emit(TransactionsLoading());
     try {
-      _transactions = _repository.getTransactions(
+      _listItems.clear();
+      final transactions = _repository.getTransactions(
         type: type,
         dateRange: dateRange,
       );
-      emit(TransactionsLoaded(transactions: _transactions));
+      generateListItems(transactions);
+
+      emit(TransactionsLoaded(listItems: _listItems));
     } catch (e) {
       emit(TransactionsError(e.toString()));
+    }
+  }
+
+  @override
+  void generateListItems(List<TransactionsEntry> transactions) {
+    final Map<DateTime, List<TransactionsEntry>> grouped = {};
+
+    for (final transaction in transactions) {
+      final dateOnly = DateTime(
+        transaction.timestamp.year,
+        transaction.timestamp.month,
+        transaction.timestamp.day,
+      );
+      if (!grouped.containsKey(dateOnly)) {
+        grouped[dateOnly] = [];
+      }
+      grouped[dateOnly]!.add(transaction);
+    }
+
+    for (final item in grouped.entries) {
+      final date = item.key;
+      final dailyTransactions = item.value;
+      final double total = dailyTransactions.fold(
+        0.0,
+        (sum, transaction) => sum + transaction.value,
+      );
+      _listItems.add(
+        HeaderItem(date: date, count: dailyTransactions.length, total: total),
+      );
+
+      for (var transaction in dailyTransactions) {
+        _listItems.add(TransactionItem(transaction: transaction));
+      }
     }
   }
 
@@ -64,8 +101,11 @@ class TransactionsCubit extends Cubit<TransactionsState>
     _selectedDateRange = null;
     emit(TransactionsLoading());
     try {
-      _transactions = _repository.getTransactions();
-      emit(TransactionsLoaded(transactions: _transactions));
+      _listItems.clear();
+      final transactions = _repository.getTransactions();
+      generateListItems(transactions);
+
+      emit(TransactionsLoaded(listItems: _listItems));
     } catch (e) {
       emit(TransactionsError(e.toString()));
     }
@@ -76,12 +116,16 @@ class TransactionsCubit extends Cubit<TransactionsState>
     _selectedDateRange = null;
     emit(TransactionsLoading());
     try {
-      _transactions = _repository.getTransactions(
+      _listItems.clear();
+
+      final transactions = _repository.getTransactions(
         type: _selectedType == null
             ? null
             : TransactionType.values[_selectedType!],
       );
-      emit(TransactionsLoaded(transactions: _transactions));
+      generateListItems(transactions);
+
+      emit(TransactionsLoaded(listItems: _listItems));
     } catch (e) {
       emit(TransactionsError(e.toString()));
     }
@@ -92,10 +136,14 @@ class TransactionsCubit extends Cubit<TransactionsState>
     _selectedType = null;
     emit(TransactionsLoading());
     try {
-      _transactions = _repository.getTransactions(
+      _listItems.clear();
+
+      final transactions = _repository.getTransactions(
         dateRange: _selectedDateRange,
       );
-      emit(TransactionsLoaded(transactions: _transactions));
+      generateListItems(transactions);
+
+      emit(TransactionsLoaded(listItems: _listItems));
     } catch (e) {
       emit(TransactionsError(e.toString()));
     }

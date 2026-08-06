@@ -46,11 +46,14 @@ class _InvoiceDetailsViewState extends State<InvoiceDetailsView> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child: _InvoiceHeader(
-                color: color,
-                invoice: widget.invoice,
-                isSelling: isSelling,
+            SliverPadding(
+              padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 0),
+              sliver: SliverToBoxAdapter(
+                child: _InvoiceHeader(
+                  color: color,
+                  invoice: widget.invoice,
+                  isSelling: isSelling,
+                ),
               ),
             ),
             SliverPadding(
@@ -101,12 +104,11 @@ class _InvoiceHeader extends StatelessWidget {
         : Icons.local_shipping_outlined;
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: color.withAlpha(50)),
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,13 +156,14 @@ class _InvoiceHeader extends StatelessWidget {
               ),
             ],
           ),
-          Gap(14.h),
-          Divider(color: color.withAlpha(60), height: 1, thickness: 1),
-          Gap(14.h),
+          Gap(16.h),
+          Divider(color: color.withValues(alpha: 0.3), height: 1, thickness: 1),
+          Gap(16.h),
 
           Row(
             children: [
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -216,9 +219,9 @@ class _CallButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
         decoration: BoxDecoration(
-          color: accentColor.withAlpha(20),
+          color: accentColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: accentColor.withAlpha(80)),
+          border: Border.all(color: accentColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -244,16 +247,11 @@ class _InvoiceItemsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: 8.h),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadowBlack,
-            blurRadius: 8.r,
-            offset: Offset(0, 2.h),
-          ),
-        ],
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: AppColors.greyMedium200),
       ),
       child: Column(
         children: items.asMap().entries.map((entry) {
@@ -320,18 +318,12 @@ class _InvoiceTotals extends StatelessWidget {
     final total = subtotal - discount;
 
     return Container(
+      margin: EdgeInsets.only(top: 8.h),
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadowBlack,
-            blurRadius: 12.r,
-            offset: Offset(0, 4.h),
-          ),
-        ],
-        border: Border.all(color: color.withAlpha(40), width: 1.5),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1.5),
       ),
       child: Column(
         children: [
@@ -430,17 +422,17 @@ class _StickyTotalsBar extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: AppColors.white,
+          border: const Border(
+            top: BorderSide(color: AppColors.greyMedium200, width: 1),
+          ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.shadowBlack,
+              color: AppColors.shadowBlack.withValues(alpha: 0.05),
               blurRadius: 16.r,
               offset: Offset(0, -4.h),
             ),
           ],
-          border: Border(
-            top: BorderSide(color: color.withAlpha(40), width: 1.5),
-          ),
         ),
         child: Row(
           children: [
@@ -467,9 +459,9 @@ class _StickyTotalsBar extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               decoration: BoxDecoration(
-                color: color.withAlpha(15),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(color: color.withAlpha(60)),
+                border: Border.all(color: color.withValues(alpha: 0.3)),
               ),
               child: Text(
                 '$itemCount ${AppStrings.items}',

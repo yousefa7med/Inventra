@@ -161,46 +161,15 @@ class TransactionCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.r),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('تفاصيل المصروف', style: AppTextStyle.bold16),
-              Gap(20.h),
-              // Value
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
-                decoration: BoxDecoration(
-                  color: AppColors.error.withAlpha(20),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'المبلغ',
-                      style: AppTextStyle.regular14.copyWith(
-                        color: AppColors.grey,
-                      ),
-                    ),
-                    Gap(8.h),
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        formatCurrency(transaction.value),
-                        style: AppTextStyle.bold20.copyWith(
-                          color: AppColors.error,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              if (transaction.description != null &&
-                  transaction.description!.isNotEmpty) ...[
-                Gap(16.h),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('تفاصيل المصروف', style: AppTextStyle.bold16),
+                Gap(20.h),
+                // Value
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.symmetric(
@@ -208,39 +177,75 @@ class TransactionCard extends StatelessWidget {
                     horizontal: 16.w,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.grey.withAlpha(20),
+                    color: AppColors.error.withAlpha(20),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'ملاحظة',
+                        'المبلغ',
                         style: AppTextStyle.regular14.copyWith(
                           color: AppColors.grey,
                         ),
                       ),
                       Gap(8.h),
-                      Text(
-                        transaction.description!,
-                        style: AppTextStyle.regular16,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          formatCurrency(transaction.value),
+                          style: AppTextStyle.bold20.copyWith(
+                            color: AppColors.error,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
-              Gap(20.h),
-              // Close button
-              AppButton(
-                child: Text(
-                  'إغلاق',
-                  style: AppTextStyle.semiBold16.copyWith(
-                    color: AppColors.white,
+
+                if (transaction.description != null &&
+                    transaction.description!.isNotEmpty) ...[
+                  Gap(16.h),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.h,
+                      horizontal: 16.w,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.grey.withAlpha(20),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ملاحظة',
+                          style: AppTextStyle.regular14.copyWith(
+                            color: AppColors.grey,
+                          ),
+                        ),
+                        Gap(8.h),
+                        Text(
+                          transaction.description!,
+                          style: AppTextStyle.regular16,
+                        ),
+                      ],
+                    ),
                   ),
+                ],
+                Gap(20.h),
+                // Close button
+                AppButton(
+                  child: Text(
+                    'إغلاق',
+                    style: AppTextStyle.semiBold16.copyWith(
+                      color: AppColors.white,
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
