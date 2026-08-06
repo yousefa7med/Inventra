@@ -1,3 +1,4 @@
+import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -6,24 +7,25 @@ class TransactionsEntry {
   int id = 0;
 
   @Index()
-  final int type;
+  final int typeIndex;
 
   final double value;
   final double? oldValue;
 
   final int referenceId;
 
+  TransactionType get type => TransactionType.values[typeIndex];
   @Index()
   final DateTime timestamp;
 
-  final String? userName;
+  final String? description;
 
   TransactionsEntry({
-    required this.type,
+    required this.typeIndex,
     required this.value,
     required this.referenceId,
     required this.timestamp,
-    this.userName,
+    this.description,
     this.oldValue,
   });
 }

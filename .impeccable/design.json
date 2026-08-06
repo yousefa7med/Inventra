@@ -1,0 +1,364 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-29T06:02:00.000Z",
+  "title": "Design System: Inventra",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Deep Trust Blue",
+        "canonical": "oklch(35% 0.18 260)",
+        "tonalRamp": ["#0B1D4A", "#122863", "#173078", "#1E3A8A", "#2A4FA0", "#3D6BB8", "#5887D0", "#7AA3E5", "#A4C5F2"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Action Indigo",
+        "canonical": "oklch(45% 0.22 270)",
+        "tonalRamp": ["#2A235E", "#382F7A", "#463C92", "#4F46E5", "#6B64EC", "#8782F0", "#A3A0F4", "#C0BFF8", "#DFDFFC"]
+      },
+      "success": {
+        "role": "success",
+        "displayName": "Success Green",
+        "canonical": "oklch(65% 0.22 145)",
+        "tonalRamp": ["#0E3E1A", "#155523", "#1C6C2C", "#22C55E", "#4ADE80", "#6FEB9C", "#93F2B8", "#B7F7D4", "#D8FBE8"]
+      },
+      "warning": {
+        "role": "warning",
+        "displayName": "Warning Amber",
+        "canonical": "oklch(75% 0.18 85)",
+        "tonalRamp": ["#4A3400", "#6B4C0A", "#8C6314", "#F59E0B", "#F8B42E", "#FACC55", "#FCE085", "#FEF0B8", "#FFF8E8"]
+      },
+      "error": {
+        "role": "error",
+        "displayName": "Error Red",
+        "canonical": "oklch(58% 0.24 25)",
+        "tonalRamp": ["#5C0F0F", "#7A1515", "#981A1A", "#EF4444", "#F26E6E", "#F59494", "#F8BABA", "#FCDFDF", "#FEF0F0"]
+      },
+      "dark-blue": {
+        "role": "neutral",
+        "displayName": "Dark Blue",
+        "canonical": "oklch(15% 0.08 260)",
+        "tonalRamp": ["#020815", "#030B1D", "#04133C", "#08225A", "#0C3278", "#104296", "#1452B4", "#2A70D0", "#5A98E8"]
+      },
+      "grey": {
+        "role": "neutral",
+        "displayName": "Medium Grey",
+        "canonical": "oklch(50% 0.01 260)",
+        "tonalRamp": ["#2E2E36", "#42424C", "#575762", "#757682", "#9293A0", "#AFAFBC", "#CCCCD8", "#E6E6EB", "#F3F3F5"]
+      },
+      "red": {
+        "role": "neutral",
+        "displayName": "Standard Red",
+        "canonical": "oklch(50% 0.20 25)",
+        "tonalRamp": ["#400808", "#600C0C", "#801010", "#BA1A1A", "#D03030", "#E05050", "#F08080", "#F8B0B0", "#FCE0E0"]
+      },
+      "light-blue": {
+        "role": "neutral",
+        "displayName": "Info Light Blue",
+        "canonical": "oklch(60% 0.15 260)",
+        "tonalRamp": ["#2A3A6E", "#3A4D85", "#4A609C", "#5872C5", "#728CD0", "#8CA6DB", "#A6C0E6", "#C0DAF1", "#E0EDF8"]
+      },
+      "light-red": {
+        "role": "neutral",
+        "displayName": "Light Red Background",
+        "canonical": "oklch(92% 0.04 25)",
+        "tonalRamp": ["#F5E0E0", "#F8E8E8", "#FBF0F0", "#FFDAD6", "#FFE8E4", "#FFF0EC", "#FFF5F0", "#FFF8F5", "#FFFAF8"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "oklch(98% 0.002 260)",
+        "tonalRamp": ["#E8E8EC", "#EEEEF0", "#F3F3F5", "#F9F9F9", "#FCFCFC", "#FEFEFE", "#FFFFFF", "#FFFFFF", "#FFFFFF"]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Pure White",
+        "canonical": "oklch(100% 0 0)",
+        "tonalRamp": ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]
+      },
+      "black-87": {
+        "role": "neutral",
+        "displayName": "Primary Text Black",
+        "canonical": "oklch(15% 0 0)",
+        "tonalRamp": ["#000000", "#1A1A1A", "#262626", "#333333", "#404040", "#4D4D4D", "#595959", "#666666", "#737373"]
+      },
+      "black-54": {
+        "role": "neutral",
+        "displayName": "Secondary Text Black",
+        "canonical": "oklch(35% 0 0)",
+        "tonalRamp": ["#262626", "#404040", "#595959", "#737373", "#8C8C8C", "#A6A6A6", "#BFBFBF", "#D9D9D9", "#F2F2F2"]
+      },
+      "shadow-black": {
+        "role": "neutral",
+        "displayName": "Shadow Black",
+        "canonical": "oklch(5% 0 0)",
+        "tonalRamp": ["#000000", "#0A0A0A", "#141414", "#1E1E1E", "#282828", "#323232", "#3C3C3C", "#464646", "#505050"]
+      },
+      "white-70": {
+        "role": "neutral",
+        "displayName": "Disabled White",
+        "canonical": "oklch(95% 0 0 / 0.7)",
+        "tonalRamp": ["#E6E6E6", "#ECECEC", "#F2F2F2", "#F7F7F7", "#FAFAFA", "#FDFDFD", "#FFFFFF", "#FFFFFF", "#FFFFFF"]
+      },
+      "grey-light-100": {
+        "role": "neutral",
+        "displayName": "Grey Light 100",
+        "canonical": "oklch(96% 0.002 260)",
+        "tonalRamp": ["#E8E8EC", "#EEEEF0", "#F3F3F5", "#F5F5F5", "#F7F7F7", "#FAFAFA", "#FDFDFD", "#FEFEFE", "#FFFFFF"]
+      },
+      "grey-medium-200": {
+        "role": "neutral",
+        "displayName": "Grey Medium 200",
+        "canonical": "oklch(93% 0.003 260)",
+        "tonalRamp": ["#D8D8DC", "#E0E0E4", "#E8E8EB", "#EEEEEE", "#F1F1F1", "#F4F4F4", "#F7F7F7", "#FAFAFA", "#FDFDFD"]
+      },
+      "grey-medium-300": {
+        "role": "neutral",
+        "displayName": "Grey Medium 300",
+        "canonical": "oklch(88% 0.004 260)",
+        "tonalRamp": ["#C8C8CC", "#D2D2D5", "#DBDBDD", "#E0E0E0", "#E5E5E5", "#EBEBEB", "#F0F0F0", "#F5F5F5", "#FAFAFA"]
+      },
+      "grey-medium-400": {
+        "role": "neutral",
+        "displayName": "Grey Medium 400",
+        "canonical": "oklch(74% 0.006 260)",
+        "tonalRamp": ["#A0A0A4", "#AAAAB0", "#B5B5BB", "#BDBDBD", "#C5C5C5", "#D0D0D0", "#DBDBDB", "#E6E6E6", "#F0F0F0"]
+      },
+      "grey-medium-500": {
+        "role": "neutral",
+        "displayName": "Grey Medium 500",
+        "canonical": "oklch(62% 0.008 260)",
+        "tonalRamp": ["#78787C", "#858588", "#929294", "#9E9E9E", "#A9A9A9", "#B4B4B4", "#BFBFBF", "#CACACA", "#D5D5D5"]
+      },
+      "snackbar-default": {
+        "role": "neutral",
+        "displayName": "Snackbar Background",
+        "canonical": "oklch(20% 0 0)",
+        "tonalRamp": ["#0D0D0D", "#1A1A1A", "#262626", "#323232", "#3D3D3D", "#484848", "#535353", "#5E5E5E", "#696969"]
+      },
+      "dark-red": {
+        "role": "neutral",
+        "displayName": "Dark Red Critical",
+        "canonical": "oklch(35% 0.18 25)",
+        "tonalRamp": ["#2E0000", "#4A0000", "#660000", "#960000", "#B80000", "#D02020", "#E04040", "#F07070", "#F8A0A0"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Screen titles only — one per screen max"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headers, card titles, invoice totals"
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "List item titles, form section labels, dialog titles"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Primary reading text, descriptions, invoice line items"
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Button labels, chip text, nav labels, form field labels"
+      }
+    },
+    "shadows": [
+      {
+        "name": "modal-elevation",
+        "value": "0 8px 24px rgba(0,0,0,0.12)",
+        "purpose": "Bottom sheets, dialogs, full-screen modals"
+      },
+      {
+        "name": "dropdown-elevation",
+        "value": "0 4px 16px rgba(0,0,0,0.10)",
+        "purpose": "Dropdown menus, autocomplete popovers"
+      },
+      {
+        "name": "snackbar-elevation",
+        "value": "0 6px 20px rgba(0,0,0,0.15)",
+        "purpose": "All snackbars, toasts"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state transitions (button hover, focus, navigation)"
+      },
+      {
+        "name": "ease-quick",
+        "value": "cubic-bezier(0.4, 0, 1, 1)",
+        "purpose": "Fast transitions (snackbar appear, tooltip)"
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "360px"
+      },
+      {
+        "name": "phone-wide",
+        "value": "412px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Full-width primary action button (AppButton) — used for Create Invoice, Save, Confirm",
+      "html": "<button class=\"ds-btn-primary\">إضافة فاتورة</button>",
+      "css": ".ds-btn-primary { background: #1E3A8A; color: #FFFFFF; padding: 16px 24px; border-radius: 12px; border: none; font-family: 'Cairo', sans-serif; font-weight: 500; font-size: 16px; min-width: 100%; transition: background 0.1s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { background: #4F46E5; } .ds-btn-primary:focus-visible { outline: 2px solid #4F46E5; outline-offset: 2px; } .ds-btn-primary:disabled { background: #E0E0E0; color: #9E9E9E; cursor: not-allowed; }"
+    },
+    {
+      "name": "Secondary Outlined Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action — Cancel, Back, Clear filters",
+      "html": "<button class=\"ds-btn-secondary\">إلغاء</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: #1E3A8A; padding: 16px 24px; border-radius: 12px; border: 2px solid #1E3A8A; font-family: 'Cairo', sans-serif; font-weight: 500; font-size: 16px; transition: background 0.1s cubic-bezier(0.4, 0, 0.2, 1), color 0.1s; } .ds-btn-secondary:hover { background: rgba(30, 58, 138, 0.08); } .ds-btn-secondary:focus-visible { outline: 2px solid #1E3A8A; outline-offset: 2px; } .ds-btn-secondary:disabled { border-color: #E0E0E0; color: #9E9E9E; cursor: not-allowed; }"
+    },
+    {
+      "name": "Destructive Button",
+      "kind": "button",
+      "refersTo": "button-destructive",
+      "description": "Delete, Remove, Confirm destructive action",
+      "html": "<button class=\"ds-btn-destructive\">حذف</button>",
+      "css": ".ds-btn-destructive { background: #960000; color: #FFFFFF; padding: 16px 24px; border-radius: 12px; border: none; font-family: 'Cairo', sans-serif; font-weight: 500; font-size: 16px; transition: background 0.1s cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-destructive:hover { background: #EF4444; } .ds-btn-destructive:focus-visible { outline: 2px solid #EF4444; outline-offset: 2px; } .ds-btn-destructive:disabled { background: #FFDAD6; color: #F59E0B; cursor: not-allowed; }"
+    },
+    {
+      "name": "App Bar",
+      "kind": "nav",
+      "refersTo": "app-bar",
+      "description": "Top app bar with RTL title, back navigation, no elevation",
+      "html": "<header class=\"ds-app-bar\"><button class=\"ds-app-bar-back\" aria-label=\"Back\">‹</button><h1 class=\"ds-app-bar-title\">لوحة التحكم</h1></header>",
+      "css": ".ds-app-bar { display: flex; align-items: center; height: 56px; padding: 0 16px; background: #F9F9F9; border-bottom: 1px solid #EEEEEE; font-family: 'Cairo', sans-serif; } .ds-app-bar-back { background: none; border: none; color: #1E3A8A; font-size: 24px; line-height: 1; padding: 8px; margin-left: -8px; cursor: pointer; } .ds-app-bar-title { flex: 1; text-align: center; color: #1E3A8A; font-weight: 600; font-size: 20px; margin: 0; }"
+    },
+    {
+      "name": "Input Field (AppTextField)",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Standardized text input — used for all forms (product name, barcode, customer phone, etc.)",
+      "html": "<div class=\"ds-input-wrapper\"><label class=\"ds-input-label\" for=\"product-name\">اسم المنتج</label><input class=\"ds-input\" id=\"product-name\" type=\"text\" placeholder=\"أدخل اسم المنتج\" /><span class=\"ds-input-hint\">مطلوب</span></div>",
+      "css": ".ds-input-wrapper { display: flex; flex-direction: column; gap: 6px; font-family: 'Cairo', sans-serif; } .ds-input-label { color: #000000; font-weight: 500; font-size: 14px; } .ds-input { background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 12px; padding: 14px 16px; color: #000000; font-family: 'Cairo', sans-serif; font-size: 16px; transition: border-color 0.1s cubic-bezier(0.4, 0, 0.2, 1); } .ds-input::placeholder { color: #9E9E9E; } .ds-input:focus { outline: none; border-color: #1E3A8A; border-width: 2px; } .ds-input.error { border-color: #EF4444; background: #FFDAD6; } .ds-input-hint { color: #9E9E9E; font-size: 12px; } .ds-input-hint.error { color: #EF4444; }"
+    },
+    {
+      "name": "Dropdown / Select",
+      "kind": "input",
+      "refersTo": "dropdown",
+      "description": "Dropdown menu for selecting customer, supplier, category",
+      "html": "<div class=\"ds-dropdown-wrapper\"><label class=\"ds-dropdown-label\">المورد</label><div class=\"ds-dropdown\" role=\"combobox\" aria-expanded=\"false\"><span class=\"ds-dropdown-value\">اختر مورداً</span><span class=\"ds-dropdown-chevron\">▼</span></div></div>",
+      "css": ".ds-dropdown-wrapper { display: flex; flex-direction: column; gap: 6px; font-family: 'Cairo', sans-serif; } .ds-dropdown-label { color: #000000; font-weight: 500; font-size: 14px; } .ds-dropdown { display: flex; align-items: center; justify-content: space-between; background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 12px; padding: 14px 16px; color: #000000; font-family: 'Cairo', sans-serif; font-size: 16px; cursor: pointer; transition: border-color 0.1s cubic-bezier(0.4, 0, 0.2, 1); } .ds-dropdown:hover { border-color: #BDBDBD; } .ds-dropdown:focus-within { outline: none; border-color: #1E3A8A; border-width: 2px; } .ds-dropdown-chevron { color: #BDBDBD; font-size: 12px; margin-right: 8px; }"
+    },
+    {
+      "name": "Card / Container",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Standard content card — used for product cards, invoice items, dashboard stats",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-content\"><h3 class=\"ds-card-title\">اسم المنتج</h3><p class=\"ds-card-subtitle\">الباركود: 123456789</p><div class=\"ds-card-meta\"><span class=\"ds-price\">شراء: 50.00</span><span class=\"ds-price\">بيع: 75.00</span></div></div></article>",
+      "css": ".ds-card { background: #FFFFFF; border: 1px solid #EEEEEE; border-radius: 12px; padding: 16px; font-family: 'Cairo', sans-serif; } .ds-card-title { margin: 0 0 4px; color: #000000; font-weight: 600; font-size: 16px; } .ds-card-subtitle { margin: 0 0 12px; color: #757682; font-size: 12px; } .ds-card-meta { display: flex; gap: 16px; } .ds-price { color: #000000; font-size: 14px; }"
+    },
+    {
+      "name": "Product Card (Signature)",
+      "kind": "custom",
+      "refersTo": "product-card",
+      "description": "Horizontal product card with thumbnail, name, prices, quantity badge, and trailing actions — used in Inventory and invoice selection",
+      "html": "<article class=\"ds-product-card\"><div class=\"ds-product-thumb\" style=\"background: #F5F5F5;\"></div><div class=\"ds-product-info\"><h3 class=\"ds-product-name\">منتج تجريبي</h3><p class=\"ds-product-barcode\">الباركود: 1234567890123</p><div class=\"ds-product-prices\"><span class=\"ds-buy-price\">شراء: 50.00</span><span class=\"ds-sell-price\">بيع: 75.00</span></div></div><div class=\"ds-product-qty-badge\">12</div><button class=\"ds-product-action\" aria-label=\"Edit\">✎</button></article>",
+      "css": ".ds-product-card { display: flex; align-items: center; gap: 12px; background: #FFFFFF; border: 1px solid #EEEEEE; border-radius: 12px; padding: 12px; font-family: 'Cairo', sans-serif; } .ds-product-thumb { width: 64px; height: 64px; border-radius: 8px; background: #F5F5F5; flex-shrink: 0; } .ds-product-info { flex: 1; min-width: 0; } .ds-product-name { margin: 0 0 2px; color: #000000; font-weight: 600; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-product-barcode { margin: 0 0 4px; color: #757682; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-product-prices { display: flex; gap: 16px; } .ds-buy-price, .ds-sell-price { color: #000000; font-size: 14px; } .ds-product-qty-badge { display: flex; align-items: center; justify-content: center; min-width: 40px; height: 28px; padding: 0 8px; background: #22C55E; color: #FFFFFF; border-radius: 6px; font-weight: 600; font-size: 14px; } .ds-product-qty-badge.low { background: #EF4444; } .ds-product-qty-badge.zero { background: #960000; } .ds-product-action { background: none; border: none; color: #1E3A8A; font-size: 18px; padding: 8px; cursor: pointer; }"
+    },
+    {
+      "name": "Dashboard Grid Card (Signature)",
+      "kind": "custom",
+      "refersTo": "dashboard-grid-card",
+      "description": "Square metric card with large number and label — used in Dashboard for Profit, Sales, Expenses, Top Customer",
+      "html": "<article class=\"ds-dashboard-card\" style=\"border-left-color: #1E3A8A;\"><div class=\"ds-dashboard-value\">50,622</div><div class=\"ds-dashboard-label\">المكسب</div></article>",
+      "css": ".ds-dashboard-card { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #FFFFFF; border: 1px solid #EEEEEE; border-left-width: 4px; border-radius: 12px; padding: 24px 16px; font-family: 'Cairo', sans-serif; aspect-ratio: 1.6; } .ds-dashboard-value { color: #1E3A8A; font-weight: 700; font-size: 26px; line-height: 1.2; margin-bottom: 8px; } .ds-dashboard-label { color: #757682; font-weight: 500; font-size: 14px; } .ds-dashboard-card.sales { border-left-color: #757682; } .ds-dashboard-card.sales .ds-dashboard-value { color: #757682; } .ds-dashboard-card.expenses { border-left-color: #EF4444; } .ds-dashboard-card.expenses .ds-dashboard-value { color: #EF4444; } .ds-dashboard-card.customer { border-left-color: #22C55E; } .ds-dashboard-card.customer .ds-dashboard-value { color: #22C55E; }"
+    },
+    {
+      "name": "Bottom Navigation",
+      "kind": "nav",
+      "refersTo": "bottom-nav",
+      "description": "Persistent bottom navigation bar (Style8) with 5 tabs — Dashboard, Operations, Inventory, Safe, Settings",
+      "html": "<nav class=\"ds-bottom-nav\"><button class=\"ds-nav-item active\" aria-label=\"Dashboard\"><span class=\"ds-nav-icon\">📊</span><span class=\"ds-nav-label\">لوحة التحكم</span></button><button class=\"ds-nav-item\" aria-label=\"Operations\"><span class=\"ds-nav-icon\">📋</span><span class=\"ds-nav-label\">عمليات</span></button><button class=\"ds-nav-item\" aria-label=\"Inventory\"><span class=\"ds-nav-icon\">📦</span><span class=\"ds-nav-label\">المخزن</span></button><button class=\"ds-nav-item\" aria-label=\"Safe\"><span class=\"ds-nav-icon\">💰</span><span class=\"ds-nav-label\">الخزنة</span></button><button class=\"ds-nav-item\" aria-label=\"Settings\"><span class=\"ds-nav-icon\">⚙️</span><span class=\"ds-nav-label\">الإعدادات</span></button></nav>",
+      "css": ".ds-bottom-nav { display: flex; height: 58px; background: #FFFFFF; border-top: 1px solid #EEEEEE; font-family: 'Cairo', sans-serif; } .ds-nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: none; border: none; padding: 4px; color: #757682; font-size: 11px; cursor: pointer; transition: color 0.1s; } .ds-nav-item:hover { color: #1E3A8A; } .ds-nav-item.active { color: #1E3A8A; } .ds-nav-icon { font-size: 20px; line-height: 1; } .ds-nav-label { font-weight: 500; }"
+    },
+    {
+      "name": "Snackbar",
+      "kind": "custom",
+      "refersTo": "snackbar",
+      "description": "Standard snackbar for toast messages — success, error, info",
+      "html": "<div class=\"ds-snackbar success\" role=\"alert\"><span class=\"ds-snackbar-text\">تم الحفظ بنجاح</span></div>",
+      "css": ".ds-snackbar { display: flex; align-items: center; min-width: 280px; max-width: 100%; background: #323232; color: #FFFFFF; border-radius: 8px; padding: 14px 16px; font-family: 'Cairo', sans-serif; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); animation: ds-slide-up 0.2s cubic-bezier(0.4, 0, 0.2, 1); } .ds-snackbar.success { background: #22C55E; } .ds-snackbar.error { background: #EF4444; } .ds-snackbar.warning { background: #F59E0B; } .ds-snackbar.info { background: #1E3A8A; } .ds-snackbar-text { flex: 1; } @keyframes ds-slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Trusted Ledger",
+    "overview": "Inventra's design system embodies the dependable, no-nonsense character of a well-worn merchant's ledger — precise, legible, and built for daily commercial rhythm. The visual language prioritizes Arabic-first clarity: generous touch targets for one-handed counter use, high-contrast typography in Cairo that renders Arabic diacritics cleanly, and a restrained blue-indigo palette that signals trust without ornament. Every screen serves the shop-floor workflow: scan → invoice → balance check in under 30 seconds. Density is purposeful, not decorative; whitespace breathes around numbers that matter (totals, balances, quantities). Dark theme exists but remains disabled pending full audit — the system is designed for daylight retail environments first.",
+    "keyCharacteristics": [
+      "Arabic RTL exclusive, Cairo font only",
+      "Blue-indigo primary palette (trust, finance, clarity)",
+      "12px base radius — approachable, not sharp",
+      "ScreenUtil scaling (360×690 baseline) — consistent across densities",
+      "Flat surfaces with tonal layering — no decorative shadows",
+      "Component themes centralized in AppTheme — zero hardcoded styling"
+    ],
+    "rules": [
+      {
+        "name": "The Ledger Ink Rule",
+        "body": "Primary blue appears on ≤15% of any screen — totals, primary CTAs, active nav only. Its scarcity creates trust.",
+        "section": "colors"
+      },
+      {
+        "name": "The Semantic Fidelity Rule",
+        "body": "Success/Warning/Error colors are reserved exclusively for their semantic meaning. Never repurpose success green for \"primary action\" or error red for \"accent.\"",
+        "section": "colors"
+      },
+      {
+        "name": "The Single Voice Rule",
+        "body": "One font family (Cairo) everywhere. No mixing, no fallback display faces. Consistency is the brand.",
+        "section": "typography"
+      },
+      {
+        "name": "The Scale Discipline Rule",
+        "body": "Only the 8 canonical sizes (12–26 in 2sp steps) are permitted. No arbitrary fontSize: 17.5 — round to nearest step.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Surface Rule",
+        "body": "Cards, buttons, inputs, and app bars have zero elevation at rest. Borders and tonal contrast create separation — not shadows.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use AppColors exclusively for every color reference",
+      "Do use AppTextStyle exclusively for every text style",
+      "Do use AppTextField for every text input — never raw TextFormField",
+      "Do use AppButton for every full-width primary action — never ElevatedButton in SizedBox",
+      "Do use AppNavigation.pushName() for all navigation — never Navigator.of(context)",
+      "Do use showSnackBar(context, message) for all toasts — never ScaffoldMessenger",
+      "Do extract every reusable UI piece into a named widget class in features/*/presentation/widgets/ or core/widgets/",
+      "Do use buildWhen on every BlocBuilder and listenWhen on every BlocListener",
+      "Do define component themes in AppTheme (elevatedButtonTheme, inputDecorationTheme, dropdownMenuTheme, cardTheme) — never hardcode BoxDecoration or InputDecoration in widgets",
+      "Do use const constructors for all immutable widgets and literals",
+      "Do scale all spacing/sizing/typography with .w, .h, .sp via flutter_screenutil",
+      "Do use 12px border radius for buttons, inputs, dropdowns, cards; 8px for chips/badges",
+      "Do reserve Primary blue for ≤15% of screen — totals, primary CTA, active nav only"
+    ],
+    "donts": [
+      "Don't hardcode any color value — always reference AppColors.*",
+      "Don't hardcode any TextStyle() — always reference AppTextStyle.*",
+      "Don't hardcode BoxDecoration, InputDecoration, ButtonStyle, DropdownMenuThemeData, CardTheme in widgets",
+      "Don't use inline Widget Function() builders or private _build*() methods for reusable UI",
+      "Don't use raw ElevatedButton, TextFormField, TextField, Navigator.push*, ScaffoldMessenger.showSnackBar",
+      "Don't add new dependencies without PR justification",
+      "Don't use getAll() in build methods — use ObjectBox query().watch() for reactive UI",
+      "Don't invent arbitrary font sizes — stick to the 8 canonical steps (12–26sp)",
+      "Don't use shadows on cards, buttons, or app bars — flat surfaces with borders only",
+      "Don't commit directly to main/master — all work on feature/<spec-name> branches via PR"
+    ]
+  }
+}

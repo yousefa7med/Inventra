@@ -40,11 +40,11 @@ class SafeRepositoryImpl implements SafeRepository {
     );
     _objectBox.transactionsEntryBox.put(
       TransactionsEntry(
-        type: TransactionType.manualAdjustment.index,
+        typeIndex: TransactionType.manualAdjustment.index,
         value: newBalance.currentBalance,
         referenceId: adjustmentId,
         timestamp: newBalance.lastUpdated,
-        userName: newBalance.note,
+        description: newBalance.note,
       ),
     );
   }
@@ -98,11 +98,11 @@ class SafeRepositoryImpl implements SafeRepository {
     _objectBox.safeBalanceBox.put(newbalance);
     _objectBox.transactionsEntryBox.put(
       TransactionsEntry(
-        type: TransactionType.expense.index,
+        typeIndex: TransactionType.expense.index,
         value: expense.value,
         referenceId: expenseId,
         timestamp: expense.date,
-        userName: expense.note.trim(),
+        description: expense.note.trim(),
       ),
     );
   }

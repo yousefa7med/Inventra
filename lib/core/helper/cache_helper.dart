@@ -46,7 +46,7 @@ class ObjectBoxServices {
   late final Store store;
   late final Box<ProductModel> productsBox;
   late final Box<SupplierModel> suppliersBox;
-  late final Box<SellingInvoiceModel> invoicesBox;
+  late final Box<SellingInvoiceModel> sellingInvoicesBox;
   late final Box<BuyingInvoiceModel> buyInvoicesBox;
   late final Box<CustomerModel> customersBox;
   late final Box<ExpenseModel> expensesBox;
@@ -59,7 +59,7 @@ class ObjectBoxServices {
     store = await openStore();
     productsBox = store.box<ProductModel>();
     suppliersBox = store.box<SupplierModel>();
-    invoicesBox = store.box<SellingInvoiceModel>();
+    sellingInvoicesBox = store.box<SellingInvoiceModel>();
     buyInvoicesBox = store.box<BuyingInvoiceModel>();
     customersBox = store.box<CustomerModel>();
     expensesBox = store.box<ExpenseModel>();

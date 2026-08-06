@@ -23,6 +23,8 @@ import 'package:Inventra/features/selling_invoice/presentation/views/selling_inv
 import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/presentation/views/all_suppliers_view.dart';
+import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
+import 'package:Inventra/features/transactions/presentation/views/invoice_details_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -155,6 +157,14 @@ class AppRouter {
               const SettingsView(),
         );
 
+      case AppRoutes.invoiceDetailsView:
+        final invoice = settings.arguments as InvoiceDetailsModel;
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              InvoiceDetailsView(invoice: invoice),
+        );
+
       default:
         return pageRouteBuilderMethod(
           settings: settings,
@@ -182,4 +192,5 @@ abstract class AppRoutes {
   static const String settings = '/settings';
 
   static const String supplierFormView = '/edit-supplier';
+  static const String invoiceDetailsView = '/invoice-details';
 }

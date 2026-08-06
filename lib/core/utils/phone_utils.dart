@@ -1,6 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
-class PhoneUtils {
+abstract class PhoneUtils {
   static Future<void> launchDialer(String phoneNumber) async {
     final trimmed = phoneNumber.trim();
     if (trimmed.isEmpty) return;

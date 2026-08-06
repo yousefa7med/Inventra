@@ -156,8 +156,4 @@ Future<void> configureDependencies() async {
     () => BuyInvoiceCubit(GetIt.instance<BuyInvoiceRepository>()),
   );
 
-  // 5. ObjectBox Boxes for new entities
-  GetIt.instance.registerLazySingleton(
-    () => objectBoxServices.sellInvoiceItemsBox,
-  );
 }

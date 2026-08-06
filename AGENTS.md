@@ -25,32 +25,115 @@ flutter run
 ## Project Structure
 ```
 lib/
-├── core/                    # Shared utilities, theme, routing, DI
-│   ├── config/configrations.dart   # AppRouter + AppRoutes
-│   ├── navigations/navigations.dart # AppNavigation helpers
-│   ├── utilities/app_theme.dart    # Light/dark ThemeData
-│   ├── controller/controllers/app_cubit/  # App-wide state
-│   └── models/               # ObjectBox entities (Product, Customer, Supplier, SellInvoice, BuyInvoice, ReturnReceipt, Expense)
-├── features/                # Feature-based modules
-│   ├── inventory/           # Products CRUD + search by name/barcode, edit/delete cards
-│   ├── dashboard/           # Analytics (profit, expenses, sales), 4 quick-add cards
-│   ├── operations/          # History of all operations (sell, buy, return) with filter/search
-│   ├── expenses/            # Expenses CRUD + search by note, FAB to add
-│   ├── settings/            # App settings (placeholder)
-│   └── main/                # MainView (bottom nav + drawer)
-└── main.dart                # Entry point, DI setup, MaterialApp
+├── core/                              # Shared utilities, theme, routing, DI
+│   ├── config/configrations.dart      # AppRouter + AppRoutes
+│   ├── constants/app_strings.dart     # Centralized Arabic strings
+│   ├── controller/controllers/app_cubit/  # App-wide state (theme, locale)
+│   ├── helper/                        # Cache, dialogs, normalizers, functions
+│   │   ├── app_dialog.dart
+│   │   ├── arabic_normalizer.dart
+│   │   ├── cache_helper.dart          # SharedPreferences + ObjectBox init
+│   │   ├── cache_keys.dart
+│   │   └── functions.dart             # showSnackBar, navigation helpers
+│   ├── models/                        # ObjectBox entities (11 models)
+│   │   ├── product_model.dart
+│   │   ├── customer_model.dart
+│   │   ├── supplier_model.dart
+│   │   ├── selling_invoice_model.dart
+│   │   ├── buying_invoice_model.dart
+│   │   ├── invoice_item_model.dart
+│   │   ├── expense_model.dart
+│   │   ├── safe_balance_model.dart
+│   │   ├── manual_adjustment_model.dart
+│   │   ├── transactions_entry.dart
+│   │   └── transaction_type.dart
+│   ├── navigations/navigations.dart   # AppNavigation helpers
+│   ├── transitions/                   # Custom page transitions
+│   │   ├── page_route_builder_method.dart
+│   │   └── slide_transation_builder.dart
+│   ├── utilities/                     # Theme, colors, typography, assets
+│   │   ├── app_theme.dart             # Light/dark ThemeData + component themes
+│   │   ├── app_colors.dart            # AppColors palette
+│   │   ├── app_text_style.dart        # AppTextStyle (Cairo font)
+│   │   ├── app_global_keys.dart       # GlobalKeys for navigation/drawer
+│   │   └── assets.dart                # Generated asset references
+│   ├── utils/                         # Formatters, validators, phone utils
+│   │   ├── formatters.dart
+│   │   ├── phone_utils.dart
+│   │   └── validators.dart
+│   └── widgets/                       # Shared UI components
+│       ├── app_button.dart            # Full-width button (AppButton)
+│       ├── app_drawer.dart            # Side drawer with navigation
+│       ├── app_text_field.dart        # Standardized text field (AppTextField)
+│       ├── custom_app_bar.dart        # RTL-aware app bar
+│       ├── search_field.dart          # Search input with clear
+│       ├── quantity_counter.dart      # +/- quantity selector
+│       ├── customer_form_view.dart    # Customer create/edit form
+│       ├── supplier_form_view.dart    # Supplier create/edit form
+│       ├── product_form_view.dart     # Product create/edit form
+│       ├── empty_state_widget.dart
+│       └── error_state_widget.dart
+├── features/                          # Feature-based modules (11 features)
+│   ├── buying_invoice/                # Buy invoices (from suppliers)
+│   │   ├── controller/cubit/          # BuyInvoiceCubit + state + interface
+│   │   ├── data/repositories/         # BuyInvoiceRepository + impl
+│   │   ├── presentation/views/        # BuyingInvoiceView, BuyingProductSelectionView
+│   │   └── presentation/widgets/      # Invoice items, product cards, supplier dropdown
+│   ├── customers/                     # Customer management
+│   │   ├── controller/cubit/          # CustomerCubit + state + interface
+│   │   ├── data/repositories/         # CustomerRepository + impl
+│   │   ├── presentation/views/        # AllCustomersView
+│   │   └── presentation/widgets/      # CustomerCard, loading/error widgets
+│   ├── dashboard/                     # Analytics dashboard
+│   │   ├── presentation/views/        # DashboardView
+│   │   └── presentation/widgets/      # Grid cards, list cards, add image
+│   ├── inventory/                     # Product management
+│   │   ├── controller/cubit/          # ProductCubit + state + interface
+│   │   ├── data/repositories/         # ProductRepository + impl
+│   │   ├── presentation/views/        # InventoryView
+│   │   └── presentation/widgets/      # ProductCard, no search result
+│   ├── main/                          # Main shell (bottom nav + drawer)
+│   │   └── presentation/views/        # MainView
+│   ├── safe/                          # Safe balance + expenses
+│   │   ├── controller/cubit/          # SafeCubit + state + interface
+│   │   ├── data/repositories/         # SafeRepository + impl
+│   │   ├── presentation/views/        # SafeView, AddExpenseView, AdjustBalanceDialog
+│   │   └── presentation/widgets/      # BalanceCard, ExpenseCard, SafeLoadedBody, search/filter
+│   ├── selling_invoice/               # Sell invoices (to customers)
+│   │   ├── controller/cubit/          # SellInvoiceCubit + state + interface
+│   │   ├── data/repositories/         # SellInvoiceRepository + impl
+│   │   ├── presentation/views/        # SellingInvoiceView, SellingProductSelectionView
+│   │   └── presentation/widgets/      # Invoice items, product cards, customer dropdown
+│   ├── settings/                      # App settings (placeholder)
+│   │   └── presentation/views/        # SettingsView
+│   ├── suppliers/                     # Supplier management
+│   │   ├── controller/cubit/          # SupplierCubit + state + interface
+│   │   ├── data/repositories/         # SupplierRepository + impl
+│   │   ├── presentation/views/        # AllSuppliersView
+│   │   └── presentation/widgets/      # SupplierCard
+│   └── transactions/                  # Unified operations history
+│       ├── controller/cubit/          # TransactionsCubit + state + interface
+│       ├── data/repositories/         # TransactionsRepository + impl
+│       ├── presentation/views/        # TransactionsView, InvoiceDetailsView
+│       ├── presentation/widgets/      # TransactionCard, TransactionsLoadedBody, filter
+│       └── utils/                     # TransactionTypeExtension
+└── main.dart                          # Entry point, DI setup, MaterialApp
 ```
 
 ## Core Business Entities (ObjectBox Models)
 | Entity | Key Fields | Purpose |
 |--------|-----------|---------|
-| `Product` | `id`, `name`, `barcode`, `quantity`, `buyPrice`, `sellPrice`, `supplierId` | Inventory item |
+| `Product` | `id`, `name`, `barcode`, `quantity`, `buyPrice`, `sellPrice`, `wholesalePrice`, `supplierId`, `imgPath` | Inventory item |
 | `Customer` | `id`, `name`, `phone`, `address`, `balance` | Sell invoice customer |
 | `Supplier` | `id`, `name`, `phone`, `address`, `balance` | Buy invoice supplier |
 | `SellInvoice` | `id`, `customerId`, `items[]`, `total`, `date`, `paidAmount` | Sale to customer → inventory↓, safe↑ |
 | `BuyInvoice` | `id`, `supplierId`, `items[]`, `total`, `date`, `paidAmount` | Purchase from supplier → inventory↑, safe↓ |
 | `ReturnReceipt` | `id`, `sellInvoiceId`, `items[]`, `total`, `date` | Return from customer → inventory↑, safe↓ |
 | `Expense` | `id`, `note`, `amount`, `date`, `category` | Business expense tracking |
+| `SafeBalance` | `id`, `balance`, `date` | Running safe/cash balance |
+| `InvoiceItem` | `id`, `productId`, `quantity`, `price`, `total` | Line item for invoices |
+| `ManualAdjustment` | `id`, `amount`, `note`, `date`, `type` | Manual safe balance adjustment |
+| `TransactionEntry` | `id`, `type`, `referenceId`, `amount`, `date` | Unified transaction log |
 
 ## Business Flow Summary
 | Transaction | Inventory | Safe Balance |
@@ -68,11 +151,12 @@ lib/
 - **Buying Invoices** → Buy invoice list/history
 - *(Future features placeholder)*
 
-### Main View - Bottom Navigation (4 tabs)
+### Main View - Bottom Navigation (5 tabs)
 1. **Dashboard** — Profit/sales/expenses analytics, 4 quick-add cards (Sell Invoice, Customer, Supplier, Product)
 2. **Operations** — Full history (sell, buy, returns), filter by category, search by customer/supplier name
 3. **Inventory** — Product cards, edit/delete, search by name or barcode
-4. **Expenses** — List with note search, FAB to add new expense
+4. **Safe** — Balance card, expenses list, FAB to add expense/adjust balance
+5. **Settings** — App settings (placeholder)
 
 ## Critical Conventions
 - **Import alias**: `package:Inventra/...` (capital I)
@@ -95,12 +179,17 @@ lib/
 ## State Management Details
 - Uses `flutter_bloc` ^9.1.1 with Cubit pattern (not Bloc)
 - `AppCubit` for app-wide state (theme, locale) in `core/controller/controllers/app_cubit/`
-- `ProductCubit` for inventory feature in `features/inventory/controller/cubit/`
-- Future cubits: `CustomerCubit`, `SupplierCubit`, `SellInvoiceCubit`, `BuyInvoiceCubit`, `ReturnReceiptCubit`, `ExpenseCubit`, `DashboardCubit`, `OperationsCubit`
-- Cubits registered as `LazySingleton` in GetIt (`main.dart:75`)
+- Feature cubits (all LazySingleton in GetIt):
+  - `ProductCubit` in `features/inventory/controller/cubit/`
+  - `CustomerCubit` in `features/customers/controller/cubit/`
+  - `SupplierCubit` in `features/suppliers/controller/cubit/`
+  - `SellInvoiceCubit` in `features/selling_invoice/controller/cubit/`
+  - `BuyInvoiceCubit` in `features/buying_invoice/controller/cubit/`
+  - `SafeCubit` in `features/safe/controller/cubit/`
+  - `TransactionsCubit` in `features/transactions/controller/cubit/`
 
 ## Database (ObjectBox)
-- Entities in `core/models/` annotated with `@Entity()`
+- Entities in `core/models/` annotated with `@Entity()` (11 models)
 - Run `dart run build_runner build --delete-conflicting-outputs` after model changes
 - Generated files: `lib/objectbox.g.dart`, `lib/objectbox-model.json`
 - Store initialized in `ObjectBoxServices.init()` (`cache_helper.dart:47`)
@@ -191,11 +280,6 @@ flutter pub add dev:<package>
 - Only merge via Pull Request after review
 - Never force-push to shared branches
 
-**Before pushing:**
-1. Run `flutter analyze` — must pass
-2. Run `flutter test` — must pass  
-3. Run `flutter build apk --debug` — must compile
-4. Run `dart run build_runner build --delete-conflicting-outputs` after model changes
 
 ## Spec Kit Rules
 Before executing any Spec Kit command:
@@ -203,3 +287,9 @@ Before executing any Spec Kit command:
 - Read all required templates before making assumptions.
 - Never assume a file is missing after a single glob.
 - If a glob returns no results, try direct file reads and recursive listing.
+
+## File Search Convention
+- Use PowerShell commands (`Get-ChildItem`, `Select-String`) for file search and content search on this Windows environment.
+- Example: `Get-ChildItem -Recurse -Filter "*.dart" lib/core/models`
+- Example: `Select-String -Pattern "AppColors" -Path "lib\**\*.dart"`
+- Avoid `ls`, `grep`, `find`, `rg` (ripgrep) — they may not work as expected in PowerShell.
