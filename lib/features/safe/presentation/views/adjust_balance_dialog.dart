@@ -44,40 +44,42 @@ class _AdjustBalanceDialogState extends State<AdjustBalanceDialog> {
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('الرصيد الجديد', style: AppTextStyle.regular16),
-              const SizedBox(height: 8),
-              AppTextField(
-                controller: _valueController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('الرصيد الجديد', style: AppTextStyle.regular16),
+                const SizedBox(height: 8),
+                AppTextField(
+                  controller: _valueController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  label: 'مثال: 5000.00',
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'الرصيد مطلوب';
+                    }
+                    final parsed = double.tryParse(value.trim());
+                    if (parsed == null) {
+                      return 'رقم غير صالح';
+                    }
+                    if (parsed > 999999999.99 || parsed < 0) {
+                      return 'القيمة خارج النطاق المسموح';
+                    }
+                    return null;
+                  },
                 ),
-                label: 'مثال: 5000.00',
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'الرصيد مطلوب';
-                  }
-                  final parsed = double.tryParse(value.trim());
-                  if (parsed == null) {
-                    return 'رقم غير صالح';
-                  }
-                  if (parsed > 999999999.99 || parsed < 0) {
-                    return 'القيمة خارج النطاق المسموح';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              Text('ملاحظة (اختياري)', style: AppTextStyle.regular16),
-              const SizedBox(height: 8),
-              AppTextField(
-                controller: _noteController,
-                label: 'مثال: رصيد افتتاحي',
-              ),
-            ],
+                const SizedBox(height: 16),
+                Text('ملاحظة (اختياري)', style: AppTextStyle.regular16),
+                const SizedBox(height: 8),
+                AppTextField(
+                  controller: _noteController,
+                  label: 'مثال: رصيد افتتاحي',
+                ),
+              ],
+            ),
           ),
         ),
       ),
