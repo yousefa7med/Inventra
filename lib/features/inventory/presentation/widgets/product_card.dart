@@ -40,8 +40,8 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 75.w,
-                height: 75.h,
+                width: 70.r,
+                height: 70.r,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.r),
                   color: AppColors.greyLight100,
@@ -56,7 +56,7 @@ class ProductCard extends StatelessWidget {
                       )
                     : Icon(
                         Icons.image_not_supported_outlined,
-                        color: AppColors.grey,
+                        color: AppColors.grey.withAlpha(150),
                         size: 28.r,
                       ),
               ),
@@ -120,6 +120,7 @@ class ProductCard extends StatelessWidget {
 
               Column(
                 mainAxisSize: MainAxisSize.min,
+                // mainAxisAlignment: MainAxisAlignment.star,
                 children: [
                   IconButton(
                     onPressed: () {
@@ -142,7 +143,6 @@ class ProductCard extends StatelessWidget {
                         size: 16.r,
                       ),
                     ),
-                    constraints: const BoxConstraints(),
                     padding: EdgeInsets.zero,
                     tooltip: "تعديل المنتج",
                   ),
@@ -171,8 +171,7 @@ class ProductCard extends StatelessWidget {
                         size: 16.r,
                       ),
                     ),
-                    constraints: const BoxConstraints(),
-                    padding: EdgeInsets.zero,
+
                     tooltip: "حذف المنتج",
                   ),
                 ],
