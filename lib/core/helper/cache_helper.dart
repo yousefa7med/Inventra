@@ -52,7 +52,7 @@ class ObjectBoxServices {
   late final Box<ExpenseModel> expensesBox;
   late final Box<SafeBalanceModel> safeBalanceBox;
   late final Box<TransactionsEntry> transactionsEntryBox;
-  late final Box<InvoiceItemModel> sellInvoiceItemsBox;
+  late final Box<InvoiceItemModel> invoiceItemsBox;
   late final Box<ManualAdjustmentModel> manualAdjustmentBox;
 
   Future<void> init() async {
@@ -65,7 +65,7 @@ class ObjectBoxServices {
     expensesBox = store.box<ExpenseModel>();
     safeBalanceBox = store.box<SafeBalanceModel>();
     transactionsEntryBox = store.box<TransactionsEntry>();
-    sellInvoiceItemsBox = store.box<InvoiceItemModel>();
+    invoiceItemsBox = store.box<InvoiceItemModel>();
     manualAdjustmentBox = store.box<ManualAdjustmentModel>();
   }
 }

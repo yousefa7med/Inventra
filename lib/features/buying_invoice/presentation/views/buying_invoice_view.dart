@@ -60,15 +60,13 @@ class BuyingInvoiceView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: AppButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (context
                             .read<BuyInvoiceCubit>()
                             .validateBuyInvoice()) {
-                          await context
-                              .read<BuyInvoiceCubit>()
-                              .confirmInvoice();
+                          context.read<BuyInvoiceCubit>().confirmInvoice();
                           if (context.mounted) {
-                            AppNavigation.pop( context);
+                            AppNavigation.pop(context);
                           }
                         }
                       },

@@ -19,7 +19,7 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  late final Timer? timer;
+  Timer? timer;
   late final TextEditingController _controller;
   bool prevIsEmpty = true;
 

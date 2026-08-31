@@ -48,9 +48,7 @@ class _SupplierDropdownMenuState extends State<SupplierDropdownMenu> {
 
     try {
       final matchedSupplier = cubit.suppliers.firstWhere(
-        (s) =>
-            s.name.trim().toLowerCase().normalizeArabic() ==
-            enteredText,
+        (s) => s.name.trim().toLowerCase().normalizeArabic() == enteredText,
       );
 
       if (cubit.selectedSupplier != matchedSupplier) {
@@ -79,7 +77,10 @@ class _SupplierDropdownMenuState extends State<SupplierDropdownMenu> {
             (s) => DropdownMenuEntry<SupplierModel>(
               value: s,
               label: s.name,
-              leadingIcon: const Icon(Icons.local_shipping_outlined, color: AppColors.grey),
+              leadingIcon: const Icon(
+                Icons.local_shipping_outlined,
+                color: AppColors.grey,
+              ),
               trailingIcon: s.phoneNum.isNotEmpty
                   ? const Icon(Icons.phone, size: 16, color: AppColors.grey)
                   : null,
@@ -92,6 +93,7 @@ class _SupplierDropdownMenuState extends State<SupplierDropdownMenu> {
       onSelected: (supplier) {
         if (supplier != null) {
           cubit.selectSupplier(supplier);
+          focusNode.unfocus();
         }
       },
 

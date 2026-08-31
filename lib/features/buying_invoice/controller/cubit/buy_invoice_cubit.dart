@@ -1,4 +1,3 @@
-import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
@@ -42,13 +41,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
 
   @override
   void insertProduct(ProductModel product) {
-    final index = _products.indexWhere((p) => p.id == product.id);
-    if (index != -1) {
-      _products.removeAt(index);
-      _products.insert(index, product);
-    } else {
-      _products.add(product);
-    }
+    _products.add(product);
 
     _repository.insertProduct(product);
     emit(BuyInvoiceProductsLoaded());
@@ -59,9 +52,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
     emit(BuyInvoiceProductLoading());
     searchQuery = search;
     try {
-      final searchText = search.trim().normalizeArabic();
-
-      _products = _repository.searchProducts(searchText);
+      _products = _repository.searchProducts(searchQuery);
       emit(BuyInvoiceProductsLoaded());
     } catch (e) {
       emit(BuyInvoiceProductError('Failed to load products: $e'));
@@ -92,7 +83,6 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
         product: product,
       );
       _items[existingIndex] = newItem;
-      _repository.addItem(newItem);
     } else {
       final qty = quantity;
 
@@ -102,7 +92,6 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
         lineTotal: qty * product.buyingPrice,
       )..product.target = product;
       _items.add(newItem);
-      _repository.addItem(newItem);
     }
 
     emit(BuyInvoiceAddProductItem());
@@ -110,14 +99,11 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
 
   @override
   void updateItemQuantity(int itemIndex, int newQuantity) {
-    if (newQuantity < 1) {
-      _items.removeAt(itemIndex);
-    } else {
-      _items[itemIndex] = _items[itemIndex].copyWith(
-        quantity: newQuantity,
-        lineTotal: newQuantity * _items[itemIndex].unitPrice,
-      );
-    }
+    _items[itemIndex] = _items[itemIndex].copyWith(
+      quantity: newQuantity,
+      lineTotal: newQuantity * _items[itemIndex].unitPrice,
+    );
+
     emit(BuyInvoiceUpdateProductQuantity());
   }
 
@@ -141,7 +127,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
   }
 
   @override
-  Future<void> confirmInvoice() async {
+  void confirmInvoice() async {
     for (final item in _items) {
       final product = item.product.target;
       if (product == null) {
@@ -161,6 +147,8 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
       _items.clear();
       _selectedSupplier = null;
       emit(BuyInvoiceConfirmed());
+    } on String catch (e) {
+      emit(BuyInvoiceError(e));
     } catch (e) {
       emit(BuyInvoiceError('Failed to save invoice: $e'));
     }
