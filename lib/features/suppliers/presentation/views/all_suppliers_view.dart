@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
@@ -22,34 +20,6 @@ class AllSuppliersView extends StatefulWidget {
 }
 
 class _AllSuppliersViewState extends State<AllSuppliersView> {
-  final _searchController = TextEditingController();
-  Timer? _debounceTimer;
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _debounceTimer?.cancel();
-    super.dispose();
-  }
-
-  void _searchSuppliers(String query) {
-    final cubit = context.read<SupplierCubit>();
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer!.cancel();
-    }
-    _debounceTimer = Timer(
-      const Duration(milliseconds: 300),
-      () => cubit.searchSuppliers(query),
-    );
-  }
-
-  void _clearSearch() {
-    final cubit = context.read<SupplierCubit>();
-    _searchController.clear();
-    cubit.searchQuery = '';
-    cubit.loadSuppliers();
-  }
-
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SupplierCubit>();
@@ -72,9 +42,12 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: SearchField(
-                      searchController: _searchController,
-                      searchFunction: _searchSuppliers,
-                      clearFunction: _clearSearch,
+                      searchFunction: context
+                          .read<SupplierCubit>()
+                          .searchSuppliers,
+                      clearFunction: context
+                          .read<SupplierCubit>()
+                          .loadSuppliers,
                       hintText: 'ابحث بالاسم...',
                     ),
                   ),

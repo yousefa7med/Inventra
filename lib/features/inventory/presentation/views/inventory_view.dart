@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
@@ -14,40 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-class InventoryView extends StatefulWidget {
+class InventoryView extends StatelessWidget {
   const InventoryView({super.key});
-
-  @override
-  State<InventoryView> createState() => _InventoryViewState();
-}
-
-class _InventoryViewState extends State<InventoryView> {
-  final _searchController = TextEditingController();
-  Timer? _debounceTimer;
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _debounceTimer?.cancel();
-    super.dispose();
-  }
-
-  void _searchProducts(String query) {
-    final cubit = context.read<ProductCubit>();
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer!.cancel();
-    }
-    _debounceTimer = Timer(
-      const Duration(milliseconds: 300),
-      () => cubit.searchProducts(query),
-    );
-  }
-
-  void _clearSearch() {
-    final cubit = context.read<ProductCubit>();
-    _searchController.clear();
-    cubit.loadProducts();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +40,10 @@ class _InventoryViewState extends State<InventoryView> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: SearchField(
-                      searchController: _searchController,
-                      searchFunction: _searchProducts,
-                      clearFunction: _clearSearch,
+                      searchFunction: context
+                          .read<ProductCubit>()
+                          .searchProducts,
+                      clearFunction: context.read<ProductCubit>().loadProducts,
                       hintText: 'ابحث باسم المنتج أو الباركود...',
                     ),
                   ),

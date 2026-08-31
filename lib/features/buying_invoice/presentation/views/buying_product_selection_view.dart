@@ -1,7 +1,6 @@
 import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
-import 'dart:async';
 
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/constants/app_strings.dart';
@@ -14,25 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class BuyingProductSelectionView extends StatefulWidget {
+class BuyingProductSelectionView extends StatelessWidget {
   const BuyingProductSelectionView({super.key});
-
-  @override
-  State<BuyingProductSelectionView> createState() =>
-      _BuyingProductSelectionViewState();
-}
-
-class _BuyingProductSelectionViewState
-    extends State<BuyingProductSelectionView> {
-  final controller = TextEditingController();
-  Timer? timer;
-
-  @override
-  void dispose() {
-    controller.dispose();
-    timer?.cancel();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +29,8 @@ class _BuyingProductSelectionViewState
 
               sliver: SliverToBoxAdapter(
                 child: SearchField(
-                  searchController: controller,
-                  searchFunction: (String value) {
-                    if (timer?.isActive ?? false) {
-                      timer!.cancel();
-                    }
-                    timer = Timer(const Duration(milliseconds: 300), () {
-                      context.read<BuyInvoiceCubit>().loadProducts(value);
-                    });
-                  },
+                  searchFunction: context.read<BuyInvoiceCubit>().loadProducts,
                   clearFunction: () {
-                    controller.clear();
                     context.read<BuyInvoiceCubit>().loadProducts('');
                   },
                   hintText: "ابحث باسم المنتج أو الباركود...",

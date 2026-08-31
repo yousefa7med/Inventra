@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
@@ -19,16 +17,6 @@ class SellingProductSelectionView extends StatefulWidget {
 
 class _SellingProductSelectionViewState
     extends State<SellingProductSelectionView> {
-  final controller = TextEditingController();
-  Timer? timer;
-
-  @override
-  void dispose() {
-    controller.dispose();
-    timer?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,17 +30,8 @@ class _SellingProductSelectionViewState
 
               sliver: SliverToBoxAdapter(
                 child: SearchField(
-                  searchController: controller,
-                  searchFunction: (String value) {
-                    if (timer?.isActive ?? false) {
-                      timer!.cancel();
-                    }
-                    timer = Timer(const Duration(milliseconds: 300), () {
-                      context.read<SellInvoiceCubit>().loadProducts(value);
-                    });
-                  },
+                  searchFunction: context.read<SellInvoiceCubit>().loadProducts,
                   clearFunction: () {
-                    controller.clear();
                     context.read<SellInvoiceCubit>().loadProducts('');
                   },
                   hintText: "ابحث باسم المنتج أو الباركود...",

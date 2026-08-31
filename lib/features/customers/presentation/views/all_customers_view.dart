@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
@@ -13,40 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-class AllCustomersView extends StatefulWidget {
+class AllCustomersView extends StatelessWidget {
   const AllCustomersView({super.key});
-
-  @override
-  State<AllCustomersView> createState() => _AllCustomersViewState();
-}
-
-class _AllCustomersViewState extends State<AllCustomersView> {
-  final _searchController = TextEditingController();
-  Timer? _debounceTimer;
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    _debounceTimer?.cancel();
-    super.dispose();
-  }
-
-  void _searchCustomers(String query) {
-    final cubit = context.read<CustomerCubit>();
-    if (_debounceTimer?.isActive ?? false) {
-      _debounceTimer!.cancel();
-    }
-    _debounceTimer = Timer(
-      const Duration(milliseconds: 300),
-      () => cubit.searchCustomers(query),
-    );
-  }
-
-  void _clearSearch() {
-    final cubit = context.read<CustomerCubit>();
-    _searchController.clear();
-    cubit.loadCustomers();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +35,12 @@ class _AllCustomersViewState extends State<AllCustomersView> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: SearchField(
-                      searchController: _searchController,
-                      searchFunction: _searchCustomers,
-                      clearFunction: _clearSearch,
+                      searchFunction: context
+                          .read<CustomerCubit>()
+                          .searchCustomers,
+                      clearFunction: context
+                          .read<CustomerCubit>()
+                          .loadCustomers,
                       hintText: 'ابحث بالاسم...',
                     ),
                   ),
