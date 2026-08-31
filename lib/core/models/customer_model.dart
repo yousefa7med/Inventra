@@ -5,7 +5,7 @@ import 'package:objectbox/objectbox.dart';
 class CustomerModel {
   @Id()
   int id = 0;
-
+  @Index()
   final String name;
   final String? address;
   final String phoneNum;
@@ -19,7 +19,7 @@ class CustomerModel {
       phoneNum: phoneNum ?? this.phoneNum,
     );
     newCustomer.id = id;
-      return newCustomer;
+    return newCustomer;
   }
 
   CustomerModel({

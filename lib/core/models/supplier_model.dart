@@ -4,6 +4,7 @@ import 'package:objectbox/objectbox.dart';
 class SupplierModel {
   @Id()
   int id = 0;
+  @Index()
   final String name;
   final String? storeAdd;
   final String storeName;

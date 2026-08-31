@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:Inventra/core/models/customer_model.dart';
-import 'package:Inventra/core/models/product_details_argument.dart';
+import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/transitions/page_route_builder_method.dart';

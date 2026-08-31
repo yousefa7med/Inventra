@@ -4,13 +4,16 @@ import 'package:objectbox/objectbox.dart';
 class ProductModel {
   @Id()
   int id = 0;
+  @Index()
   final String name;
+  @Index()
+  final String? barcode;
+
   final String? imgPath;
   int quantity;
   final double buyingPrice;
   final double sellingPrice;
   final double wholesalePrice;
-  final String? barcode;
 
   ProductModel copyWith({
     String? name,

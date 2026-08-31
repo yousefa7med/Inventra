@@ -1,4 +1,4 @@
-import 'package:Inventra/core/models/product_details_argument.dart';
+import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'dart:async';

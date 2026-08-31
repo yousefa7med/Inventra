@@ -6,6 +6,7 @@ import 'package:objectbox/objectbox.dart';
 class BuyingInvoiceModel {
   @Id()
   int id = 0;
+  @Index()
   final DateTime date;
 
   // Supplier relationship

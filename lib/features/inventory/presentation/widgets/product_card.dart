@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/helper/app_dialog.dart';
-import 'package:Inventra/core/models/product_details_argument.dart';
+import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';

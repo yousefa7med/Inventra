@@ -6,7 +6,7 @@ import 'package:objectbox/objectbox.dart';
 class SellingInvoiceModel {
   @Id()
   int id = 0;
-
+  @Index()
   final DateTime date;
   final double? discount;
 
@@ -17,15 +17,8 @@ class SellingInvoiceModel {
 
   double get profit {
     double profit = 0;
-    print(items.length);
     for (var item in items) {
-      // print("before {$profit}");
-
-      // print(item.lineTotal);
-      // print(item.unitCost);
-      // print(item.quantity);
       profit += item.lineTotal - (item.unitCost! * item.quantity);
-      print("after {$profit}");
     }
 
     return profit - (discount ?? 0);

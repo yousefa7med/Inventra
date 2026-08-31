@@ -8,14 +8,13 @@ class TransactionsEntry {
 
   @Index()
   final int typeIndex;
-
+  @Index()
+  final DateTime createdAt;
   final double value;
 
   final int referenceId;
   final double? profit;
   TransactionType get type => TransactionType.values[typeIndex];
-  @Index()
-  final DateTime createdAt;
 
   final String? description;
 
