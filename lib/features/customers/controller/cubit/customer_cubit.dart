@@ -47,9 +47,9 @@ class CustomerCubit extends Cubit<CustomerState>
   }
 
   @override
-  void updateCustomer(CustomerModel customer) async {
+  void insertCustomer(CustomerModel customer)  {
     try {
-      _repository.updateCustomer(customer);
+      _repository.insertCustomer(customer);
 
       final index = _allCustomers.indexWhere((c) => c.id == customer.id);
       if (index != -1) {

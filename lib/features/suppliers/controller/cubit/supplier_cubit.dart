@@ -43,9 +43,9 @@ class SupplierCubit extends Cubit<SupplierState>
   }
 
   @override
-  void updateSupplier(SupplierModel supplier) {
+  void insertSupplier(SupplierModel supplier) {
     try {
-      _repository.updateSupplier(supplier);
+      _repository.insertSupplier(supplier);
 
       // Update local lists
       final index = _suppliers.indexWhere((c) => c.id == supplier.id);
