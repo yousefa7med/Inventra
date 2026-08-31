@@ -386,7 +386,7 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(3, 1113850688095251133),
         name: 'barcode',
         type: 9,
-        flags: 2048,
+        flags: 2080,
         indexId: const obx_int.IdUid(14, 7404459875075255909),
       ),
       obx_int.ModelProperty(

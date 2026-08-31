@@ -1,9 +1,9 @@
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
-import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
+import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/inventory/presentation/widgets/product_card.dart';
@@ -68,27 +68,10 @@ class InventoryView extends StatelessWidget {
                 if (state is ProductErrorState) {
                   return SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            state.message,
-                            style: AppTextStyle.medium16.copyWith(
-                              color: AppColors.error,
-                            ),
-                          ),
-                          Gap(16.h),
-                          ElevatedButton(
-                            onPressed: () =>
-                                context.read<ProductCubit>().loadProducts(),
-                            child: const Text(
-                              'إعادة المحاولة',
-                              style: AppTextStyle.navBar,
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: ErrorStateWidget(
+                      message: state.message,
+                      onPressed: () =>
+                          context.read<ProductCubit>().loadProducts(),
                     ),
                   );
                 }
@@ -134,6 +117,20 @@ class InventoryView extends StatelessWidget {
               },
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            AppNavigation.pushName(
+              rootNavigator: true,
+              context: context,
+              route: AppRoutes.productFormView,
+            );
+          },
+          icon: const Icon(Icons.add),
+          label: Text(
+            'منتج',
+            style: AppTextStyle.medium16.copyWith(color: Colors.white),
+          ),
         ),
       ),
     );

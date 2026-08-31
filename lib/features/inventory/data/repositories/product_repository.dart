@@ -5,5 +5,6 @@ abstract class ProductRepository {
   void insertProduct(ProductModel product);
 
   void deleteProduct(int id);
-  bool isBarcodeUnique(String barcode, {int? excludeId});
+
+  List<ProductModel> searchProduct(String query);
 }
