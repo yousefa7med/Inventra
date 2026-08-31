@@ -1,6 +1,8 @@
+import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
+import 'package:Inventra/objectbox.g.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
   final ObjectBoxServices _objectBoxServices;
@@ -22,11 +24,26 @@ class ProductRepositoryImpl implements ProductRepository {
     _objectBoxServices.productsBox.remove(id);
   }
 
+
   @override
-  bool isBarcodeUnique(String barcode, {int? excludeId}) {
-    final products = getAllProducts();
-    return !products.any(
-      (p) => p.barcode == barcode && (excludeId == null || p.id != excludeId),
-    );
+  List<ProductModel> searchProduct(String searchQuery) {
+    final text = searchQuery.trim().normalizeArabic();
+
+    if (text.isEmpty) {
+      return _objectBoxServices.productsBox.getAll();
+    }
+
+    final condition = ProductModel_.barcode
+        .contains(text)
+        .or(ProductModel_.name.contains(text, caseSensitive: false));
+
+    final query = _objectBoxServices.productsBox
+        .query(condition)
+        .order(ProductModel_.name)
+        .build();
+
+    final products = query.find();
+    query.close();
+    return products;
   }
 }

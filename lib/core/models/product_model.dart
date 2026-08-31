@@ -7,6 +7,7 @@ class ProductModel {
   @Index()
   final String name;
   @Index()
+  @Unique()
   final String? barcode;
 
   final String? imgPath;

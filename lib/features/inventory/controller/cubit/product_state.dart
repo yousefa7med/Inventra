@@ -1,6 +1,6 @@
 part of 'product_cubit.dart';
 
-@immutable
+
 sealed class ProductState {
   const ProductState();
 }

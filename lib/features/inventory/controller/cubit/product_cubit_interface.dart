@@ -9,5 +9,4 @@ abstract class ProductCubitInterface {
   void addProduct(ProductModel product);
   void updateProduct(ProductModel product);
   void deleteProduct(ProductModel product);
-  bool isBarcodeUnique(String barcode, {int? excludeId});
 }

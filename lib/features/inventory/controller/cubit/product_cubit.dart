@@ -1,9 +1,7 @@
-import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit_interface.dart';
 import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'product_state.dart';
 
@@ -35,25 +33,16 @@ class ProductCubit extends Cubit<ProductState>
 
   @override
   void searchProducts(String query) {
-    if (query.isEmpty) {
-      loadProducts();
-    } else {
+    try {
+      if (query.isEmpty) {
+        loadProducts();
+      }
       emit(const ProductLoading());
-      final cleanedQuery = query.trim().toLowerCase();
-      final normalizedQuery = cleanedQuery.normalizeArabic();
+      _filteredProducts = _repository.searchProduct(query);
 
-      _filteredProducts = _allProducts.where((product) {
-        final nameMatch = product.name.toLowerCase().normalizeArabic().contains(
-          normalizedQuery,
-        );
-
-        final barcodeMatch =
-            product.barcode != null &&
-            product.barcode!.toLowerCase().contains(cleanedQuery);
-
-        return nameMatch || barcodeMatch;
-      }).toList();
       emit(const ProductsLoadingSuccessed());
+    } catch (e) {
+      emit(ProductErrorState('فشل البحث عن المنتج: $e'));
     }
   }
 
@@ -111,8 +100,4 @@ class ProductCubit extends Cubit<ProductState>
     }
   }
 
-  @override
-  bool isBarcodeUnique(String barcode, {int? excludeId}) {
-    return _repository.isBarcodeUnique(barcode, excludeId: excludeId);
-  }
 }
