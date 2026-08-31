@@ -28,27 +28,18 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
   }
 
   @override
-  List<ProductModel> getAllProducts() {
-    final query = _objectBox.productsBox
-        .query()
-        .order(ProductModel_.name)
-        .build();
-
-    final products = query.find();
-    query.close();
-    return products;
-  }
-
-  @override
   void insertProduct(ProductModel product) {
     _objectBox.productsBox.put(product);
   }
 
   @override
-  List<ProductModel> searchProducts(String query) {
-    final searchText = query.trim().normalizeArabic();
+  List<ProductModel> searchProducts(String searchQuery) {
+    final searchText = searchQuery.trim().normalizeArabic();
     if (searchText.isEmpty) {
-      return getAllProducts();
+      final query = _objectBox.productsBox.query().build();
+      final products = query.find();
+      query.close();
+      return products;
     }
 
     if (RegExp(r'^\d+$').hasMatch(searchText)) {
@@ -70,7 +61,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
   }
 
   @override
-  BuyingInvoiceModel createBuyInvoice({
+  void createBuyInvoice({
     required List<InvoiceItemModel> items,
     required SupplierModel supplier,
   }) {
@@ -79,45 +70,38 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
     _objectBox.store.runInTransaction(TxMode.write, () {
       final invoice = BuyingInvoiceModel(date: DateTime.now());
       invoice.supplier.target = supplier;
-      _objectBox.buyInvoicesBox.put(invoice);
 
       for (final item in items) {
-        invoice.items.add(item);
-
         final product = item.product.target!;
         product.quantity += item.quantity;
         _objectBox.productsBox.put(product);
 
         totalPrice += item.lineTotal;
       }
-      _objectBox.buyInvoicesBox.put(invoice);
+      final balance =
+          _objectBox.safeBalanceBox.get(1) ??
+          SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
+      if (totalPrice > balance.currentBalance) {
+        throw "رصيد الخزنة لا يكفي";
+      }
 
       invoice.items.addAll(items);
+      _objectBox.buyInvoicesBox.put(invoice);
       savedInvoice = invoice;
+
+      final newBalance = balance.copyWith(
+        currentBalance: balance.currentBalance - totalPrice,
+      );
+      _objectBox.safeBalanceBox.put(newBalance);
+
+      final auditEntry = TransactionsEntry(
+        typeIndex: TransactionType.buyingInvoice.index,
+        value: -totalPrice,
+        referenceId: savedInvoice!.id,
+        createdAt: savedInvoice!.date,
+        description: supplier.name,
+      );
+      _objectBox.transactionsEntryBox.put(auditEntry);
     });
-
-    final balance =
-        _objectBox.safeBalanceBox.get(1) ??
-        SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
-    final newBalance = balance.copyWith(
-      currentBalance: balance.currentBalance - totalPrice,
-    );
-    _objectBox.safeBalanceBox.put(newBalance);
-
-    final auditEntry = TransactionsEntry(
-      typeIndex: TransactionType.buyingInvoice.index,
-      value: -totalPrice,
-      referenceId: savedInvoice!.id,
-      createdAt: savedInvoice!.date,
-      description: supplier.name,
-    );
-    _objectBox.transactionsEntryBox.put(auditEntry);
-
-    return savedInvoice!;
-  }
-
-  @override
-  void addItem(InvoiceItemModel item) {
-    _objectBox.sellInvoiceItemsBox.put(item);
   }
 }

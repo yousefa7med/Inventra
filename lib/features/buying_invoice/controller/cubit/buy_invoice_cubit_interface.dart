@@ -10,7 +10,7 @@ abstract class BuyInvoiceCubitInterface {
   double get total;
   List<SupplierModel> get suppliers;
   List<ProductModel> get products;
-  String searchQuery="";
+  String searchQuery = "";
 
   // Supplier actions
   void selectSupplier(SupplierModel supplier);
@@ -25,6 +25,6 @@ abstract class BuyInvoiceCubitInterface {
   void removeItem(int index);
 
   // Confirmation
-  Future<void> confirmInvoice();
+  void confirmInvoice();
   bool validateBuyInvoice();
 }

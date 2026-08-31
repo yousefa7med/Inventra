@@ -131,6 +131,6 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
 
   @override
   void addItem(InvoiceItemModel item) {
-    _objectBox.sellInvoiceItemsBox.put(item);
+    _objectBox.invoiceItemsBox.put(item);
   }
 }

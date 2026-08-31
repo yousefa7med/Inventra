@@ -1,3 +1,4 @@
+import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/manual_adjustment_model.dart';
@@ -49,23 +50,6 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  List<ExpenseModel> loadExpenses(String searchText) {
-    Condition<ExpenseModel>? condition;
-    if (searchText.trim().isNotEmpty) {
-      condition = ExpenseModel_.note.contains(searchText);
-    }
-
-    final query = _objectBox.expensesBox
-        .query(condition)
-        .order(ExpenseModel_.date, flags: Order.descending)
-        .build();
-    final expenses = query.find();
-    query.close();
-
-    return expenses;
-  }
-
-  @override
   void addExpense(ExpenseModel expense) {
     final expenseId = _objectBox.expensesBox.put(expense);
     final balance = getBalance();
@@ -84,5 +68,23 @@ class SafeRepositoryImpl implements SafeRepository {
         description: expense.note.trim(),
       ),
     );
+  }
+
+  @override
+  List<ExpenseModel> loadExpenses(String searchQuery) {
+    final searchText = searchQuery.trim().normalizeArabic();
+    Condition<ExpenseModel>? condition;
+    if (searchText.isNotEmpty) {
+      condition = ExpenseModel_.note.contains(searchText);
+    }
+
+    final query = _objectBox.expensesBox
+        .query(condition)
+        .order(ExpenseModel_.date, flags: Order.descending)
+        .build();
+    final expenses = query.find();
+    query.close();
+
+    return expenses;
   }
 }

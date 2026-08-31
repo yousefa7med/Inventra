@@ -4,7 +4,7 @@ import 'package:Inventra/core/models/safe_balance_model.dart';
 abstract class SafeRepository {
   SafeBalanceModel getBalance();
   void adjustBalance({required double newAmount, String? newNote});
-  List<ExpenseModel> loadExpenses(String searchText);
+  List<ExpenseModel> loadExpenses(String searchQuery);
 
   void addExpense(ExpenseModel expense);
 }
