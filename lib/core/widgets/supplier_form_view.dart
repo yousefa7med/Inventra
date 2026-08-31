@@ -148,7 +148,7 @@ class _SupplierFormViewState extends State<SupplierFormView> {
                           );
                         }
 
-                        context.read<SupplierCubit>().updateSupplier(supplier);
+                        context.read<SupplierCubit>().insertSupplier(supplier);
 
                         AppNavigation.pop(context);
                       }

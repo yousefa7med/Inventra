@@ -116,7 +116,7 @@ class _CustomerFormViewState extends State<CustomerFormView> {
                             phoneNum: phoneController.text.trim(),
                           );
                         }
-                        context.read<CustomerCubit>().updateCustomer(customer);
+                        context.read<CustomerCubit>().insertCustomer(customer);
                         if (!isEditing) {
                           showSnackBar(
                             context,

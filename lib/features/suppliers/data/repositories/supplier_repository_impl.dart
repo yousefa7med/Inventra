@@ -29,12 +29,9 @@ class SupplierRepositoryImpl implements SupplierRepository {
   }
 
   @override
-  void addSupplier(SupplierModel supplier) {
+  void insertSupplier(SupplierModel supplier) {
     _objectBox.suppliersBox.put(supplier);
   }
 
-  @override
-  void updateSupplier(SupplierModel supplier) {
-    _objectBox.suppliersBox.put(supplier);
-  }
+
 }

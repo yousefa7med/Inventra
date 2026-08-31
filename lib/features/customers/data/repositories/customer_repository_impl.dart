@@ -15,15 +15,11 @@ class CustomerRepositoryImpl implements CustomerRepository {
   }
 
   @override
-  void addCustomer(CustomerModel customer) {
+  void insertCustomer(CustomerModel customer) {
     _objectBoxServices.customersBox.put(customer);
   }
 
-  @override
-  void updateCustomer(CustomerModel customer) {
-    _objectBoxServices.customersBox.put(customer);
-  }
-
+  
   @override
   List<CustomerModel> searchCustomers(String search) {
     if (search.isEmpty) return getAllCustomers();

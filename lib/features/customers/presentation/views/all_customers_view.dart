@@ -2,10 +2,10 @@ import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
+import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/widgets/customer_card.dart';
-import 'package:Inventra/features/customers/presentation/widgets/customer_loading_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -68,7 +68,7 @@ class AllCustomersView extends StatelessWidget {
                 if (state is CustomerLoadingError) {
                   return SliverFillRemaining(
                     hasScrollBody: false,
-                    child: CustomerLoadingErrorWidget(
+                    child: ErrorStateWidget(
                       message: state.message,
                       onPressed: () {
                         cubit.loadCustomers();
