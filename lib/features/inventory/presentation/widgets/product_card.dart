@@ -222,7 +222,11 @@ class ProductCard extends StatelessWidget {
         ),
         const Gap(4),
         Text(
-          formatCurrency(price),
+          formatCurrency(
+            price,
+            useCurrencySymbol: true,
+            reduceDecimalDigits: true,
+          ),
           style: AppTextStyle.bold14.copyWith(fontSize: 12.sp, color: color),
         ),
       ],

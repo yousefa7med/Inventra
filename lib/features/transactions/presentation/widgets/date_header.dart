@@ -63,7 +63,11 @@ class DateHeader extends StatelessWidget {
           ),
           Gap(12.w),
           Text(
-            formatCurrency(headerItem.total),
+            formatCurrency(
+              headerItem.total,
+              useCurrencySymbol: true,
+              reduceDecimalDigits: true,
+            ),
             style: AppTextStyle.bold14.copyWith(
               color: _getTotalColor(headerItem.total),
             ),

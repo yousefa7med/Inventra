@@ -1,30 +1,46 @@
 import 'package:intl/intl.dart';
 
-String formatCurrency(double amount) {
-  final length = amount.toString().split('.').last.length;
-  late final int decimalDigits;
-  late final String symbol;
+String formatCurrency(
+  double amount, {
+  bool useCurrencySymbol = false,
+  bool reduceDecimalDigits = false,
+}) {
+  String? symbol;
 
-  if (length > 2) {
-    decimalDigits = 2;
-  } else {
-    decimalDigits = length;
+  if (useCurrencySymbol) {
+    final absoluteAmount = amount.abs();
+
+    if (absoluteAmount >= 1000000) {
+      amount /= 1000000;
+      symbol = 'م ج.م ';
+    } else if (absoluteAmount >= 1000) {
+      amount /= 1000;
+      symbol = 'الف ج.م ';
+    } else {
+      symbol = 'ج.م ';
+    }
   }
-  if (amount > 1000000) {
-    amount = amount / 1000000;
-    symbol = "م ج.م ";
-  } else if (amount > 1000) {
-    amount = amount / 1000;
-    symbol = "الف ج.م ";
-  } else {
-    symbol = 'ج.م ';
+
+  int? decimalDigits;
+
+  if (reduceDecimalDigits) {
+    final roundedAmount = double.parse(amount.toStringAsFixed(2));
+
+    if (roundedAmount == roundedAmount.truncateToDouble()) {
+      decimalDigits = 0;
+    } else if ((roundedAmount * 10) % 1 == 0) {
+      decimalDigits = 1;
+    } else {
+      decimalDigits = 2;
+    }
   }
 
   final formatter = NumberFormat.currency(
     locale: 'ar',
-    symbol: '',
+    symbol: symbol,
     decimalDigits: decimalDigits,
   );
+
   return formatter.format(amount);
 }
 

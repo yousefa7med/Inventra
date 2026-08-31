@@ -36,7 +36,11 @@ class HeroKpiCard extends StatelessWidget {
           ),
           Gap(8.h),
           Text(
-            formatCurrency(value),
+            formatCurrency(
+              value,
+              useCurrencySymbol: true,
+              reduceDecimalDigits: true,
+            ),
             style: AppTextStyle.bold24.copyWith(color: color),
             overflow: TextOverflow.ellipsis,
           ),

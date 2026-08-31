@@ -75,7 +75,11 @@ class DashboardMetricKpi extends StatelessWidget {
             SizedBox(height: 12.h),
             FittedBox(
               child: Text(
-                formatCurrency(value),
+                formatCurrency(
+                value,
+                  useCurrencySymbol: true,
+                  reduceDecimalDigits: true,
+                ),
                 style: AppTextStyle.bold20.copyWith(color: metric.metricColor),
                 overflow: TextOverflow.ellipsis,
               ),

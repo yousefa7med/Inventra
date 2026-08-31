@@ -278,7 +278,7 @@ class _InvoiceItemsCard extends StatelessWidget {
                     ),
                     Gap(12.w),
                     Text(
-                      '${item.quantity} × ${formatCurrency(item.unitPrice).replaceAll('ج.م ', '').trim()}',
+                      '${item.quantity} × ${formatCurrency( item.unitPrice, useCurrencySymbol: true, reduceDecimalDigits: true)}',
                       style: AppTextStyle.regular14.copyWith(
                         color: AppColors.greyMedium500,
                       ),
@@ -329,14 +329,14 @@ class _InvoiceTotals extends StatelessWidget {
         children: [
           _TotalsRow(
             label: AppStrings.subtotal,
-            value: formatCurrency(subtotal),
+            value: formatCurrency(subtotal, reduceDecimalDigits: true),
             valueStyle: AppTextStyle.semiBold16,
           ),
           if (discount > 0) ...[
             Gap(12.h),
             _TotalsRow(
               label: AppStrings.discount,
-              value: '-${formatCurrency(discount)}',
+              value: '-${formatCurrency(discount, reduceDecimalDigits: true)}',
               valueStyle: AppTextStyle.semiBold14.copyWith(
                 color: AppColors.error,
               ),
@@ -354,7 +354,11 @@ class _InvoiceTotals extends StatelessWidget {
           Gap(16.h),
           _TotalsRow(
             label: AppStrings.total,
-            value: formatCurrency(total),
+            value: formatCurrency(
+              total,
+              reduceDecimalDigits: true,
+              useCurrencySymbol: true,
+            ),
             valueStyle: AppTextStyle.bold24.copyWith(color: color),
             labelStyle: AppTextStyle.medium16.copyWith(
               color: AppColors.greyMedium500,
@@ -449,7 +453,11 @@ class _StickyTotalsBar extends StatelessWidget {
                   ),
                   Gap(2.h),
                   Text(
-                    formatCurrency(total),
+                    formatCurrency(
+                      total,
+                      reduceDecimalDigits: true,
+                      useCurrencySymbol: true,
+                    ),
                     style: AppTextStyle.bold24.copyWith(color: color),
                   ),
                 ],

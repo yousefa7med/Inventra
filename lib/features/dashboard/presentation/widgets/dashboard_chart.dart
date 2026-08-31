@@ -117,7 +117,11 @@ class DashboardChart extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: formatCurrency(point.value),
+                          text: formatCurrency(
+ spot.y,
+                            useCurrencySymbol: true,
+                            reduceDecimalDigits: true,
+                          ),
                           style: AppTextStyle.bold16.copyWith(
                             color: AppColors.white,
                           ),

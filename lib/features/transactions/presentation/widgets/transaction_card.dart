@@ -192,7 +192,11 @@ class TransactionCard extends StatelessWidget {
                       FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          formatCurrency(transaction.value),
+                          formatCurrency(
+                            transaction.value,
+                            useCurrencySymbol: true,
+                            reduceDecimalDigits: true,
+                          ),
                           style: AppTextStyle.bold20.copyWith(
                             color: AppColors.error,
                           ),
@@ -293,7 +297,11 @@ class TransactionCard extends StatelessWidget {
                           ),
                           Gap(4.h),
                           Text(
-                            formatCurrency(adjustment.prevBalanceValue),
+                            formatCurrency(
+                              adjustment.prevBalanceValue,
+                              useCurrencySymbol: true,
+                              reduceDecimalDigits: true,
+                            ),
                             style: AppTextStyle.semiBold16,
                           ),
                         ],
@@ -320,7 +328,11 @@ class TransactionCard extends StatelessWidget {
                           ),
                           Gap(4.h),
                           Text(
-                            formatCurrency(adjustment.newBalanceValue),
+                            formatCurrency(
+                              adjustment.newBalanceValue,
+                              useCurrencySymbol: true,
+                              reduceDecimalDigits: true,
+                            ),
                             style: AppTextStyle.semiBold16,
                           ),
                         ],
