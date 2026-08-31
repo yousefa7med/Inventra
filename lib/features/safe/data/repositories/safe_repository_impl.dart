@@ -6,7 +6,6 @@ import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
-import 'package:flutter/material.dart';
 
 class SafeRepositoryImpl implements SafeRepository {
   final ObjectBoxServices _objectBox;
@@ -50,32 +49,12 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  List<ExpenseModel> loadExpenses({
-    String? searchText,
-    DateTimeRange<DateTime>? dateRange,
-  }) {
+  List<ExpenseModel> loadExpenses(String searchText) {
     Condition<ExpenseModel>? condition;
-    if (searchText != null && searchText.trim().isNotEmpty) {
+    if (searchText.trim().isNotEmpty) {
       condition = ExpenseModel_.note.contains(searchText);
     }
-    if (dateRange != null) {
-      final start = dateRange.start;
-      final end = DateTime(
-        dateRange.end.year,
-        dateRange.end.month,
-        dateRange.end.day,
-        23,
-        59,
-        59,
-        999,
-      );
 
-      final dateCondition = ExpenseModel_.date.betweenDate(start, end);
-
-      condition = (condition == null)
-          ? dateCondition
-          : condition.and(dateCondition);
-    }
     final query = _objectBox.expensesBox
         .query(condition)
         .order(ExpenseModel_.date, flags: Order.descending)

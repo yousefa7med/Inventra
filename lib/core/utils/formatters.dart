@@ -12,12 +12,12 @@ String formatCurrency(
 
     if (absoluteAmount >= 1000000) {
       amount /= 1000000;
-      symbol = 'م ج.م ';
+      symbol = 'مليون ج.م';
     } else if (absoluteAmount >= 1000) {
       amount /= 1000;
-      symbol = 'الف ج.م ';
+      symbol = 'الف ج.م';
     } else {
-      symbol = 'ج.م ';
+      symbol = 'ج.م';
     }
   }
 

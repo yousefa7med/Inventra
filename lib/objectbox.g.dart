@@ -44,8 +44,7 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(2, 380508528436269661),
         name: 'date',
         type: 10,
-        flags: 8,
-        indexId: const obx_int.IdUid(2, 7771893157637719355),
+        flags: 0,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(3, 6230398129282065033),
@@ -324,47 +323,6 @@ final _entities = <obx_int.ModelEntity>[
     backlinks: <obx_int.ModelBacklink>[],
   ),
   obx_int.ModelEntity(
-    id: const obx_int.IdUid(14, 9192639286491383621),
-    name: 'CustomerModel',
-    lastPropertyId: const obx_int.IdUid(4, 7557834816726494275),
-    flags: 0,
-    properties: <obx_int.ModelProperty>[
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(1, 2176718105192908735),
-        name: 'id',
-        type: 6,
-        flags: 1,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 654472520556339),
-        name: 'name',
-        type: 9,
-        flags: 2048,
-        indexId: const obx_int.IdUid(11, 2644687706225165152),
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 807499548421484161),
-        name: 'address',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(4, 7557834816726494275),
-        name: 'phoneNum',
-        type: 9,
-        flags: 0,
-      ),
-    ],
-    relations: <obx_int.ModelRelation>[],
-    backlinks: <obx_int.ModelBacklink>[
-      obx_int.ModelBacklink(
-        name: 'invoices',
-        srcEntity: 'SellingInvoiceModel',
-        srcField: 'customer',
-      ),
-    ],
-  ),
-  obx_int.ModelEntity(
     id: const obx_int.IdUid(15, 9406231606145410),
     name: 'ManualAdjustmentModel',
     lastPropertyId: const obx_int.IdUid(5, 3254118131467158764),
@@ -465,6 +423,47 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(17, 1582643625114445892),
+    name: 'CustomerModel',
+    lastPropertyId: const obx_int.IdUid(4, 623057683635920461),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 4727967868029482237),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 968656415085431420),
+        name: 'name',
+        type: 9,
+        flags: 2048,
+        indexId: const obx_int.IdUid(17, 7142281411925490566),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 2422693643060928116),
+        name: 'address',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 623057683635920461),
+        name: 'phoneNum',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[
+      obx_int.ModelBacklink(
+        name: 'invoices',
+        srcEntity: 'SellingInvoiceModel',
+        srcField: 'customer',
+      ),
+    ],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -510,8 +509,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(16, 8568212727339551587),
-    lastIndexId: const obx_int.IdUid(16, 2320794290294034317),
+    lastEntityId: const obx_int.IdUid(17, 1582643625114445892),
+    lastIndexId: const obx_int.IdUid(17, 7142281411925490566),
     lastRelationId: const obx_int.IdUid(3, 2089443554590729677),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [
@@ -521,8 +520,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       1406365318251202517,
       3280175246303753326,
       3846377632810140269,
+      9192639286491383621,
     ],
-    retiredIndexUids: const [],
+    retiredIndexUids: const [7771893157637719355],
     retiredPropertyUids: const [
       7030434825211001772,
       432972897868067567,
@@ -555,6 +555,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
       5169307016349048707,
       2344762961856799133,
       5604748102401389570,
+      2176718105192908735,
+      654472520556339,
+      807499548421484161,
+      7557834816726494275,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -916,65 +920,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
-    CustomerModel: obx_int.EntityDefinition<CustomerModel>(
-      model: _entities[7],
-      toOneRelations: (CustomerModel object) => [],
-      toManyRelations: (CustomerModel object) => {
-        obx_int.RelInfo<SellingInvoiceModel>.toOneBacklink(
-          4,
-          object.id,
-          (SellingInvoiceModel srcObject) => srcObject.customer,
-        ): object.invoices,
-      },
-      getId: (CustomerModel object) => object.id,
-      setId: (CustomerModel object, int id) {
-        object.id = id;
-      },
-      objectToFB: (CustomerModel object, fb.Builder fbb) {
-        final nameOffset = fbb.writeString(object.name);
-        final addressOffset = object.address == null
-            ? null
-            : fbb.writeString(object.address!);
-        final phoneNumOffset = fbb.writeString(object.phoneNum);
-        fbb.startTable(5);
-        fbb.addInt64(0, object.id);
-        fbb.addOffset(1, nameOffset);
-        fbb.addOffset(2, addressOffset);
-        fbb.addOffset(3, phoneNumOffset);
-        fbb.finish(fbb.endTable());
-        return object.id;
-      },
-      objectFromFB: (obx.Store store, ByteData fbData) {
-        final buffer = fb.BufferContext(fbData);
-        final rootOffset = buffer.derefObject(0);
-        final nameParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 6, '');
-        final addressParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGetNullable(buffer, rootOffset, 8);
-        final phoneNumParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 10, '');
-        final object = CustomerModel(
-          name: nameParam,
-          address: addressParam,
-          phoneNum: phoneNumParam,
-        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
-        obx_int.InternalToManyAccess.setRelInfo<CustomerModel>(
-          object.invoices,
-          store,
-          obx_int.RelInfo<SellingInvoiceModel>.toOneBacklink(
-            4,
-            object.id,
-            (SellingInvoiceModel srcObject) => srcObject.customer,
-          ),
-        );
-        return object;
-      },
-    ),
     ManualAdjustmentModel: obx_int.EntityDefinition<ManualAdjustmentModel>(
-      model: _entities[8],
+      model: _entities[7],
       toOneRelations: (ManualAdjustmentModel object) => [],
       toManyRelations: (ManualAdjustmentModel object) => {},
       getId: (ManualAdjustmentModel object) => object.id,
@@ -1026,7 +973,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
     ),
     ProductModel: obx_int.EntityDefinition<ProductModel>(
-      model: _entities[9],
+      model: _entities[8],
       toOneRelations: (ProductModel object) => [],
       toManyRelations: (ProductModel object) => {},
       getId: (ProductModel object) => object.id,
@@ -1099,6 +1046,63 @@ obx_int.ModelDefinition getObjectBoxModel() {
           barcode: barcodeParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
+        return object;
+      },
+    ),
+    CustomerModel: obx_int.EntityDefinition<CustomerModel>(
+      model: _entities[9],
+      toOneRelations: (CustomerModel object) => [],
+      toManyRelations: (CustomerModel object) => {
+        obx_int.RelInfo<SellingInvoiceModel>.toOneBacklink(
+          4,
+          object.id,
+          (SellingInvoiceModel srcObject) => srcObject.customer,
+        ): object.invoices,
+      },
+      getId: (CustomerModel object) => object.id,
+      setId: (CustomerModel object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CustomerModel object, fb.Builder fbb) {
+        final nameOffset = fbb.writeString(object.name);
+        final addressOffset = object.address == null
+            ? null
+            : fbb.writeString(object.address!);
+        final phoneNumOffset = fbb.writeString(object.phoneNum);
+        fbb.startTable(5);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, nameOffset);
+        fbb.addOffset(2, addressOffset);
+        fbb.addOffset(3, phoneNumOffset);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final nameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final addressParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 8);
+        final phoneNumParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final object = CustomerModel(
+          name: nameParam,
+          address: addressParam,
+          phoneNum: phoneNumParam,
+        )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+        obx_int.InternalToManyAccess.setRelInfo<CustomerModel>(
+          object.invoices,
+          store,
+          obx_int.RelInfo<SellingInvoiceModel>.toOneBacklink(
+            4,
+            object.id,
+            (SellingInvoiceModel srcObject) => srcObject.customer,
+          ),
+        );
         return object;
       },
     ),
@@ -1307,61 +1311,32 @@ class BuyingInvoiceModel_ {
       );
 }
 
-/// [CustomerModel] entity fields to define ObjectBox queries.
-class CustomerModel_ {
-  /// See [CustomerModel.id].
-  static final id = obx.QueryIntegerProperty<CustomerModel>(
-    _entities[7].properties[0],
-  );
-
-  /// See [CustomerModel.name].
-  static final name = obx.QueryStringProperty<CustomerModel>(
-    _entities[7].properties[1],
-  );
-
-  /// See [CustomerModel.address].
-  static final address = obx.QueryStringProperty<CustomerModel>(
-    _entities[7].properties[2],
-  );
-
-  /// See [CustomerModel.phoneNum].
-  static final phoneNum = obx.QueryStringProperty<CustomerModel>(
-    _entities[7].properties[3],
-  );
-
-  /// see [CustomerModel.invoices]
-  static final invoices =
-      obx.QueryBacklinkToMany<SellingInvoiceModel, CustomerModel>(
-        SellingInvoiceModel_.customer,
-      );
-}
-
 /// [ManualAdjustmentModel] entity fields to define ObjectBox queries.
 class ManualAdjustmentModel_ {
   /// See [ManualAdjustmentModel.id].
   static final id = obx.QueryIntegerProperty<ManualAdjustmentModel>(
-    _entities[8].properties[0],
+    _entities[7].properties[0],
   );
 
   /// See [ManualAdjustmentModel.date].
   static final date = obx.QueryDateProperty<ManualAdjustmentModel>(
-    _entities[8].properties[1],
+    _entities[7].properties[1],
   );
 
   /// See [ManualAdjustmentModel.prevBalanceValue].
   static final prevBalanceValue =
       obx.QueryDoubleProperty<ManualAdjustmentModel>(
-        _entities[8].properties[2],
+        _entities[7].properties[2],
       );
 
   /// See [ManualAdjustmentModel.newBalanceValue].
   static final newBalanceValue = obx.QueryDoubleProperty<ManualAdjustmentModel>(
-    _entities[8].properties[3],
+    _entities[7].properties[3],
   );
 
   /// See [ManualAdjustmentModel.note].
   static final note = obx.QueryStringProperty<ManualAdjustmentModel>(
-    _entities[8].properties[4],
+    _entities[7].properties[4],
   );
 }
 
@@ -1369,41 +1344,70 @@ class ManualAdjustmentModel_ {
 class ProductModel_ {
   /// See [ProductModel.id].
   static final id = obx.QueryIntegerProperty<ProductModel>(
-    _entities[9].properties[0],
+    _entities[8].properties[0],
   );
 
   /// See [ProductModel.name].
   static final name = obx.QueryStringProperty<ProductModel>(
-    _entities[9].properties[1],
+    _entities[8].properties[1],
   );
 
   /// See [ProductModel.barcode].
   static final barcode = obx.QueryStringProperty<ProductModel>(
-    _entities[9].properties[2],
+    _entities[8].properties[2],
   );
 
   /// See [ProductModel.imgPath].
   static final imgPath = obx.QueryStringProperty<ProductModel>(
-    _entities[9].properties[3],
+    _entities[8].properties[3],
   );
 
   /// See [ProductModel.quantity].
   static final quantity = obx.QueryIntegerProperty<ProductModel>(
-    _entities[9].properties[4],
+    _entities[8].properties[4],
   );
 
   /// See [ProductModel.buyingPrice].
   static final buyingPrice = obx.QueryDoubleProperty<ProductModel>(
-    _entities[9].properties[5],
+    _entities[8].properties[5],
   );
 
   /// See [ProductModel.sellingPrice].
   static final sellingPrice = obx.QueryDoubleProperty<ProductModel>(
-    _entities[9].properties[6],
+    _entities[8].properties[6],
   );
 
   /// See [ProductModel.wholesalePrice].
   static final wholesalePrice = obx.QueryDoubleProperty<ProductModel>(
-    _entities[9].properties[7],
+    _entities[8].properties[7],
   );
+}
+
+/// [CustomerModel] entity fields to define ObjectBox queries.
+class CustomerModel_ {
+  /// See [CustomerModel.id].
+  static final id = obx.QueryIntegerProperty<CustomerModel>(
+    _entities[9].properties[0],
+  );
+
+  /// See [CustomerModel.name].
+  static final name = obx.QueryStringProperty<CustomerModel>(
+    _entities[9].properties[1],
+  );
+
+  /// See [CustomerModel.address].
+  static final address = obx.QueryStringProperty<CustomerModel>(
+    _entities[9].properties[2],
+  );
+
+  /// See [CustomerModel.phoneNum].
+  static final phoneNum = obx.QueryStringProperty<CustomerModel>(
+    _entities[9].properties[3],
+  );
+
+  /// see [CustomerModel.invoices]
+  static final invoices =
+      obx.QueryBacklinkToMany<SellingInvoiceModel, CustomerModel>(
+        SellingInvoiceModel_.customer,
+      );
 }
