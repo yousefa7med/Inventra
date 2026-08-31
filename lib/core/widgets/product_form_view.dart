@@ -9,7 +9,7 @@ import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
-import 'package:Inventra/features/dashboard/presentation/widgets/add_image.dart';
+import 'package:Inventra/core/widgets/add_image.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

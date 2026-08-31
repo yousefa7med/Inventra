@@ -6,6 +6,7 @@ import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/utils/formatters.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -221,7 +222,7 @@ class ProductCard extends StatelessWidget {
         ),
         const Gap(4),
         Text(
-          "${price.toStringAsFixed(1)} ج.م",
+          formatCurrency(price),
           style: AppTextStyle.bold14.copyWith(fontSize: 12.sp, color: color),
         ),
       ],
