@@ -10,13 +10,12 @@ class TransactionsEntry {
   final int typeIndex;
 
   final double value;
-  final double? oldValue;
 
   final int referenceId;
-
+  final double? profit;
   TransactionType get type => TransactionType.values[typeIndex];
   @Index()
-  final DateTime timestamp;
+  final DateTime createdAt;
 
   final String? description;
 
@@ -24,8 +23,8 @@ class TransactionsEntry {
     required this.typeIndex,
     required this.value,
     required this.referenceId,
-    required this.timestamp,
+    required this.createdAt,
     this.description,
-    this.oldValue,
+    this.profit,
   });
 }

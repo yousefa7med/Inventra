@@ -24,6 +24,9 @@ import 'package:Inventra/features/suppliers/data/repositories/supplier_repositor
 import 'package:Inventra/features/transactions/data/repositories/transactions_repository_impl.dart';
 import 'package:Inventra/features/transactions/data/repositories/transactions_repository.dart';
 import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
+import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
+import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -133,6 +136,15 @@ Future<void> configureDependencies() async {
 
   GetIt.instance.registerLazySingleton<TransactionsCubit>(
     () => TransactionsCubit(GetIt.instance<TransactionsRepository>()),
+  );
+
+  // Dashboard
+  final dashboardRepository = DashboardRepositoryImpl(objectBoxServices);
+  GetIt.instance.registerLazySingleton<DashboardRepository>(
+    () => dashboardRepository,
+  );
+  GetIt.instance.registerLazySingleton<DashboardCubit>(
+    () => DashboardCubit(GetIt.instance<DashboardRepository>()),
   );
 
   // 4. Cubits (LazySingletons for app-wide state)

@@ -46,7 +46,7 @@ class TransactionsView extends StatelessWidget {
                     state.listItems.isNotEmpty) {
                   return TransactionsLoadedBody(listItems: state.listItems);
                 }
-                return const SliverToBoxAdapter(
+                return const SliverFillRemaining(
                   child: EmptyStateWidget(
                     message: "لا يوجد عمليات سابقة",
                     icon: Icons.history_sharp,

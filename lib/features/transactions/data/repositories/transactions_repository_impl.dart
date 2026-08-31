@@ -36,7 +36,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         999,
       );
 
-      final dateCondition = TransactionsEntry_.timestamp.betweenDate(
+      final dateCondition = TransactionsEntry_.createdAt.betweenDate(
         start,
         end,
       );
@@ -48,7 +48,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
 
     final query = _objectBox.transactionsEntryBox
         .query(condition)
-        .order(TransactionsEntry_.timestamp, flags: Order.descending)
+        .order(TransactionsEntry_.createdAt, flags: Order.descending)
         .build();
 
     final results = query.find();

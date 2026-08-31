@@ -2,7 +2,6 @@ import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
-import 'package:Inventra/features/transactions/controller/cubit/transactions_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,30 +13,22 @@ class TransactionsFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TransactionsCubit, dynamic>(
-      buildWhen: (previous, current) =>
-          current is TransactionsLoaded ||
-          current is TransactionsLoading ||
-          current is TransactionsError,
-      builder: (context, state) {
-        final cubit = context.read<TransactionsCubit>();
-        final selectedType = cubit.selectedType;
-        final dateRange = cubit.selectedDateRange;
+    final cubit = context.read<TransactionsCubit>();
+    final selectedType = cubit.selectedType;
+    final dateRange = cubit.selectedDateRange;
 
-        return _FilterBar(
-          selectedType: selectedType,
-          dateRange: dateRange,
-          onTypeChanged: (index) {
-            if (index == 0) {
-              cubit.clearTypeFilterAndGetTransactions();
-            } else {
-              cubit.loadTransactions(type: TransactionType.values[index - 1]);
-            }
-          },
-          onDateSelected: (range) => cubit.loadTransactions(dateRange: range),
-          onDateCleared: () => cubit.clearDateFilterAndGetTransactions(),
-        );
+    return _FilterBar(
+      selectedType: selectedType,
+      dateRange: dateRange,
+      onTypeChanged: (index) {
+        if (index == 0) {
+          cubit.clearTypeFilterAndGetTransactions();
+        } else {
+          cubit.loadTransactions(type: TransactionType.values[index - 1]);
+        }
       },
+      onDateSelected: (range) => cubit.loadTransactions(dateRange: range),
+      onDateCleared: () => cubit.clearDateFilterAndGetTransactions(),
     );
   }
 }

@@ -108,7 +108,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
       typeIndex: TransactionType.buyingInvoice.index,
       value: -totalPrice,
       referenceId: savedInvoice!.id,
-      timestamp: savedInvoice!.date,
+      createdAt: savedInvoice!.date,
       description: supplier.name,
     );
     _objectBox.transactionsEntryBox.put(auditEntry);

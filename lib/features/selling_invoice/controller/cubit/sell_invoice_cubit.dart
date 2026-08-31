@@ -99,10 +99,10 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
       final qty = quantity.clamp(1, product.quantity);
 
       final newItem = InvoiceItemModel(
-        // sellInvoiceId: 0,
         quantity: qty,
         unitPrice: product.sellingPrice,
         lineTotal: qty * product.sellingPrice,
+        unitCost: product.buyingPrice,
       )..product.target = product;
       _items.add(newItem);
       _repository.addItem(newItem);
