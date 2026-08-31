@@ -127,7 +127,7 @@ class TransactionCard extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            formatDateTime(transaction.timestamp),
+                            formatDateTime(transaction.createdAt),
                             style: AppTextStyle.regular12.copyWith(
                               fontSize: 8.sp,
                               color: AppColors.grey,

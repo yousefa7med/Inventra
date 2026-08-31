@@ -68,9 +68,9 @@ class TransactionsCubit extends Cubit<TransactionsState>
 
     for (final transaction in transactions) {
       final dateOnly = DateTime(
-        transaction.timestamp.year,
-        transaction.timestamp.month,
-        transaction.timestamp.day,
+        transaction.createdAt.year,
+        transaction.createdAt.month,
+        transaction.createdAt.day,
       );
       if (!grouped.containsKey(dateOnly)) {
         grouped[dateOnly] = [];

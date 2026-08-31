@@ -82,21 +82,19 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         discount: discount,
       );
       invoice.customer.target = customer;
-      _objectBox.sellingInvoicesBox.put(invoice);
       _objectBox.customersBox.put(customer);
 
       for (final item in items) {
-        invoice.items.add(item);
-
         final product = item.product.target!;
         product.quantity -= item.quantity;
         _objectBox.productsBox.put(product);
 
         totalPrice += item.lineTotal;
       }
-      _objectBox.sellingInvoicesBox.put(invoice);
 
       invoice.items.addAll(items);
+      _objectBox.sellingInvoicesBox.put(invoice);
+
       savedInvoice = invoice;
     });
 
@@ -113,8 +111,9 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
       typeIndex: TransactionType.sellingInvoice.index,
       value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
       referenceId: savedInvoice!.id,
-      timestamp: savedInvoice!.date,
+      createdAt: savedInvoice!.date,
       description: customer.name,
+      profit: savedInvoice!.profit,
     );
     _objectBox.transactionsEntryBox.put(auditEntry);
 

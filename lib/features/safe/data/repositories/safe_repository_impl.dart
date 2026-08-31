@@ -43,7 +43,7 @@ class SafeRepositoryImpl implements SafeRepository {
         typeIndex: TransactionType.manualAdjustment.index,
         value: newBalance.currentBalance,
         referenceId: adjustmentId,
-        timestamp: newBalance.lastUpdated,
+        createdAt: newBalance.lastUpdated,
         description: newBalance.note,
       ),
     );
@@ -101,7 +101,7 @@ class SafeRepositoryImpl implements SafeRepository {
         typeIndex: TransactionType.expense.index,
         value: expense.value,
         referenceId: expenseId,
-        timestamp: expense.date,
+        createdAt: expense.date,
         description: expense.note.trim(),
       ),
     );

@@ -8,19 +8,22 @@ class InvoiceItemModel {
 
   final ToOne<ProductModel> product = ToOne<ProductModel>();
 
-  int quantity = 0;
-  double unitPrice = 0.0;
-  double lineTotal = 0.0;
+  final int quantity;
+  final double unitPrice;
+  final double? unitCost;
+  final double lineTotal;
 
   InvoiceItemModel({
     required this.quantity,
     required this.unitPrice,
     required this.lineTotal,
+    this.unitCost,
   });
 
   InvoiceItemModel copyWith({
     int? quantity,
     double? unitPrice,
+    double? unitCost,
     double? lineTotal,
     ProductModel? product,
   }) {
@@ -28,6 +31,7 @@ class InvoiceItemModel {
         quantity: quantity ?? this.quantity,
         unitPrice: unitPrice ?? this.unitPrice,
         lineTotal: lineTotal ?? this.lineTotal,
+        unitCost: unitCost ?? this.unitCost,
       )
       ..id = id
       ..product.target = product ?? this.product.target;
