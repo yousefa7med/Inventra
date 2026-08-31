@@ -1,6 +1,7 @@
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/utils/formatters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -10,10 +11,6 @@ class ExpenseCard extends StatelessWidget {
   const ExpenseCard({super.key, required this.expense});
 
   final ExpenseModel expense;
-
-  String _formatCurrency(double amount) {
-    return '${amount.toStringAsFixed(2)} ج.م';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +47,21 @@ class ExpenseCard extends StatelessWidget {
                   ),
                   const Gap(4),
                   Text(
-                    DateFormat('dd/MM/yyyy - hh:mm a').format(expense.date),
+                    DateFormat('hh:mm a').format(expense.date),
                     style: AppTextStyle.regular14.copyWith(
-                      fontSize: 12.sp,
+                      fontSize: 11.sp,
                       color: AppColors.grey,
                     ),
                   ),
                 ],
               ),
             ),
-            Text(
-              '-${_formatCurrency(expense.value)}',
-              style: AppTextStyle.semiBold16.copyWith(color: AppColors.error),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                formatCurrency(expense.value, useCurrencySymbol: true),
+                style: AppTextStyle.semiBold16.copyWith(color: AppColors.error),
+              ),
             ),
           ],
         ),

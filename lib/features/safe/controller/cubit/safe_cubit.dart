@@ -1,40 +1,36 @@
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit_interface.dart';
+import 'package:Inventra/features/safe/data/models/expense_list_item.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'safe_state.dart';
 
 class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   final SafeRepository _repository;
-  DateTimeRange<DateTime>? _selectedDateRange;
-  double _currentBalance = 0;
-
-  List<ExpenseModel> _expenses = [];
-
-  String? _searchText;
 
   SafeCubit(this._repository) : super(SafeInitial());
 
-  @override
-  double get currentBalance => _currentBalance;
+  double _currentBalance = 0;
 
-  @override
-  DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;
-  @override
-  List<ExpenseModel> get expenses => _expenses;
+  String _searchText = '';
 
   @override
   String? get searchText => _searchText;
 
   void init() {
     emit(SafeLoading());
-
     try {
+      _searchText = '';
       _currentBalance = _repository.getBalance().currentBalance;
-      _expenses = _repository.loadExpenses();
-      emit(SafeLoaded());
+      final expenses = _repository.loadExpenses('');
+      final expenseListItem = generateExpensesListItem(expenses);
+      emit(
+        SafeLoaded(
+          safeBalance: _currentBalance,
+          expenseListItem: expenseListItem,
+        ),
+      );
     } catch (e) {
       emit(SafeError("فشل في تحميل بايانات الخزنة"));
     }
@@ -42,19 +38,22 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
   @override
   void addExpense({required double value, required String note}) {
-  
-
     try {
-      emit(SafeLoading());
       final expense = ExpenseModel(
         date: DateTime.now(),
         value: -value,
         note: note.trim(),
       );
-      _expenses.add(expense);
+      final expenseListItem = (state as SafeLoaded).expenseListItem;
+      expenseListItem.insert(1, ExpenseItem(expense: expense));
       _repository.addExpense(expense);
       _currentBalance -= value;
-      emit(SafeLoaded());
+      emit(
+        (state as SafeLoaded).copyWith(
+          safeBalance: _currentBalance,
+          expenseListItem: expenseListItem,
+        ),
+      );
     } catch (e) {
       emit(SafeError('فشل إضافة المصروف: $e'));
     }
@@ -63,46 +62,26 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   @override
   void adjustBalance({required double newBalance, String? note}) {
     try {
-      emit(SafeLoading());
       _repository.adjustBalance(newAmount: newBalance, newNote: note);
       _currentBalance = newBalance;
-      emit(SafeLoaded());
+      if (state is SafeLoaded) {
+        emit((state as SafeLoaded).copyWith(safeBalance: _currentBalance));
+      }
     } catch (e) {
       emit(SafeError('فشل تعديل الرصيد: $e'));
     }
   }
 
   @override
-  void getExpenses({DateTimeRange<DateTime>? dateRange, String? searchText}) {
-    if (dateRange == null) {
-      dateRange = _selectedDateRange;
-    } else {
-      _selectedDateRange = dateRange;
-    }
-    if (searchText == null) {
-      searchText = _searchText;
-    } else {
-      _searchText = searchText;
-    }
-    try {
-      emit(SafeLoading());
-      _expenses = _repository.loadExpenses(
-        dateRange: dateRange,
-        searchText: searchText,
-      );
-      emit(SafeLoaded());
-    } catch (e) {
-      emit(SafeError("فشل في تحميل المصاريف"));
-    }
-  }
+  void searchForExpenses(String searchText) {
+    _searchText = searchText;
 
-  @override
-  void clearDateFilter() {
-    _selectedDateRange = null;
     try {
-      emit(SafeLoading());
-      _expenses = _repository.loadExpenses(searchText: _searchText);
-      emit(SafeLoaded());
+      final expenses = _repository.loadExpenses(searchText);
+      final expenseListItem = generateExpensesListItem(expenses);
+      if (state is SafeLoaded) {
+        emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
+      }
     } catch (e) {
       emit(SafeError("فشل في تحميل المصاريف"));
     }
@@ -110,13 +89,39 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
   @override
   void clearSearchFilter() {
-    _searchText = null;
+    _searchText = '';
     try {
-      emit(SafeLoading());
-      _expenses = _repository.loadExpenses(dateRange: _selectedDateRange);
-      emit(SafeLoaded());
+      final expenses = _repository.loadExpenses(_searchText);
+      final expenseListItem = generateExpensesListItem(expenses);
+      if (state is SafeLoaded) {
+        emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
+      }
     } catch (e) {
       emit(SafeError("فشل في تحميل المصاريف"));
     }
+  }
+
+  List<ExpenseListItem> generateExpensesListItem(List<ExpenseModel> expenses) {
+    Map<DateTime, List<ExpenseModel>> grouped = {};
+    for (var expense in expenses) {
+      final date = DateTime(
+        expense.date.year,
+        expense.date.month,
+        expense.date.day,
+      );
+
+      grouped.putIfAbsent(date, () => []);
+      grouped[date]!.add(expense);
+    }
+    final List<ExpenseListItem> expenseListItem = [];
+    for (var item in grouped.entries) {
+      final date = item.key;
+      final list = item.value;
+      expenseListItem.add(ExpenseHeaderItem(date: date));
+      for (var expense in list) {
+        expenseListItem.add(ExpenseItem(expense: expense));
+      }
+    }
+    return expenseListItem;
   }
 }

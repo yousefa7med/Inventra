@@ -1,4 +1,5 @@
 import 'package:Inventra/core/navigations/navigations.dart';
+import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
+import 'package:gap/gap.dart';
 
 class AddExpenseView extends StatelessWidget {
   const AddExpenseView({super.key});
@@ -61,7 +63,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('القيمة', style: AppTextStyle.regular18),
-                const SizedBox(height: 8),
+                const Gap(8),
                 AppTextField(
                   controller: _valueController,
                   keyboardType: const TextInputType.numberWithOptions(
@@ -69,39 +71,22 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
                   ),
                   textInputAction: TextInputAction.next,
                   label: 'مثال: 150.50',
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'القيمة مطلوبة';
-                    }
-                    final parsed = double.tryParse(value.trim());
-                    if (parsed == null || parsed <= 0) {
-                      return 'قيمة المصروف يجب أن تكون موجبة';
-                    }
-                    if (parsed > 999999999.99) {
-                      return 'القيمة كبيرة جداً';
-                    }
-                    if (parsed > context.read<SafeCubit>().currentBalance) {
-                      return 'القيمة اكبر من المبلغ في الخزنة';
-                    }
-                    return null;
-                  },
+                  validator: Validator.validateExpense(
+                    (context.read<SafeCubit>().state as SafeLoaded).safeBalance,
+                  ),
                 ),
-                const SizedBox(height: 24),
+                const Gap(12),
                 Text('الملاحظة', style: AppTextStyle.regular18),
-                const SizedBox(height: 8),
+                const Gap(8),
                 AppTextField(
                   textInputAction: TextInputAction.done,
 
                   controller: _noteController,
                   label: 'مثال: مصاريف نقل',
-                  validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return 'الملاحظة مطلوبة';
-                    }
-                    return null;
-                  },
+                  validator: (value) =>
+                      Validator.requiredField(value, "الملاحظة"),
                 ),
-                const Spacer(),
+                const Gap(12),
                 AppButton(
                   onPressed: () {
                     _saveExpense();
@@ -114,9 +99,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
                     ),
                   ),
                   child:
-                      //  _isLoading
-                      //     ? const CircularProgressIndicator(color: Colors.white)
-                      //     :
+                 
                       Text(
                         'حفظ',
                         style: AppTextStyle.medium20.copyWith(

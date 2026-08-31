@@ -21,22 +21,20 @@ class SafeView extends StatelessWidget {
           onRefresh: () async => context.read<SafeCubit>().init(),
           child: BlocBuilder<SafeCubit, SafeState>(
             builder: (context, state) {
-              if (state is SafeLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
+              switch (state) {
+                case SafeInitial():
+                  return const SizedBox.shrink();
+                case SafeLoading():
+                  return const Center(child: CircularProgressIndicator());
 
-              if (state is SafeError) {
-                return ErrorStateWidget(
-                  message: state.message,
-                  onPressed: () => context.read<SafeCubit>().init(),
-                );
+                case SafeError():
+                  return ErrorStateWidget(
+                    message: state.message,
+                    onPressed: () => context.read<SafeCubit>().init(),
+                  );
+                case SafeLoaded():
+                  return SafeLoadedBody(state: state);
               }
-
-              if (state is SafeLoaded) {
-                return  SafeLoadedBody();
-              }
-
-              return const Center(child: CircularProgressIndicator());
             },
           ),
         ),

@@ -40,13 +40,14 @@ class _SearchFieldState extends State<SearchField> {
             )
           : null,
       onChanged: (q) {
-        if ((prevIsEmpty && q.isNotEmpty) || (!prevIsEmpty && q.isEmpty)) {
+        final isEmpty = q.isEmpty;
+
+        if (isEmpty != prevIsEmpty) {
           setState(() {
-            prevIsEmpty = q.isEmpty;
+            prevIsEmpty = isEmpty;
           });
-        } else {
-          prevIsEmpty = q.isEmpty;
         }
+
         widget.searchFunction(q);
       },
     );

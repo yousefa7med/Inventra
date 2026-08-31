@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 abstract class Validator {
-  static String? validateRequired(String? value, String fieldName) {
+  static String? requiredField(String? value, String fieldName) {
     if (value == null || value.trim().isEmpty) {
       return 'برجاء إدخال $fieldName';
     }
@@ -37,19 +37,40 @@ abstract class Validator {
 
   static String? Function(String? value) validateAddress() {
     return (value) {
-      return validateRequired(value, 'العنوان');
+      return requiredField(value, 'العنوان');
     };
   }
 
   static String? Function(String? value) validateStoreName() {
     return (value) {
-      return validateRequired(value, 'اسم المتجر');
+      return requiredField(value, 'اسم المتجر');
     };
   }
 
   static String? Function(String? value) validateBarcode() {
     return (value) {
-      return validateRequired(value, "الباركود");
+      return requiredField(value, "الباركود");
+    };
+  }
+
+  static String? Function(String? value) validateExpense(
+    double currentBalance,
+  ) {
+    return (value) {
+      if (value == null || value.trim().isEmpty) {
+        return 'القيمة مطلوبة';
+      }
+      final parsed = double.tryParse(value.trim());
+      if (parsed == null || parsed <= 0) {
+        return 'قيمة المصروف يجب أن تكون موجبة';
+      }
+      if (parsed > 999999999.99) {
+        return 'القيمة كبيرة جداً';
+      }
+      if (parsed > currentBalance) {
+        return 'القيمة اكبر من المبلغ في الخزنة';
+      }
+      return null;
     };
   }
 
