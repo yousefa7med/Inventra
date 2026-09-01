@@ -65,7 +65,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(4, 2457382206467444821),
     name: 'InvoiceItemModel',
-    lastPropertyId: const obx_int.IdUid(7, 7466051360257898880),
+    lastPropertyId: const obx_int.IdUid(8, 5810067013242430168),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -105,6 +105,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(7, 7466051360257898880),
         name: 'unitCost',
         type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 5810067013242430168),
+        name: 'name',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -618,13 +624,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (InvoiceItemModel object, fb.Builder fbb) {
-        fbb.startTable(8);
+        final nameOffset = fbb.writeString(object.name);
+        fbb.startTable(9);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.product.targetId);
         fbb.addInt64(2, object.quantity);
         fbb.addFloat64(3, object.unitPrice);
         fbb.addFloat64(4, object.lineTotal);
         fbb.addFloat64(6, object.unitCost);
+        fbb.addOffset(7, nameOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -654,11 +662,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           16,
         );
+        final nameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 18, '');
         final object = InvoiceItemModel(
           quantity: quantityParam,
           unitPrice: unitPriceParam,
           lineTotal: lineTotalParam,
           unitCost: unitCostParam,
+          name: nameParam,
         )..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
         object.product.targetId = const fb.Int64Reader().vTableGet(
           buffer,
@@ -1164,6 +1176,11 @@ class InvoiceItemModel_ {
   /// See [InvoiceItemModel.unitCost].
   static final unitCost = obx.QueryDoubleProperty<InvoiceItemModel>(
     _entities[1].properties[5],
+  );
+
+  /// See [InvoiceItemModel.name].
+  static final name = obx.QueryStringProperty<InvoiceItemModel>(
+    _entities[1].properties[6],
   );
 }
 

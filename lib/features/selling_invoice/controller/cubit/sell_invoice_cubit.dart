@@ -1,4 +1,3 @@
-import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
@@ -11,14 +10,12 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
     implements SellInvoiceCubitInterface {
   final SellInvoiceRepository _repository;
 
+  SellInvoiceCubit(this._repository) : super(const SellInvoiceInitial());
   final List<InvoiceItemModel> _items = [];
   CustomerModel? _selectedCustomer;
   double _discount = 0.0;
   List<CustomerModel> _customers = [];
   List<ProductModel> _products = [];
-
-  SellInvoiceCubit(this._repository) : super(const SellInvoiceInitial());
-
   // Getters for UI
   @override
   String searchQuery = "";
@@ -40,7 +37,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
 
   // Actions
   @override
-  Future<void> loadCustomers() async {
+  void loadCustomers() {
     try {
       _customers = _repository.getAllCustomers();
     } catch (e) {
@@ -49,12 +46,10 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
   }
 
   @override
-  Future<void> loadProducts(String search) async {
-    searchQuery = search;
+  void loadProducts(String search) {
     try {
-      final searchText = search.trim().normalizeArabic();
       emit(const SellInvoiceProductLoading());
-      _products = _repository.searchProducts(searchText);
+      _products = _repository.searchProducts(search);
       emit(const SellInvoiceProductSuccessed());
     } catch (e) {
       emit(SellInvoiceProductError('Failed to load products: $e'));
@@ -94,7 +89,6 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
         lineTotal: newQty * _items[existingIndex].unitPrice,
       )..product.target = product;
       _items[existingIndex] = newItem;
-      _repository.addItem(newItem);
     } else {
       final qty = quantity.clamp(1, product.quantity);
 
@@ -103,9 +97,9 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
         unitPrice: product.sellingPrice,
         lineTotal: qty * product.sellingPrice,
         unitCost: product.buyingPrice,
+        name: product.name,
       )..product.target = product;
       _items.add(newItem);
-      _repository.addItem(newItem);
     }
 
     emit(const SellInvoiceAddProductItem());
@@ -113,18 +107,14 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
 
   @override
   void updateItemQuantity(int itemIndex, int newQuantity) {
-    if (newQuantity < 1) {
-      _items.removeAt(itemIndex);
-    } else {
-      final product = _items[itemIndex].product.target;
-      if (product != null) {
-        newQuantity = newQuantity.clamp(1, product.quantity);
-      }
-      _items[itemIndex] = _items[itemIndex].copyWith(
-        quantity: newQuantity,
-        lineTotal: newQuantity * _items[itemIndex].unitPrice,
-      );
+    final product = _items[itemIndex].product.target;
+    if (product != null) {
+      newQuantity = newQuantity.clamp(1, product.quantity);
     }
+    _items[itemIndex] = _items[itemIndex].copyWith(
+      quantity: newQuantity,
+      lineTotal: newQuantity * _items[itemIndex].unitPrice,
+    );
 
     // ignore: prefer_const_constructors
     emit(SellInvoiceUpdateProductQuantity());
@@ -152,7 +142,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
   }
 
   @override
-  Future<void> confirmInvoice() async {
+  void confirmInvoice() {
     for (final item in _items) {
       final product = item.product.target;
       if (product == null || product.quantity < item.quantity) {

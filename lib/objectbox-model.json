@@ -34,7 +34,7 @@
     },
     {
       "id": "4:2457382206467444821",
-      "lastPropertyId": "7:7466051360257898880",
+      "lastPropertyId": "8:5810067013242430168",
       "name": "InvoiceItemModel",
       "properties": [
         {
@@ -70,6 +70,11 @@
           "id": "7:7466051360257898880",
           "name": "unitCost",
           "type": 8
+        },
+        {
+          "id": "8:5810067013242430168",
+          "name": "name",
+          "type": 9
         }
       ],
       "relations": []
