@@ -90,7 +90,9 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
         quantity: qty,
         unitPrice: product.buyingPrice,
         lineTotal: qty * product.buyingPrice,
+        name: product.name,
       )..product.target = product;
+
       _items.add(newItem);
     }
 

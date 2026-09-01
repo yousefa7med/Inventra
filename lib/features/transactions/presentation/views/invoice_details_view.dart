@@ -257,10 +257,7 @@ class _InvoiceItemsCard extends StatelessWidget {
         children: items.asMap().entries.map((entry) {
           final index = entry.key;
           final item = entry.value;
-          final product = item.product.target;
           final isLast = index == items.length - 1;
-
-          if (product == null) return const SizedBox.shrink();
 
           return Column(
             children: [
@@ -270,7 +267,7 @@ class _InvoiceItemsCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        product.name,
+                        item.name,
                         style: AppTextStyle.medium16,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -278,7 +275,7 @@ class _InvoiceItemsCard extends StatelessWidget {
                     ),
                     Gap(12.w),
                     Text(
-                      '${item.quantity} × ${formatCurrency( item.unitPrice, useCurrencySymbol: true, reduceDecimalDigits: true)}',
+                      '${item.quantity} × ${formatCurrency(item.unitPrice, useCurrencySymbol: true, reduceDecimalDigits: true)}',
                       style: AppTextStyle.regular14.copyWith(
                         color: AppColors.greyMedium500,
                       ),

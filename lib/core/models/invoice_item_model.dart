@@ -12,12 +12,14 @@ class InvoiceItemModel {
   final double unitPrice;
   final double? unitCost;
   final double lineTotal;
+  final String name;
 
   InvoiceItemModel({
     required this.quantity,
     required this.unitPrice,
     required this.lineTotal,
     this.unitCost,
+    required this.name,
   });
 
   InvoiceItemModel copyWith({
@@ -26,12 +28,14 @@ class InvoiceItemModel {
     double? unitCost,
     double? lineTotal,
     ProductModel? product,
+    String? name,
   }) {
     return InvoiceItemModel(
         quantity: quantity ?? this.quantity,
         unitPrice: unitPrice ?? this.unitPrice,
         lineTotal: lineTotal ?? this.lineTotal,
         unitCost: unitCost ?? this.unitCost,
+        name: name ?? this.name,
       )
       ..id = id
       ..product.target = product ?? this.product.target;

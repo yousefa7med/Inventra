@@ -24,24 +24,26 @@ class ProductRepositoryImpl implements ProductRepository {
     _objectBoxServices.productsBox.remove(id);
   }
 
-
   @override
   List<ProductModel> searchProduct(String searchQuery) {
-    final text = searchQuery.trim().normalizeArabic();
-
-    if (text.isEmpty) {
-      return _objectBoxServices.productsBox.getAll();
+    final searchText = searchQuery.trim().normalizeArabic();
+    if (searchText.isEmpty) {
+      return getAllProducts();
     }
 
-    final condition = ProductModel_.barcode
-        .contains(text)
-        .or(ProductModel_.name.contains(text, caseSensitive: false));
+    if (RegExp(r'^\d+$').hasMatch(searchText)) {
+      final query = _objectBoxServices.productsBox
+          .query(ProductModel_.barcode.contains(searchText))
+          .build();
+      final products = query.find();
+      query.close();
 
+      return products;
+    }
     final query = _objectBoxServices.productsBox
-        .query(condition)
+        .query(ProductModel_.name.contains(searchText, caseSensitive: false))
         .order(ProductModel_.name)
         .build();
-
     final products = query.find();
     query.close();
     return products;

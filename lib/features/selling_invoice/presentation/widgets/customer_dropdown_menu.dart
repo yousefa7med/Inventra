@@ -94,6 +94,7 @@ class _CustomerDropdownMenuState extends State<CustomerDropdownMenu> {
       onSelected: (customer) {
         if (customer != null) {
           cubit.selectCustomer(customer);
+          focusNode.unfocus();
         }
       },
 

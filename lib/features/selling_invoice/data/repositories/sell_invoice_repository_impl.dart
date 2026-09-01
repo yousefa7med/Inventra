@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
@@ -44,8 +42,6 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
   @override
   List<ProductModel> searchProducts(String search) {
     final searchText = search.trim().normalizeArabic();
-    log(searchText);
-    late final List<ProductModel> products;
     if (searchText.isEmpty) {
       return getAllProducts();
     }
@@ -54,7 +50,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
       final query = _objectBox.productsBox
           .query(ProductModel_.barcode.contains(searchText))
           .build();
-      products = query.find();
+      final products = query.find();
       query.close();
 
       return products;
@@ -63,13 +59,13 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         .query(ProductModel_.name.contains(searchText, caseSensitive: false))
         .order(ProductModel_.name)
         .build();
-    products = query.find();
+    final products = query.find();
     query.close();
     return products;
   }
 
   @override
-  SellingInvoiceModel createSellInvoice({
+  void createSellInvoice({
     required List<InvoiceItemModel> items,
     required CustomerModel customer,
     double? discount,
@@ -82,7 +78,6 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
         discount: discount,
       );
       invoice.customer.target = customer;
-      _objectBox.customersBox.put(customer);
 
       for (final item in items) {
         final product = item.product.target!;
@@ -96,41 +91,24 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
       _objectBox.sellingInvoicesBox.put(invoice);
 
       savedInvoice = invoice;
+      final balance =
+          _objectBox.safeBalanceBox.get(1) ??
+          SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
+      final newBalance = balance.copyWith(
+        currentBalance: balance.currentBalance + (totalPrice - (discount ?? 0)),
+      );
+
+      _objectBox.safeBalanceBox.put(newBalance);
+
+      final auditEntry = TransactionsEntry(
+        typeIndex: TransactionType.sellingInvoice.index,
+        value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
+        referenceId: savedInvoice!.id,
+        createdAt: savedInvoice!.date,
+        description: customer.name,
+        profit: savedInvoice!.profit,
+      );
+      _objectBox.transactionsEntryBox.put(auditEntry);
     });
-
-    final balance =
-        _objectBox.safeBalanceBox.get(1) ??
-        SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
-    final newBalance = balance.copyWith(
-      currentBalance: balance.currentBalance + (totalPrice - (discount ?? 0)),
-    );
-
-    _objectBox.safeBalanceBox.put(newBalance);
-
-    final auditEntry = TransactionsEntry(
-      typeIndex: TransactionType.sellingInvoice.index,
-      value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
-      referenceId: savedInvoice!.id,
-      createdAt: savedInvoice!.date,
-      description: customer.name,
-      profit: savedInvoice!.profit,
-    );
-    _objectBox.transactionsEntryBox.put(auditEntry);
-
-    return savedInvoice!;
-  }
-
-  @override
-  Stream<List<SellingInvoiceModel>> watchInvoices() {
-    return _objectBox.sellingInvoicesBox
-        .query()
-        .order(SellingInvoiceModel_.date, flags: Order.descending)
-        .watch(triggerImmediately: true)
-        .map((query) => query.find());
-  }
-
-  @override
-  void addItem(InvoiceItemModel item) {
-    _objectBox.invoiceItemsBox.put(item);
   }
 }
