@@ -83,194 +83,203 @@ class _ProductFormViewState extends State<ProductFormView> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: CustomAppBar(title: isEditing ? 'تعديل المنتج' : 'إضافة منتج'),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Form(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Gap(24),
-                  imgPath == null
-                      ? AddProductImageWidget(
-                          onTap: () async {
-                            await pickImage();
-                          },
-                        )
-                      : ProductImage(
-                          imagePath: imgPath!,
-                          onTap: () async {
-                            await pickImage();
-                          },
-                        ),
-                  const Gap(32),
-
-                  AppTextField(
-                    label: "اسم المنتج",
-                    textInputAction: TextInputAction.next,
-                    controller: nameController,
-                    validator: Validator.validateName(),
-                  ),
-                  const Gap(16),
-
-                  AppTextField(
-                    controller: barcodeController,
-                    label: "الباركود",
-                    textInputAction: TextInputAction.next,
-                    suffixIcon: const Icon(
-                      Icons.qr_code_scanner,
-                      color: AppColors.primary,
-                    ),
-                    validator: Validator.validateBarcode(),
-                  ),
-
-                  if (widget.isQuantitiyEditable ?? true) ...[
-                    const Gap(16),
-                    AppTextField(
-                      controller: quantatyController,
-                      label: "الكمية المتاحة",
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      validator: Validator.validateQuantaty(),
-                    ),
-                  ],
-                  const Gap(16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AppTextField(
-                          controller: bPriceController,
-                          label: "سعر الشراء",
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                          suffixText: 'ج.م',
-                          validator: Validator.validateBuyingPrice(),
-                        ),
-                      ),
-                      Gap(12.w),
-
-                      Expanded(
-                        child: AppTextField(
-                          controller: wPriceController,
-                          label: "سعر الجملة",
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                          suffixText: 'ج.م',
-                          validator: Validator.validateWholeSalePrice(
-                            bPriceController,
+        body: BlocListener<ProductCubit, ProductState>(
+          listenWhen: (previous, current) =>
+              current is ProductInsertedSuccessed ||
+              current is ProductInsertError,
+          listener: (context, state) {
+            if (state is ProductInsertedSuccessed) {
+              showSnackBar(
+                context,
+                isEditing ? "تم تعديل المنتج بنجاح" : "تم إضافة المنتج بنجاح",
+                color: AppColors.success,
+              );
+            } else if (state is ProductInsertError) {
+              showSnackBar(context, state.message, color: AppColors.error);
+            }
+          },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Gap(24),
+                    imgPath == null
+                        ? AddProductImageWidget(
+                            onTap: () async {
+                              await pickImage();
+                            },
+                          )
+                        : ProductImage(
+                            imagePath: imgPath!,
+                            onTap: () async {
+                              await pickImage();
+                            },
                           ),
-                        ),
+                    const Gap(32),
+
+                    AppTextField(
+                      label: "اسم المنتج",
+                      textInputAction: TextInputAction.next,
+                      controller: nameController,
+                      validator: Validator.validateName(),
+                    ),
+                    const Gap(16),
+
+                    AppTextField(
+                      controller: barcodeController,
+                      label: "الباركود",
+                      textInputAction: TextInputAction.next,
+                      suffixIcon: const Icon(
+                        Icons.qr_code_scanner,
+                        color: AppColors.primary,
+                      ),
+                      validator: Validator.validateBarcode(),
+                    ),
+
+                    if (widget.isQuantitiyEditable ?? true) ...[
+                      const Gap(16),
+                      AppTextField(
+                        controller: quantatyController,
+                        label: "الكمية المتاحة",
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.number,
+                        validator: Validator.validateQuantaty(),
                       ),
                     ],
-                  ),
-                  const Gap(16),
+                    const Gap(16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            controller: bPriceController,
+                            label: "سعر الشراء",
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            suffixText: 'ج.م',
+                            validator: Validator.validateBuyingPrice(),
+                          ),
+                        ),
+                        Gap(12.w),
 
-                  FractionallySizedBox(
-                    child: AppTextField(
-                      controller: sPriceController,
-                      label: "سعر البيع",
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      suffixText: 'ج.م',
-                      validator: Validator.validateSellingPrice(
-                        bPriceController,
-                        wPriceController,
+                        Expanded(
+                          child: AppTextField(
+                            controller: wPriceController,
+                            label: "سعر الجملة",
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            suffixText: 'ج.م',
+                            validator: Validator.validateWholeSalePrice(
+                              bPriceController,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(16),
+
+                    FractionallySizedBox(
+                      child: AppTextField(
+                        controller: sPriceController,
+                        label: "سعر البيع",
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        suffixText: 'ج.م',
+                        validator: Validator.validateSellingPrice(
+                          bPriceController,
+                          wPriceController,
+                        ),
                       ),
                     ),
-                  ),
 
-                  Gap(32.h),
-                  AppButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        late final ProductModel product;
-                        String? oldImagePath = widget.product?.imgPath;
-                        String? workingImgPath = imgPath;
+                    Gap(32.h),
+                    AppButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          late final ProductModel product;
+                          String? oldImagePath = widget.product?.imgPath;
+                          String? workingImgPath = imgPath;
 
-                        // حفظ الصورة الجديدة أولاً في متغير مؤقت
-                        if (image != null) {
-                          workingImgPath = await saveProductImage(image!);
-                        }
-
-                        if (isEditing) {
-                          product = widget.product!.copyWith(
-                            name: nameController.text.trim(),
-                            quantity: int.tryParse(
-                              quantatyController?.text ?? "0",
-                            ),
-                            buyingPrice: double.tryParse(bPriceController.text),
-                            sellingPrice: double.tryParse(
-                              sPriceController.text,
-                            ),
-                            wholesalePrice: double.tryParse(
-                              wPriceController.text,
-                            ),
-                            barcode: barcodeController.text,
-                            imgPath: workingImgPath,
-                          );
-                        } else {
-                          product = ProductModel(
-                            name: nameController.text.trim(),
-                            quantity:
-                                int.tryParse(quantatyController?.text ?? "0") ??
-                                0,
-                            buyingPrice:
-                                double.tryParse(bPriceController.text) ?? 0,
-                            sellingPrice:
-                                double.tryParse(sPriceController.text) ?? 0,
-                            wholesalePrice:
-                                double.tryParse(wPriceController.text) ?? 0,
-                            barcode: barcodeController.text,
-                            imgPath: workingImgPath,
-                          );
-                        }
-
-                        try {
-                          // محاولة الحفظ في قاعدة البيانات
-                          context.read<ProductCubit>().updateProduct(product);
-
-                          // إذا نجحت عملية الحفظ، نقوم بحذف الصورة القديمة بأمان الآن
-                          if (isEditing &&
-                              image != null &&
-                              oldImagePath != null) {
-                            await deleteImage(oldImagePath);
+                          // حفظ الصورة الجديدة أولاً في متغير مؤقت
+                          if (image != null) {
+                            workingImgPath = await saveProductImage(image!);
                           }
 
-                          if (!context.mounted) return;
-                          showSnackBar(
-                            context,
-                            isEditing
-                                ? "تم تعديل المنتج بنجاح"
-                                : "تم إضافة المنتج بنجاح",
-                            color: AppColors.success,
-                          );
-
-                          AppNavigation.pop<ProductModel>(context, product);
-                        } catch (e) {
-                          if (image != null && workingImgPath != null) {
-                            await deleteImage(workingImgPath);
-                            imgPath = oldImagePath;
+                          if (isEditing) {
+                            product = widget.product!.copyWith(
+                              name: nameController.text.trim(),
+                              quantity: int.tryParse(
+                                quantatyController?.text ?? "0",
+                              ),
+                              buyingPrice: double.tryParse(
+                                bPriceController.text,
+                              ),
+                              sellingPrice: double.tryParse(
+                                sPriceController.text,
+                              ),
+                              wholesalePrice: double.tryParse(
+                                wPriceController.text,
+                              ),
+                              barcode: barcodeController.text,
+                              imgPath: workingImgPath,
+                            );
+                          } else {
+                            product = ProductModel(
+                              name: nameController.text.trim(),
+                              quantity:
+                                  int.tryParse(
+                                    quantatyController?.text ?? "0",
+                                  ) ??
+                                  0,
+                              buyingPrice:
+                                  double.tryParse(bPriceController.text) ?? 0,
+                              sellingPrice:
+                                  double.tryParse(sPriceController.text) ?? 0,
+                              wholesalePrice:
+                                  double.tryParse(wPriceController.text) ?? 0,
+                              barcode: barcodeController.text,
+                              imgPath: workingImgPath,
+                            );
                           }
 
-                          if (!context.mounted) return;
-                          showSnackBar(
-                            context,
-                            isEditing
-                                ? 'فشل تعديل المنتج: $e'
-                                : 'فشل إضافة المنتج: $e',
-                            color: AppColors.error,
-                          );
+                          try {
+                            // محاولة الحفظ في قاعدة البيانات
+                            context.read<ProductCubit>().updateProduct(product);
+
+                            // إذا نجحت عملية الحفظ، نقوم بحذف الصورة القديمة بأمان الآن
+                            if (isEditing &&
+                                image != null &&
+                                oldImagePath != null) {
+                              await deleteImage(oldImagePath);
+                            }
+
+                            AppNavigation.pop<ProductModel>(context, product);
+                          } catch (e) {
+                            if (image != null && workingImgPath != null) {
+                              await deleteImage(workingImgPath);
+                              imgPath = oldImagePath;
+                            }
+                            showSnackBar(
+                              context,
+                              isEditing
+                                  ? 'فشل تعديل المنتج: $e'
+                                  : 'فشل إضافة المنتج: $e',
+                              color: AppColors.error,
+                            );
+                          }
                         }
-                      }
-                    },
-                    child: Text(
-                      isEditing ? "تعديل المنتج" : "إضافة المنتج",
-                      style: AppTextStyle.medium16,
+                      },
+                      child: Text(
+                        isEditing ? "تعديل المنتج" : "إضافة المنتج",
+                        style: AppTextStyle.medium16,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

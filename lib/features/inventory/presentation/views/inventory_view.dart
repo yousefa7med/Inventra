@@ -56,7 +56,7 @@ class InventoryView extends StatelessWidget {
                   current is ProductLoading ||
                   current is ProductsLoadingSuccessed ||
                   current is ProductErrorState ||
-                  current is ProductInserted,
+                  current is ProductInsertedSuccessed,
               builder: (context, state) {
                 if (state is ProductLoading) {
                   return const SliverFillRemaining(
@@ -77,7 +77,7 @@ class InventoryView extends StatelessWidget {
                 }
 
                 if (state is ProductsLoadingSuccessed ||
-                    state is ProductInserted) {
+                    state is ProductInsertedSuccessed) {
                   final products = cubit.filteredProducts;
 
                   if (products.isEmpty) {

@@ -54,9 +54,9 @@ class ProductCubit extends Cubit<ProductState>
       _allProducts.add(product);
       _filteredProducts = List.from(_allProducts);
       // ignore: prefer_const_constructors
-      emit(ProductsLoadingSuccessed());
+      emit(ProductInsertedSuccessed());
     } on ProductBarcodeTakenException {
-      emit(const ProductErrorState("الباركود مستخدم بالفعل"));
+      emit(const ProductInsertError("الباركود مستخدم بالفعل"));
     } catch (e) {
       emit(ProductErrorState('فشل إضافة المنتج: $e'));
     }
@@ -84,9 +84,9 @@ class ProductCubit extends Cubit<ProductState>
       }
 
       // ignore: prefer_const_constructors
-      emit(ProductsLoadingSuccessed());
+      emit(ProductInsertedSuccessed());
     } on ProductBarcodeTakenException {
-      emit(const ProductErrorState("الباركود مستخدم بالفعل"));
+      emit(const ProductInsertError("الباركود مستخدم بالفعل"));
     } catch (e) {
       emit(ProductErrorState('فشل تعديل المنتج: $e'));
     }
