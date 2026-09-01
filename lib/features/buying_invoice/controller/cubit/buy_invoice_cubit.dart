@@ -1,3 +1,4 @@
+import 'package:Inventra/core/exceptions/product_barcode_taken_exception.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
@@ -43,8 +44,12 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
   void insertProduct(ProductModel product) {
     _products.add(product);
 
-    _repository.insertProduct(product);
-    emit(BuyInvoiceProductsLoaded());
+    try {
+      _repository.insertProduct(product);
+      emit(BuyInvoiceProductsLoaded());
+    } on ProductBarcodeTakenException {
+      emit(BuyInvoiceProductError('الباركود مستخدم بالفعل'));
+    }
   }
 
   @override

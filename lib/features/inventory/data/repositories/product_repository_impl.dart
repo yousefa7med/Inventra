@@ -1,3 +1,4 @@
+import 'package:Inventra/core/exceptions/product_barcode_taken_exception.dart';
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -16,6 +17,15 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   void insertProduct(ProductModel product) {
+    final barcode = product.barcode?.trim();
+    if (barcode != null && barcode.isNotEmpty) {
+      if (isBarcodeTaken(
+        barcode,
+        excludeProductId: product.id == 0 ? null : product.id,
+      )) {
+        throw const ProductBarcodeTakenException();
+      }
+    }
     _objectBoxServices.productsBox.put(product);
   }
 
@@ -47,5 +57,24 @@ class ProductRepositoryImpl implements ProductRepository {
     final products = query.find();
     query.close();
     return products;
+  }
+
+  @override
+  bool isBarcodeTaken(String barcode, {int? excludeProductId}) {
+    final query = _objectBoxServices.productsBox
+        .query(ProductModel_.barcode.equals(barcode))
+        .build();
+
+    try {
+      final product = query.findFirst();
+
+      if (product == null) {
+        return false;
+      }
+
+      return excludeProductId == null || product.id != excludeProductId;
+    } finally {
+      query.close();
+    }
   }
 }

@@ -7,4 +7,5 @@ abstract class ProductRepository {
   void deleteProduct(int id);
 
   List<ProductModel> searchProduct(String query);
+  bool isBarcodeTaken(String barcode, {int? excludeProductId});
 }
