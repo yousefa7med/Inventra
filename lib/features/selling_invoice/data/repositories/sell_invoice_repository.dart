@@ -6,7 +6,7 @@ abstract class SellInvoiceRepository {
   List<CustomerModel> getAllCustomers();
   List<ProductModel> getAllProducts();
   List<ProductModel> searchProducts(String query);
-  void createSellInvoice({
+  void createSellingInvoice({
     required List<InvoiceItemModel> items,
     required CustomerModel customer,
     required double discount,

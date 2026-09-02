@@ -65,7 +65,7 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
   }
 
   @override
-  void createSellInvoice({
+  void createSellingInvoice({
     required List<InvoiceItemModel> items,
     required CustomerModel customer,
     double? discount,

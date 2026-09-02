@@ -25,6 +25,12 @@ class DashboardModel {
     snapshots[period] = snapshot;
     return this;
   }
+
+  void clear() {
+    for (final period in DashboardPeriod.values) {
+      snapshots[period] = null;
+    }
+  }
 }
 
 class DashboardPeriodSnapshot {

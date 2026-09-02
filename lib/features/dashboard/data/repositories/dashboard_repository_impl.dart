@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
   final ObjectBoxServices _objectBox;
+  @override
   late DashboardModel dashboardEntity;
   DashboardRepositoryImpl(this._objectBox) {
     dashboardEntity = DashboardModel.initial();
@@ -171,12 +172,13 @@ class DashboardRepositoryImpl implements DashboardRepository {
       case DashboardPeriod.today:
         start = DateTime(now.year, now.month, now.day, 0, 0, 0);
         end = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
-
       case DashboardPeriod.week:
+        int daysToSubtract = (now.weekday + 1) & 7;
+
         start = DateTime(
           now.year,
           now.month,
-          now.day - (now.weekday - 1),
+          now.day - daysToSubtract,
           0,
           0,
           0,
@@ -184,7 +186,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
         end = DateTime(
           now.year,
           now.month,
-          (now.day - (now.weekday - 1)) + 6,
+          (now.day - daysToSubtract) + 6,
           23,
           59,
           59,

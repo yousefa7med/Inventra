@@ -149,7 +149,10 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
 
     emit(BuyInvoiceLoading());
     try {
-      _repository.createBuyInvoice(items: _items, supplier: _selectedSupplier!);
+      _repository.createBuyingInvoice(
+        items: _items,
+        supplier: _selectedSupplier!,
+      );
 
       _items.clear();
       _selectedSupplier = null;

@@ -10,9 +10,8 @@ abstract class BuyInvoiceRepository {
   List<ProductModel> searchProducts(String query);
   void insertProduct(ProductModel product);
   // Invoice operations
-  void createBuyInvoice({
+  void createBuyingInvoice({
     required List<InvoiceItemModel> items,
     required SupplierModel supplier,
   });
-
 }

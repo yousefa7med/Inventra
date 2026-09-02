@@ -1,5 +1,4 @@
 import 'package:Inventra/features/dashboard/data/models/dashboard_metric.dart';
-import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dashboard_state.dart';
 import 'dashboard_cubit_interface.dart';
@@ -12,12 +11,10 @@ class DashboardCubit extends Cubit<DashboardState>
 
   DashboardMetric _selectedMetric = DashboardMetric.netProfit;
   DashboardPeriod _selectedPeriod = DashboardPeriod.today;
-  late final KpiModel _kpis;
 
   @override
   DashboardMetric get selectedMetric => _selectedMetric;
-  @override
-  KpiModel get kpis => _kpis;
+ 
 
   @override
   DashboardPeriod get selectedPeriod => _selectedPeriod;

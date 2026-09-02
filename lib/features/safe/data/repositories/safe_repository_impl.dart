@@ -30,44 +30,48 @@ class SafeRepositoryImpl implements SafeRepository {
     );
     _objectBox.safeBalanceBox.put(newBalance);
 
-    final adjustmentId = _objectBox.manualAdjustmentBox.put(
-      ManualAdjustmentModel(
-        prevBalanceValue: balance.currentBalance,
-        newBalanceValue: newBalance.currentBalance,
-        date: newBalance.lastUpdated,
-        note: newBalance.note,
-      ),
-    );
-    _objectBox.transactionsEntryBox.put(
-      TransactionsEntry(
-        typeIndex: TransactionType.manualAdjustment.index,
-        value: newBalance.currentBalance,
-        referenceId: adjustmentId,
-        createdAt: newBalance.lastUpdated,
-        description: newBalance.note,
-      ),
-    );
+    _objectBox.store.runInTransaction(TxMode.write, () {
+      final adjustmentId = _objectBox.manualAdjustmentBox.put(
+        ManualAdjustmentModel(
+          prevBalanceValue: balance.currentBalance,
+          newBalanceValue: newBalance.currentBalance,
+          date: newBalance.lastUpdated,
+          note: newBalance.note,
+        ),
+      );
+      _objectBox.transactionsEntryBox.put(
+        TransactionsEntry(
+          typeIndex: TransactionType.manualAdjustment.index,
+          value: newBalance.currentBalance,
+          referenceId: adjustmentId,
+          createdAt: newBalance.lastUpdated,
+          description: newBalance.note,
+        ),
+      );
+    });
   }
 
   @override
   void addExpense(ExpenseModel expense) {
-    final expenseId = _objectBox.expensesBox.put(expense);
     final balance = getBalance();
     final newbalance = balance.copyWith(
       currentBalance: balance.currentBalance + expense.value,
       lastUpdated: DateTime.now(),
     );
+    _objectBox.store.runInTransaction(TxMode.write, () {
+      final expenseId = _objectBox.expensesBox.put(expense);
 
-    _objectBox.safeBalanceBox.put(newbalance);
-    _objectBox.transactionsEntryBox.put(
-      TransactionsEntry(
-        typeIndex: TransactionType.expense.index,
-        value: expense.value,
-        referenceId: expenseId,
-        createdAt: expense.date,
-        description: expense.note.trim(),
-      ),
-    );
+      _objectBox.safeBalanceBox.put(newbalance);
+      _objectBox.transactionsEntryBox.put(
+        TransactionsEntry(
+          typeIndex: TransactionType.expense.index,
+          value: expense.value,
+          referenceId: expenseId,
+          createdAt: expense.date,
+          description: expense.note.trim(),
+        ),
+      );
+    });
   }
 
   @override
