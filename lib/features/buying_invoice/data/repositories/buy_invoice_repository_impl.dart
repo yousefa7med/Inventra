@@ -30,7 +30,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
 
   @override
   void insertProduct(ProductModel product) {
-       final barcode = product.barcode?.trim();
+    final barcode = product.barcode?.trim();
     if (barcode != null && barcode.isNotEmpty) {
       if (isBarcodeTaken(
         barcode,
@@ -71,7 +71,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
   }
 
   @override
-  void createBuyInvoice({
+  void createBuyingInvoice({
     required List<InvoiceItemModel> items,
     required SupplierModel supplier,
   }) {
@@ -114,7 +114,8 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
       _objectBox.transactionsEntryBox.put(auditEntry);
     });
   }
-   bool isBarcodeTaken(String barcode, {int? excludeProductId}) {
+
+  bool isBarcodeTaken(String barcode, {int? excludeProductId}) {
     final query = _objectBox.productsBox
         .query(ProductModel_.barcode.equals(barcode))
         .build();

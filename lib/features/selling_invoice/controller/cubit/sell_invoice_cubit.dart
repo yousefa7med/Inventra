@@ -157,7 +157,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
 
     emit(const SellInvoiceLoading());
     try {
-      _repository.createSellInvoice(
+      _repository.createSellingInvoice(
         items: _items,
         customer: _selectedCustomer!,
         discount: _discount,

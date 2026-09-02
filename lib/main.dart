@@ -144,7 +144,7 @@ Future<void> configureDependencies() async {
     () => dashboardRepository,
   );
   GetIt.instance.registerLazySingleton<DashboardCubit>(
-    () => DashboardCubit(GetIt.instance<DashboardRepository>()),
+    () => DashboardCubit(dashboardRepository),
   );
 
   // 4. Cubits (LazySingletons for app-wide state)
@@ -167,5 +167,4 @@ Future<void> configureDependencies() async {
   GetIt.instance.registerLazySingleton<BuyInvoiceCubit>(
     () => BuyInvoiceCubit(GetIt.instance<BuyInvoiceRepository>()),
   );
-
 }
