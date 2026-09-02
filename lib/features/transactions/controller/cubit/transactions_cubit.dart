@@ -17,7 +17,7 @@ class TransactionsCubit extends Cubit<TransactionsState>
 
   final List<ListItemModel> _listItems = [];
   DateTimeRange<DateTime>? _selectedDateRange;
-  int? _selectedType;
+  TransactionType? _selectedType;
 
   @override
   List<ListItemModel> get listItems => _listItems;
@@ -26,7 +26,7 @@ class TransactionsCubit extends Cubit<TransactionsState>
   DateTimeRange<DateTime>? get selectedDateRange => _selectedDateRange;
 
   @override
-  int? get selectedType => _selectedType;
+  TransactionType? get selectedType => _selectedType;
 
   @override
   void loadTransactions({
@@ -34,11 +34,9 @@ class TransactionsCubit extends Cubit<TransactionsState>
     DateTimeRange<DateTime>? dateRange,
   }) async {
     if (type == null) {
-      type = _selectedType == null
-          ? null
-          : TransactionType.values[_selectedType!];
+      type = _selectedType;
     } else {
-      _selectedType = type.index;
+      _selectedType = type;
     }
 
     if (dateRange == null) {
@@ -96,49 +94,21 @@ class TransactionsCubit extends Cubit<TransactionsState>
   }
 
   @override
-  void clearFiltersAndGetTransactions() async {
-    _selectedType = null;
-    _selectedDateRange = null;
+  void clearFiltersAndGetTransactions({
+    bool type = false,
+    bool time = false,
+  }) async {
     emit(TransactionsLoading());
     try {
+      if (type) {
+        _selectedType = null;
+      }
+      if (time) {
+        _selectedDateRange = null;
+      }
       _listItems.clear();
-      final transactions = _repository.getTransactions();
-      generateListItems(transactions);
-
-      emit(TransactionsLoaded(listItems: _listItems));
-    } catch (e) {
-      emit(TransactionsError(e.toString()));
-    }
-  }
-
-  @override
-  void clearDateFilterAndGetTransactions() {
-    _selectedDateRange = null;
-    emit(TransactionsLoading());
-    try {
-      _listItems.clear();
-
       final transactions = _repository.getTransactions(
-        type: _selectedType == null
-            ? null
-            : TransactionType.values[_selectedType!],
-      );
-      generateListItems(transactions);
-
-      emit(TransactionsLoaded(listItems: _listItems));
-    } catch (e) {
-      emit(TransactionsError(e.toString()));
-    }
-  }
-
-  @override
-  void clearTypeFilterAndGetTransactions() {
-    _selectedType = null;
-    emit(TransactionsLoading());
-    try {
-      _listItems.clear();
-
-      final transactions = _repository.getTransactions(
+        type: _selectedType,
         dateRange: _selectedDateRange,
       );
       generateListItems(transactions);

@@ -62,8 +62,6 @@ class TransactionCard extends StatelessWidget {
               _showManualAdjustmentDialog(context, adjustment);
             } else if (transaction.type == TransactionType.expense) {
               _showExpenseDialog(context, transaction);
-            } else {
-              // TODO:
             }
           },
           borderRadius: BorderRadius.circular(12.r),
