@@ -18,23 +18,23 @@ class TransactionsFilter extends StatelessWidget {
     final dateRange = cubit.selectedDateRange;
 
     return _FilterBar(
-      selectedType: selectedType,
+      selectedType: selectedType?.index ?? 0,
       dateRange: dateRange,
       onTypeChanged: (index) {
         if (index == 0) {
-          cubit.clearTypeFilterAndGetTransactions();
+          cubit.clearFiltersAndGetTransactions(type: true);
         } else {
           cubit.loadTransactions(type: TransactionType.values[index - 1]);
         }
       },
       onDateSelected: (range) => cubit.loadTransactions(dateRange: range),
-      onDateCleared: () => cubit.clearDateFilterAndGetTransactions(),
+      onDateCleared: () => cubit.clearFiltersAndGetTransactions(time: true),
     );
   }
 }
 
 class _FilterBar extends StatefulWidget {
-  final int? selectedType;
+  final int selectedType;
   final DateTimeRange? dateRange;
   final Function(int) onTypeChanged;
   final Function(DateTimeRange) onDateSelected;
@@ -69,7 +69,7 @@ class _FilterBarState extends State<_FilterBar> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.selectedType ?? 0;
+    _selectedIndex = widget.selectedType;
     _filterFrom = widget.dateRange?.start;
     _filterTo = widget.dateRange?.end;
   }

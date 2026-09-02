@@ -8,15 +8,14 @@ import 'package:Inventra/core/models/transaction_type.dart';
 abstract class TransactionsCubitInterface {
   // State getters
   List<ListItemModel> get listItems;
-  int? get selectedType;
+  TransactionType? get selectedType;
   DateTimeRange? get selectedDateRange;
 
   // Filter actions
   void loadTransactions({TransactionType? type, DateTimeRange? dateRange});
 
-  void clearFiltersAndGetTransactions();
-  void clearTypeFilterAndGetTransactions();
-  void clearDateFilterAndGetTransactions();
+  void clearFiltersAndGetTransactions({bool type=false, bool time=false});
+
   InvoiceDetailsModel getInvoiceDetails({
     required TransactionType type,
     required int id,
