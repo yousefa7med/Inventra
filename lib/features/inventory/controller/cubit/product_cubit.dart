@@ -1,3 +1,4 @@
+import 'package:Inventra/core/exceptions/product_barcode_taken_exception.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit_interface.dart';
 import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
@@ -53,7 +54,9 @@ class ProductCubit extends Cubit<ProductState>
       _allProducts.add(product);
       _filteredProducts = List.from(_allProducts);
       // ignore: prefer_const_constructors
-      emit(ProductsLoadingSuccessed());
+      emit(ProductInsertedSuccessed());
+    } on ProductBarcodeTakenException {
+      emit(const ProductInsertError("الباركود مستخدم بالفعل"));
     } catch (e) {
       emit(ProductErrorState('فشل إضافة المنتج: $e'));
     }
@@ -81,7 +84,9 @@ class ProductCubit extends Cubit<ProductState>
       }
 
       // ignore: prefer_const_constructors
-      emit(ProductsLoadingSuccessed());
+      emit(ProductInsertedSuccessed());
+    } on ProductBarcodeTakenException {
+      emit(const ProductInsertError("الباركود مستخدم بالفعل"));
     } catch (e) {
       emit(ProductErrorState('فشل تعديل المنتج: $e'));
     }
@@ -99,5 +104,4 @@ class ProductCubit extends Cubit<ProductState>
       emit(ProductErrorState('فشل حذف المنتج: $e'));
     }
   }
-
 }

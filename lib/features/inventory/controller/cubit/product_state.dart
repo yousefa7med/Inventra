@@ -1,6 +1,5 @@
 part of 'product_cubit.dart';
 
-
 sealed class ProductState {
   const ProductState();
 }
@@ -17,8 +16,14 @@ final class ProductsLoadingSuccessed extends ProductState {
   const ProductsLoadingSuccessed();
 }
 
-final class ProductInserted extends ProductState {
-  const ProductInserted();
+final class ProductInsertedSuccessed extends ProductState {
+  const ProductInsertedSuccessed();
+}
+
+final class ProductInsertError extends ProductState {
+  final String message;
+
+  const ProductInsertError(this.message);
 }
 
 final class ProductErrorState extends ProductState {
