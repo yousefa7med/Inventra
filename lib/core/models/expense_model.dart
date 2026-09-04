@@ -5,6 +5,7 @@ class ExpenseModel {
   @Id()
    int id = 0;
 
+ @Index()
  final  DateTime date;
 
  final  double value;

@@ -1,3 +1,4 @@
+import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit_interface.dart';
 import 'package:Inventra/features/safe/data/models/expense_list_item.dart';
@@ -12,8 +13,8 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   SafeCubit(this._repository) : super(SafeInitial());
 
   double _currentBalance = 0;
-
   String _searchText = '';
+  List<ExpenseModel> _allExpenses = [];
 
   @override
   String? get searchText => _searchText;
@@ -23,8 +24,8 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
     try {
       _searchText = '';
       _currentBalance = _repository.getBalance().currentBalance;
-      final expenses = _repository.loadExpenses('');
-      final expenseListItem = generateExpensesListItem(expenses);
+      _allExpenses = _repository.loadExpenses('');
+      final expenseListItem = generateExpensesListItem(_allExpenses);
       emit(
         SafeLoaded(
           safeBalance: _currentBalance,
@@ -44,12 +45,12 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
         value: -value,
         note: note.trim(),
       );
-      final expenseListItem = (state as SafeLoaded).expenseListItem;
-      expenseListItem.insert(1, ExpenseItem(expense: expense));
+      _allExpenses.insert(0, expense);
+      final expenseListItem = generateExpensesListItem(_allExpenses);
       _repository.addExpense(expense);
       _currentBalance -= value;
       emit(
-        (state as SafeLoaded).copyWith(
+        SafeLoaded(
           safeBalance: _currentBalance,
           expenseListItem: expenseListItem,
         ),
@@ -75,29 +76,29 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   @override
   void searchForExpenses(String searchText) {
     _searchText = searchText;
+    final normalizedSearch = searchText.trim().normalizeArabic();
 
-    try {
-      final expenses = _repository.loadExpenses(searchText);
-      final expenseListItem = generateExpensesListItem(expenses);
-      if (state is SafeLoaded) {
-        emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
-      }
-    } catch (e) {
-      emit(SafeError("فشل في تحميل المصاريف"));
+    List<ExpenseModel> filtered;
+    if (normalizedSearch.isEmpty) {
+      filtered = _allExpenses;
+    } else {
+      filtered = _allExpenses
+          .where((e) => e.note.normalizeArabic().contains(normalizedSearch))
+          .toList();
+    }
+
+    final expenseListItem = generateExpensesListItem(filtered);
+    if (state is SafeLoaded) {
+      emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
     }
   }
 
   @override
   void clearSearchFilter() {
     _searchText = '';
-    try {
-      final expenses = _repository.loadExpenses(_searchText);
-      final expenseListItem = generateExpensesListItem(expenses);
-      if (state is SafeLoaded) {
-        emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
-      }
-    } catch (e) {
-      emit(SafeError("فشل في تحميل المصاريف"));
+    final expenseListItem = generateExpensesListItem(_allExpenses);
+    if (state is SafeLoaded) {
+      emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
     }
   }
 
