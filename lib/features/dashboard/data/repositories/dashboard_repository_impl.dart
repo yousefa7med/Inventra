@@ -1,10 +1,10 @@
-
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
-import 'package:Inventra/features/dashboard/data/models/dashboard_metric.dart';
-import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
+ import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
 import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
 import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
@@ -68,7 +68,10 @@ class DashboardRepositoryImpl implements DashboardRepository {
     double bucketExpenses = 0;
     double bucketNetProfit = 0;
 
-    int bucketCountTransactions = 0;
+    int bucketSalesCount = 0;
+    int bucketPurchasesCount = 0;
+    int bucketExpensesCount = 0;
+    int bucketNetProfitCount = 0;
 
     for (final entry in entries) {
       while (entry.createdAt.isAfter(currentDateTime)) {
@@ -79,15 +82,21 @@ class DashboardRepositoryImpl implements DashboardRepository {
           purchases: bucketPurchases,
           expenses: bucketExpenses,
           netProfit: bucketNetProfit,
-          count: bucketCountTransactions,
+          bucketSalesCount: bucketSalesCount,
+          bucketPurchasesCount: bucketPurchasesCount,
+          bucketExpensesCount: bucketExpensesCount,
+          bucketNetProfitCount: bucketNetProfitCount,
         );
 
         bucketSales = 0;
         bucketPurchases = 0;
         bucketExpenses = 0;
         bucketNetProfit = 0;
-        bucketCountTransactions = 0;
 
+        bucketSalesCount = 0;
+        bucketPurchasesCount = 0;
+        bucketExpensesCount = 0;
+        bucketNetProfitCount = 0;
         currentDateTime = _getNextBucket(currentDateTime, period);
       }
       double entryProfit = 0;
@@ -97,12 +106,18 @@ class DashboardRepositoryImpl implements DashboardRepository {
           salesKpi += entry.signedValue;
           bucketSales += entry.signedValue;
           entryProfit += entry.profit!;
+          bucketSalesCount++;
           hasMetricData[DashboardMetric.sales] = true;
           hasMetricData[DashboardMetric.netProfit] = true;
+          bucketNetProfitCount++;
+          bucketNetProfit += entryProfit;
+          netProfitKpi += entryProfit;
         case TransactionType.buyingInvoice:
           purchasesKpi += entry.signedValue.abs();
           bucketPurchases += entry.signedValue.abs();
           hasMetricData[DashboardMetric.purchases] = true;
+          bucketPurchasesCount++;
+          bucketNetProfitCount++;
 
         case TransactionType.expense:
           expensesKpi += entry.signedValue.abs();
@@ -110,13 +125,13 @@ class DashboardRepositoryImpl implements DashboardRepository {
           entryProfit += entry.signedValue;
           hasMetricData[DashboardMetric.expenses] = true;
           hasMetricData[DashboardMetric.netProfit] = true;
+          bucketExpensesCount++;
+          bucketNetProfitCount++;
+          bucketNetProfit += entryProfit;
+          netProfitKpi += entryProfit;
         default:
           break;
       }
-      bucketNetProfit += entryProfit;
-
-      netProfitKpi += entryProfit;
-      bucketCountTransactions++;
     }
 
     _addChartPoints(
@@ -126,7 +141,10 @@ class DashboardRepositoryImpl implements DashboardRepository {
       purchases: bucketPurchases,
       expenses: bucketExpenses,
       netProfit: bucketNetProfit,
-      count: bucketCountTransactions,
+      bucketSalesCount: bucketSalesCount,
+      bucketPurchasesCount: bucketPurchasesCount,
+      bucketExpensesCount: bucketExpensesCount,
+      bucketNetProfitCount: bucketNetProfitCount,
     );
 
     currentDateTime = _getNextBucket(currentDateTime, period);
@@ -257,22 +275,43 @@ class DashboardRepositoryImpl implements DashboardRepository {
     required double purchases,
     required double expenses,
     required double netProfit,
-    required int count,
+
+    required int bucketSalesCount,
+    required int bucketPurchasesCount,
+    required int bucketExpensesCount,
+    required int bucketNetProfitCount,
   }) {
     charts[DashboardMetric.sales]!.add(
-      ChartPoint(timestamp: timestamp, value: sales, count: count),
+      ChartPoint(timestamp: timestamp, value: sales, count: bucketSalesCount),
     );
 
     charts[DashboardMetric.purchases]!.add(
-      ChartPoint(timestamp: timestamp, value: purchases, count: count),
+      ChartPoint(
+        timestamp: timestamp,
+        value: purchases,
+        count: bucketPurchasesCount,
+      ),
     );
 
     charts[DashboardMetric.expenses]!.add(
-      ChartPoint(timestamp: timestamp, value: expenses, count: count),
+      ChartPoint(
+        timestamp: timestamp,
+        value: expenses,
+        count: bucketExpensesCount,
+      ),
     );
 
     charts[DashboardMetric.netProfit]!.add(
-      ChartPoint(timestamp: timestamp, value: netProfit, count: count),
+      ChartPoint(
+        timestamp: timestamp,
+        value: netProfit,
+        count: bucketNetProfitCount,
+      ),
     );
+  }
+
+  @override
+  double getBalance() {
+    return _objectBox.safeBalanceBox.get(1)?.currentBalance ?? 0;
   }
 }

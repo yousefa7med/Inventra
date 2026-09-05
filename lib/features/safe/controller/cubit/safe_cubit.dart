@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit_interface.dart';
 import 'package:Inventra/features/safe/data/models/expense_list_item.dart';
@@ -40,7 +39,6 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   @override
   void addExpense({required double value, required String note}) {
     try {
-      
       final expense = ExpenseModel(
         date: DateTime.now(),
         value: -value,

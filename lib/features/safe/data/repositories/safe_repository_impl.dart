@@ -50,6 +50,8 @@ class SafeRepositoryImpl implements SafeRepository {
           description: newBalance.note,
         ),
       );
+         _transactionChangeNotifier.notify(TransactionType.manualAdjustment);
+
     });
   }
 
