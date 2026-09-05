@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/config/arguments/product_details_argument.dart';
@@ -31,7 +30,6 @@ import 'package:get_it/get_it.dart';
 
 class AppRouter {
   static Route? generateRoute(RouteSettings settings) {
-    log("${settings.name}");
     switch (settings.name) {
       case AppRoutes.mainView:
         return pageRouteBuilderMethod(

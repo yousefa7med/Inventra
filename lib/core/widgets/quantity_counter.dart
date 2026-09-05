@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,6 @@ class _QuantityCounterState extends State<QuantityCounter> {
   @override
   void initState() {
     uiQuantity = widget.quantity;
-    log(widget.quantity.toString());
 
     super.initState();
   }
