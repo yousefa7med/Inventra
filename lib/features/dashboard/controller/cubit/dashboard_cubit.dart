@@ -1,3 +1,5 @@
+
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/dashboard/data/models/dashboard_metric.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dashboard_state.dart';
@@ -7,14 +9,22 @@ import '../../data/repositories/dashboard_repository.dart';
 class DashboardCubit extends Cubit<DashboardState>
     implements DashboardCubitInterface {
   final DashboardRepository _repository;
-  DashboardCubit(this._repository) : super(DashboardInitial());
+  final TransactionChangeNotifier _transactionChangeNotifier;
+
+  DashboardCubit(this._repository, this._transactionChangeNotifier)
+    : super(DashboardInitial()) {
+    _transactionChangeNotifier.stream.listen((_) {
+
+      _repository.clearCachedDashboardSnapshot();
+      loadDashboard();
+    });
+  }
 
   DashboardMetric _selectedMetric = DashboardMetric.netProfit;
   DashboardPeriod _selectedPeriod = DashboardPeriod.today;
 
   @override
   DashboardMetric get selectedMetric => _selectedMetric;
- 
 
   @override
   DashboardPeriod get selectedPeriod => _selectedPeriod;

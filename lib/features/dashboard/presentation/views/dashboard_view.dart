@@ -54,7 +54,7 @@ class DashboardView extends StatelessWidget {
     if (state is DashboardLoaded) {
       final selectedMetric = state.selectedMetric;
       final selectedPeriod = state.selectedPeriod;
-      final snapshot = state.snapshot.snapshots[selectedPeriod]!;
+      final snapshot = state.snapshot;
 
       return RefreshIndicator(
         onRefresh: () async => context.read<DashboardCubit>().refresh(),

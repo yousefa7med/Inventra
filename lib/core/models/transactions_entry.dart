@@ -10,7 +10,7 @@ class TransactionsEntry {
   final int typeIndex;
   @Index()
   final DateTime createdAt;
-  final double value;
+  final double signedValue;
 
   final int referenceId;
   final double? profit;
@@ -20,7 +20,7 @@ class TransactionsEntry {
 
   TransactionsEntry({
     required this.typeIndex,
-    required this.value,
+    required this.signedValue,
     required this.referenceId,
     required this.createdAt,
     this.description,

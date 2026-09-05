@@ -240,7 +240,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(10, 5751848838677251857),
     name: 'TransactionsEntry',
-    lastPropertyId: const obx_int.IdUid(7, 6557909718525526477),
+    lastPropertyId: const obx_int.IdUid(8, 3753122541448732843),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -255,12 +255,6 @@ final _entities = <obx_int.ModelEntity>[
         type: 6,
         flags: 8,
         indexId: const obx_int.IdUid(5, 2326885959875775617),
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 5565267625079159377),
-        name: 'value',
-        type: 8,
-        flags: 0,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(4, 7327265378412542483),
@@ -285,6 +279,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(7, 6557909718525526477),
         name: 'description',
         type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 3753122541448732843),
+        name: 'signedValue',
+        type: 8,
         flags: 0,
       ),
     ],
@@ -566,6 +566,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       654472520556339,
       807499548421484161,
       7557834816726494275,
+      5565267625079159377,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -837,14 +838,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final descriptionOffset = object.description == null
             ? null
             : fbb.writeString(object.description!);
-        fbb.startTable(8);
+        fbb.startTable(9);
         fbb.addInt64(0, object.id);
         fbb.addInt64(1, object.typeIndex);
-        fbb.addFloat64(2, object.value);
         fbb.addInt64(3, object.referenceId);
         fbb.addFloat64(4, object.profit);
         fbb.addInt64(5, object.createdAt.millisecondsSinceEpoch);
         fbb.addOffset(6, descriptionOffset);
+        fbb.addFloat64(7, object.signedValue);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -857,10 +858,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           6,
           0,
         );
-        final valueParam = const fb.Float64Reader().vTableGet(
+        final signedValueParam = const fb.Float64Reader().vTableGet(
           buffer,
           rootOffset,
-          8,
+          18,
           0,
         );
         final referenceIdParam = const fb.Int64Reader().vTableGet(
@@ -882,7 +883,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final object = TransactionsEntry(
           typeIndex: typeIndexParam,
-          value: valueParam,
+          signedValue: signedValueParam,
           referenceId: referenceIdParam,
           createdAt: createdAtParam,
           description: descriptionParam,
@@ -1278,28 +1279,28 @@ class TransactionsEntry_ {
     _entities[5].properties[1],
   );
 
-  /// See [TransactionsEntry.value].
-  static final value = obx.QueryDoubleProperty<TransactionsEntry>(
-    _entities[5].properties[2],
-  );
-
   /// See [TransactionsEntry.referenceId].
   static final referenceId = obx.QueryIntegerProperty<TransactionsEntry>(
-    _entities[5].properties[3],
+    _entities[5].properties[2],
   );
 
   /// See [TransactionsEntry.profit].
   static final profit = obx.QueryDoubleProperty<TransactionsEntry>(
-    _entities[5].properties[4],
+    _entities[5].properties[3],
   );
 
   /// See [TransactionsEntry.createdAt].
   static final createdAt = obx.QueryDateProperty<TransactionsEntry>(
-    _entities[5].properties[5],
+    _entities[5].properties[4],
   );
 
   /// See [TransactionsEntry.description].
   static final description = obx.QueryStringProperty<TransactionsEntry>(
+    _entities[5].properties[5],
+  );
+
+  /// See [TransactionsEntry.signedValue].
+  static final signedValue = obx.QueryDoubleProperty<TransactionsEntry>(
     _entities[5].properties[6],
   );
 }

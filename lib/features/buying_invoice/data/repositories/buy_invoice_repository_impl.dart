@@ -8,13 +8,15 @@ import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
 class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
   final ObjectBoxServices _objectBox;
+  final TransactionChangeNotifier _transactionChangeNotifier;
 
-  BuyInvoiceRepositoryImpl(this._objectBox);
+  BuyInvoiceRepositoryImpl(this._objectBox, this._transactionChangeNotifier);
 
   @override
   List<SupplierModel> getAllSuppliers() {
@@ -106,12 +108,13 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
 
       final auditEntry = TransactionsEntry(
         typeIndex: TransactionType.buyingInvoice.index,
-        value: -totalPrice,
+        signedValue: -totalPrice,
         referenceId: savedInvoice!.id,
         createdAt: savedInvoice!.date,
         description: supplier.name,
       );
       _objectBox.transactionsEntryBox.put(auditEntry);
+      _transactionChangeNotifier.notify(TransactionType.buyingInvoice);
     });
   }
 

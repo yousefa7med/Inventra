@@ -7,13 +7,15 @@ import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/selling_invoice/data/repositories/sell_invoice_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
 class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
   final ObjectBoxServices _objectBox;
+  final TransactionChangeNotifier _transactionChangeNotifier;
 
-  SellInvoiceRepositoryImpl(this._objectBox);
+  SellInvoiceRepositoryImpl(this._objectBox, this._transactionChangeNotifier);
 
   @override
   List<CustomerModel> getAllCustomers() {
@@ -102,13 +104,14 @@ class SellInvoiceRepositoryImpl implements SellInvoiceRepository {
 
       final auditEntry = TransactionsEntry(
         typeIndex: TransactionType.sellingInvoice.index,
-        value: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
+        signedValue: (totalPrice - (discount ?? 0)).clamp(0.0, double.infinity),
         referenceId: savedInvoice!.id,
         createdAt: savedInvoice!.date,
         description: customer.name,
         profit: savedInvoice!.profit,
       );
       _objectBox.transactionsEntryBox.put(auditEntry);
+      _transactionChangeNotifier.notify(TransactionType.sellingInvoice);
     });
   }
 }

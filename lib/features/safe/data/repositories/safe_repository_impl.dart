@@ -5,13 +5,15 @@ import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
 class SafeRepositoryImpl implements SafeRepository {
   final ObjectBoxServices _objectBox;
+  final TransactionChangeNotifier _transactionChangeNotifier;
 
-  SafeRepositoryImpl(this._objectBox);
+  SafeRepositoryImpl(this._objectBox, this._transactionChangeNotifier, );
 
   @override
   SafeBalanceModel getBalance() {
@@ -42,7 +44,7 @@ class SafeRepositoryImpl implements SafeRepository {
       _objectBox.transactionsEntryBox.put(
         TransactionsEntry(
           typeIndex: TransactionType.manualAdjustment.index,
-          value: newBalance.currentBalance,
+          signedValue: newBalance.currentBalance,
           referenceId: adjustmentId,
           createdAt: newBalance.lastUpdated,
           description: newBalance.note,
@@ -65,12 +67,14 @@ class SafeRepositoryImpl implements SafeRepository {
       _objectBox.transactionsEntryBox.put(
         TransactionsEntry(
           typeIndex: TransactionType.expense.index,
-          value: expense.value,
+          signedValue: expense.value,
           referenceId: expenseId,
           createdAt: expense.date,
           description: expense.note.trim(),
         ),
       );
+   _transactionChangeNotifier.notify(TransactionType.expense);
+
     });
   }
 
