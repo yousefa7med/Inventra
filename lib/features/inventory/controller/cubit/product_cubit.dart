@@ -36,7 +36,9 @@ class ProductCubit extends Cubit<ProductState>
   void searchProducts(String query) {
     try {
       if (query.isEmpty) {
-        loadProducts();
+        _filteredProducts = List.from(_allProducts);
+        emit(const ProductsLoadingSuccessed());
+        return;
       }
       emit(const ProductLoading());
       _filteredProducts = _repository.searchProduct(query);
