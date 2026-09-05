@@ -18,6 +18,7 @@ class SafeView extends StatelessWidget {
       child: Scaffold(
         appBar: const CustomAppBar(title: 'الخزنة', showDrawerButton: true),
         body: RefreshIndicator(
+          
           onRefresh: () async => context.read<SafeCubit>().init(),
           child: BlocBuilder<SafeCubit, SafeState>(
             builder: (context, state) {

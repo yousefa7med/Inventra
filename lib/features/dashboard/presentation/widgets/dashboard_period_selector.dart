@@ -1,10 +1,10 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
-import 'package:Inventra/features/dashboard/data/models/dashboard_metric.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DashboardPeriodSelector extends StatelessWidget {
+class DashboardPeriodSelector extends StatefulWidget {
   final DashboardPeriod selectedPeriod;
   final ValueChanged<DashboardPeriod> onPeriodChanged;
   const DashboardPeriodSelector({
@@ -14,41 +14,64 @@ class DashboardPeriodSelector extends StatelessWidget {
   });
 
   @override
+  State<DashboardPeriodSelector> createState() =>
+      _DashboardPeriodSelectorState();
+}
+
+class _DashboardPeriodSelectorState extends State<DashboardPeriodSelector> {
+  final periods = DashboardPeriod.values;
+  late int _selectedIndex;
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedPeriod.index;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44.h,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 4.w),
-        children: DashboardPeriod.values.map((period) {
-          final isSelected = period == selectedPeriod;
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            child: FilterChip(
-              label: Text(
-                period.label,
-                style: AppTextStyle.medium14.copyWith(
-                  color: isSelected ? AppColors.white : AppColors.primary,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: List.generate(periods.length, (index) {
+        final isSelected = _selectedIndex == index;
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: index == periods.last.index ? 0.w : 8.w,
+            ),
+            child: OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  _selectedIndex = index;
+                });
+                widget.onPeriodChanged(periods[index]);
+              },
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                backgroundColor: isSelected
+                    ? AppColors.primary.withValues(alpha: 0.1)
+                    : Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                side: BorderSide(
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.greyMedium300,
+                  width: isSelected ? 1.5 : 1,
                 ),
               ),
-              selected: isSelected,
-              onSelected: (_) => onPeriodChanged(period),
-              backgroundColor: AppColors.surface,
-              selectedColor: AppColors.primary,
-              checkmarkColor: AppColors.white,
-              side: BorderSide(
-                color: isSelected ? AppColors.primary : AppColors.greyMedium300,
-                width: 1.5,
+              child: Text(
+                periods[index].label,
+                style: AppTextStyle.medium12.copyWith(
+                  color: isSelected ? AppColors.primary : AppColors.darkBlue,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-          );
-        }).toList(),
-      ),
+          ),
+        );
+      }),
     );
   }
 }

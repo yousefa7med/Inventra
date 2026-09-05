@@ -1,7 +1,8 @@
+import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
 
 import 'chart_point.dart';
-import 'dashboard_metric.dart';
 
 class DashboardModel {
   final Map<DashboardPeriod, DashboardPeriodSnapshot?> snapshots;
