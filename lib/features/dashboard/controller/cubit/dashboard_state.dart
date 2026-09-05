@@ -8,20 +8,25 @@ class DashboardInitial extends DashboardState {}
 class DashboardLoading extends DashboardState {}
 
 class DashboardLoaded extends DashboardState {
-  final DashboardModel snapshot;
+  final DashboardPeriodSnapshot snapshot;
   final DashboardMetric selectedMetric;
   final DashboardPeriod selectedPeriod;
 
-  DashboardLoaded({required this.snapshot, required this.selectedMetric, required this.selectedPeriod});
+  DashboardLoaded({
+    required this.snapshot,
+    required this.selectedMetric,
+    required this.selectedPeriod,
+  });
 
   DashboardLoaded copyWith({
-    DashboardModel? snapshot,
+    DashboardPeriodSnapshot? snapshot,
     DashboardMetric? selectedMetric,
     DashboardPeriod? selectedPeriod,
   }) {
     return DashboardLoaded(
       snapshot: snapshot ?? this.snapshot,
-      selectedMetric: selectedMetric ?? this.selectedMetric, selectedPeriod: selectedPeriod??this.selectedPeriod,
+      selectedMetric: selectedMetric ?? this.selectedMetric,
+      selectedPeriod: selectedPeriod ?? this.selectedPeriod,
     );
   }
 }

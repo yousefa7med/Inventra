@@ -1,3 +1,4 @@
+
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
@@ -12,26 +13,31 @@ import 'package:flutter/material.dart';
 class DashboardRepositoryImpl implements DashboardRepository {
   final ObjectBoxServices _objectBox;
   @override
-  late DashboardModel dashboardEntity;
+  late DashboardModel cachedDashboardSnapshot;
+
   DashboardRepositoryImpl(this._objectBox) {
-    dashboardEntity = DashboardModel.initial();
+    cachedDashboardSnapshot = DashboardModel.initial();
+  }
+  @override
+  void clearCachedDashboardSnapshot() {
+    cachedDashboardSnapshot = DashboardModel.initial();
   }
 
   @override
-  DashboardModel getDashboardData({required DashboardPeriod period}) {
-    final snapshot = dashboardEntity.snapshots[period];
+  DashboardPeriodSnapshot getDashboardData({required DashboardPeriod period}) {
+    final snapshot = cachedDashboardSnapshot.snapshots[period];
 
     if (snapshot != null) {
-      return dashboardEntity;
+      return snapshot;
     }
 
     final newSnapshot = getDashboardSnapshot(period: period);
-    dashboardEntity = dashboardEntity.insertSnapshot(
+    cachedDashboardSnapshot = cachedDashboardSnapshot.insertSnapshot(
       snapshot: newSnapshot,
       period: period,
     );
 
-    return dashboardEntity;
+    return newSnapshot;
   }
 
   @override
@@ -43,6 +49,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
     final charts = <DashboardMetric, List<ChartPoint>>{
       for (final metric in DashboardMetric.values) metric: <ChartPoint>[],
+    };
+    final hasMetricData = <DashboardMetric, bool>{
+      for (final metric in DashboardMetric.values) metric: false,
     };
 
     final bucketCount = _getBucketCount(period, dateRange.start.month);
@@ -58,13 +67,11 @@ class DashboardRepositoryImpl implements DashboardRepository {
     double bucketPurchases = 0;
     double bucketExpenses = 0;
     double bucketNetProfit = 0;
-    double profit = 0;
 
     int bucketCountTransactions = 0;
 
     for (final entry in entries) {
-      while (entry.createdAt.isAfter(currentDateTime) ||
-          entry.createdAt.isAtSameMomentAs(currentDateTime)) {
+      while (entry.createdAt.isAfter(currentDateTime)) {
         _addChartPoints(
           charts: charts,
           timestamp: currentDateTime,
@@ -83,26 +90,32 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
         currentDateTime = _getNextBucket(currentDateTime, period);
       }
+      double entryProfit = 0;
+
       switch (entry.type) {
         case TransactionType.sellingInvoice:
-          salesKpi += entry.value;
-          bucketSales += entry.value;
-          profit += entry.profit!;
+          salesKpi += entry.signedValue;
+          bucketSales += entry.signedValue;
+          entryProfit += entry.profit!;
+          hasMetricData[DashboardMetric.sales] = true;
+          hasMetricData[DashboardMetric.netProfit] = true;
         case TransactionType.buyingInvoice:
-          purchasesKpi += entry.value.abs();
-          bucketPurchases = purchasesKpi;
+          purchasesKpi += entry.signedValue.abs();
+          bucketPurchases += entry.signedValue.abs();
+          hasMetricData[DashboardMetric.purchases] = true;
 
         case TransactionType.expense:
-          expensesKpi += entry.value;
-          bucketExpenses += entry.value;
-          profit += entry.value;
-
+          expensesKpi += entry.signedValue.abs();
+          bucketExpenses += entry.signedValue.abs();
+          entryProfit += entry.signedValue;
+          hasMetricData[DashboardMetric.expenses] = true;
+          hasMetricData[DashboardMetric.netProfit] = true;
         default:
           break;
       }
-      bucketNetProfit += profit;
+      bucketNetProfit += entryProfit;
 
-      netProfitKpi += profit;
+      netProfitKpi += entryProfit;
       bucketCountTransactions++;
     }
 
@@ -121,12 +134,11 @@ class DashboardRepositoryImpl implements DashboardRepository {
     for (var metric in DashboardMetric.values) {
       final points = charts[metric]!;
 
-      final hasData = points.any((point) => point.value > 0 || point.value < 0);
-
-      if (!hasData) {
-        charts[metric]!.clear();
+      if (!hasMetricData[metric]!) {
+        points.clear();
         continue;
       }
+
       var time = currentDateTime;
       while (points.length < bucketCount) {
         points.add(ChartPoint(timestamp: time, value: 0, count: 0));
@@ -173,7 +185,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
         start = DateTime(now.year, now.month, now.day, 0, 0, 0);
         end = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
       case DashboardPeriod.week:
-        int daysToSubtract = (now.weekday + 1) & 7;
+        int daysToSubtract = (now.weekday + 1) % 7;
 
         start = DateTime(
           now.year,
@@ -213,7 +225,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
         return current.add(const Duration(days: 1));
 
       case DashboardPeriod.year:
-        return current.add(Duration(days: _daysInMonth(current.month)));
+        return DateTime(current.year, current.month + 1, 1);
     }
   }
 

@@ -81,7 +81,7 @@ class TransactionsCubit extends Cubit<TransactionsState>
       final dailyTransactions = item.value;
       final double total = dailyTransactions.fold(
         0.0,
-        (sum, transaction) => sum + transaction.value,
+        (sum, transaction) => sum + transaction.signedValue,
       );
       _listItems.add(
         HeaderItem(date: date, count: dailyTransactions.length, total: total),
