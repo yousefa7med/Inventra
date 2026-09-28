@@ -135,9 +135,9 @@ class TransactionCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      transaction.value.toString(),
+                      transaction.signedValue.toString(),
                       style: AppTextStyle.semiBold14.copyWith(
-                        color: transaction.value > 0
+                        color: transaction.signedValue > 0
                             ? AppColors.success
                             : AppColors.error,
                       ),
@@ -191,7 +191,7 @@ class TransactionCard extends StatelessWidget {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           formatCurrency(
-                            transaction.value,
+                            transaction.signedValue,
                             useCurrencySymbol: true,
                             reduceDecimalDigits: true,
                           ),

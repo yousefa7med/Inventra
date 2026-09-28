@@ -20,6 +20,9 @@ class TransactionsView extends StatelessWidget {
         onRefresh: () async =>
             context.read<TransactionsCubit>().loadTransactions(),
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
           slivers: [
             const SliverToBoxAdapter(child: Gap(8)),
             const SliverToBoxAdapter(child: TransactionsFilter()),

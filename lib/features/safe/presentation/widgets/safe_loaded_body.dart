@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/data/models/expense_list_item.dart';
@@ -18,9 +16,10 @@ class SafeLoadedBody extends StatelessWidget {
   final SafeLoaded state;
   @override
   Widget build(BuildContext context) {
-    log('rebuildddddddddddd');
     return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
       slivers: [
         SliverToBoxAdapter(
           child: Padding(

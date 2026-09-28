@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -110,12 +109,10 @@ abstract class Validator {
       if (price == null || price <= 0) {
         return "رقم غير صحيح";
       }
-      log(buyingPrice.text);
-      log(wholeSalePrice.text);
+  
       final parsedBuyingPrice = double.tryParse(buyingPrice.text) ?? 0;
       final parsedWholesalePrice = double.tryParse(wholeSalePrice.text) ?? 0;
-      log(parsedBuyingPrice.toString());
-      log(parsedWholesalePrice.toString());
+
       if (price <= parsedBuyingPrice) {
         return "يجب أن يزيد عن سعر الشراء";
       }

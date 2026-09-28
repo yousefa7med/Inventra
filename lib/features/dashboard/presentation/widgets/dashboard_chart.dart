@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:Inventra/core/utils/formatters.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
-import 'package:Inventra/features/dashboard/data/models/dashboard_metric.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
@@ -118,7 +118,7 @@ class DashboardChart extends StatelessWidget {
                         ),
                         TextSpan(
                           text: formatCurrency(
- spot.y,
+                            spot.y,
                             useCurrencySymbol: true,
                             reduceDecimalDigits: true,
                           ),

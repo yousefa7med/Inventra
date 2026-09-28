@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
@@ -40,7 +39,6 @@ class MainView extends StatelessWidget {
           if (value == 3) {
             GetIt.instance<SafeCubit>().init();
           }
-          log(value.toString());
         },
         stateManagement: false,
         tabs: _tabs(context),

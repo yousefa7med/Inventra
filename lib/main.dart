@@ -2,6 +2,7 @@ import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/controller/controllers/app_cubit/app_cubit.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/observer.dart';
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/core/utilities/app_theme.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository.dart';
@@ -98,11 +99,20 @@ Future<void> configureDependencies() async {
   await objectBoxServices.init();
   GetIt.instance.registerSingleton<ObjectBoxServices>(objectBoxServices);
 
+  final TransactionChangeNotifier transactionChangeNotifier =
+      TransactionChangeNotifier();
+
   // 3. Repositories
-  final safeRepository = SafeRepositoryImpl(objectBoxServices);
+  final safeRepository = SafeRepositoryImpl(
+    objectBoxServices,
+    transactionChangeNotifier,
+  );
   GetIt.instance.registerLazySingleton<SafeRepository>(() => safeRepository);
 
-  final sellInvoiceRepository = SellInvoiceRepositoryImpl(objectBoxServices);
+  final sellInvoiceRepository = SellInvoiceRepositoryImpl(
+    objectBoxServices,
+    transactionChangeNotifier,
+  );
   GetIt.instance.registerLazySingleton<SellInvoiceRepository>(
     () => sellInvoiceRepository,
   );
@@ -122,7 +132,10 @@ Future<void> configureDependencies() async {
     () => productRepository,
   );
 
-  final buyInvoiceRepository = BuyInvoiceRepositoryImpl(objectBoxServices);
+  final buyInvoiceRepository = BuyInvoiceRepositoryImpl(
+    objectBoxServices,
+    transactionChangeNotifier,
+  );
   GetIt.instance.registerLazySingleton<BuyInvoiceRepository>(
     () => buyInvoiceRepository,
   );
@@ -144,7 +157,7 @@ Future<void> configureDependencies() async {
     () => dashboardRepository,
   );
   GetIt.instance.registerLazySingleton<DashboardCubit>(
-    () => DashboardCubit(dashboardRepository),
+    () => DashboardCubit(dashboardRepository, transactionChangeNotifier),
   );
 
   // 4. Cubits (LazySingletons for app-wide state)
