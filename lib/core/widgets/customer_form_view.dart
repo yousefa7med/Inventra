@@ -52,94 +52,110 @@ class _CustomerFormViewState extends State<CustomerFormView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        appBar: CustomAppBar(title: isEditing ? 'تعديل العميل' : "اضافة عميل"),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0.w),
-            child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: _formKey,
-              child: Column(
-                children: [
-                  Gap(24.h),
-                  AppTextField(
-                    prefixIcon: const Icon(
-                      Icons.person_outline,
-                      color: AppColors.primary,
+      child: BlocListener<CustomerCubit, CustomerState>(
+        listenWhen: (previous, current) =>
+            current is CustomerInserted || current is CustomerLoadingError,
+        listener: (context, state) {
+          if (state is CustomerInserted) {
+            if (!isEditing) {
+              showSnackBar(
+                context,
+                "تم اضافة العميل بنجاح",
+                color: AppColors.success,
+              );
+            } else {
+              showSnackBar(
+                context,
+                'تم تعديل العميل بنجاح',
+                color: AppColors.success,
+              );
+            }
+          } else if (state is CustomerLoadingError) {
+            showSnackBar(context, state.message, color: AppColors.error);
+          }
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: isEditing ? 'تعديل العميل' : "اضافة عميل",
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Gap(24.h),
+                    AppTextField(
+                      prefixIcon: const Icon(
+                        Icons.person_outline,
+                        color: AppColors.primary,
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller: nameController,
+                      label: 'اسم العميل',
+                      textInputAction: TextInputAction.next,
+                      validator: Validator.validateName(),
                     ),
-                    keyboardType: TextInputType.text,
-                    controller: nameController,
-                    label: 'اسم العميل',
-                    textInputAction: TextInputAction.next,
-                    validator: Validator.validateName(),
-                  ),
-                  Gap(16.h),
-                  AppTextField(
-                    prefixIcon: const Icon(
-                      Icons.phone_android_outlined,
-                      color: AppColors.primary,
+                    Gap(16.h),
+                    AppTextField(
+                      prefixIcon: const Icon(
+                        Icons.phone_android_outlined,
+                        color: AppColors.primary,
+                      ),
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      label: 'رقم الهاتف',
+                      textInputAction: TextInputAction.next,
+                      validator: Validator.validatePhone(),
                     ),
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    label: 'رقم الهاتف',
-                    textInputAction: TextInputAction.next,
-                    validator: Validator.validatePhone(),
-                  ),
-                  Gap(16.h),
-                  AppTextField(
-                    controller: addressController,
-                    keyboardType: TextInputType.streetAddress,
-                    prefixIcon: const Icon(
-                      Icons.location_on_outlined,
-                      color: AppColors.primary,
+                    Gap(16.h),
+                    AppTextField(
+                      controller: addressController,
+                      keyboardType: TextInputType.streetAddress,
+                      prefixIcon: const Icon(
+                        Icons.location_on_outlined,
+                        color: AppColors.primary,
+                      ),
+                      label: "العنوان (اختياري)",
+                      textInputAction: TextInputAction.done,
                     ),
-                    label: "العنوان (اختياري)",
-                    textInputAction: TextInputAction.done,
-                  ),
 
-                  Gap(32.h),
-                  AppButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        late final CustomerModel customer;
-                        if (!isEditing) {
-                          customer = CustomerModel(
-                            name: nameController.text.trim(),
-                            address: addressController.text.trim(),
-                            phoneNum: phoneController.text.trim(),
-                          );
-                        } else {
-                          customer = widget.customer!.copyWith(
-                            name: nameController.text.trim(),
-                            address: addressController.text.trim(),
-                            phoneNum: phoneController.text.trim(),
-                          );
+                    Gap(32.h),
+                    AppButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          late final CustomerModel customer;
+                          if (!isEditing) {
+                            customer = CustomerModel(
+                              name: nameController.text.trim(),
+                              address: addressController.text.trim(),
+                              phoneNum: phoneController.text.trim(),
+                            );
+                          } else {
+                            customer = widget.customer!.copyWith(
+                              name: nameController.text.trim(),
+                              address: addressController.text.trim(),
+                              phoneNum: phoneController.text.trim(),
+                            );
+                          }
+                          final isCustomerInserted = context
+                              .read<CustomerCubit>()
+                              .insertCustomer(customer);
+                          if (!isCustomerInserted) {
+                            return;
+                          }
+                          AppNavigation.pop(context);
                         }
-                        context.read<CustomerCubit>().insertCustomer(customer);
-                        if (!isEditing) {
-                          showSnackBar(
-                            context,
-                            "تم اضافة العميل بنجاح",
-                            color: AppColors.success,
-                          );
-                        } else {
-                          showSnackBar(
-                            context,
-                            'تم تعديل العميل بنجاح',
-                            color: AppColors.success,
-                          );
-                        }
-
-                        AppNavigation.pop(context);
-                      }
-                    },
-                    child: Text(
-                      !isEditing ? "اضافة عميل" : 'تعديل العميل',
-                      style: AppTextStyle.medium16,
+                      },
+                      child: Text(
+                        !isEditing ? "اضافة عميل" : 'تعديل العميل',
+                        style: AppTextStyle.medium16,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

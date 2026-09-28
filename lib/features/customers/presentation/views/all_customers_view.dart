@@ -55,7 +55,7 @@ class AllCustomersView extends StatelessWidget {
                   current is CustomerLoading ||
                   current is CustomerLoadingSuccessed ||
                   current is CustomerLoadingError ||
-                  current is CustomerUpdated,
+                  current is CustomerInserted,
 
               builder: (context, state) {
                 final cubit = context.read<CustomerCubit>();
@@ -80,7 +80,7 @@ class AllCustomersView extends StatelessWidget {
                 }
 
                 if (state is CustomerLoadingSuccessed ||
-                    state is CustomerUpdated) {
+                    state is CustomerInserted) {
                   final customers = cubit.filteredCustomers;
 
                   if (customers.isEmpty) {

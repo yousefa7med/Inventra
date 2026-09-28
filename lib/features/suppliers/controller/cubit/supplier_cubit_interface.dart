@@ -6,5 +6,5 @@ abstract class SupplierCubitInterface {
 
   void loadSuppliers();
   void searchSuppliers(String query);
-  void insertSupplier(SupplierModel supplier);
+  bool insertSupplier(SupplierModel supplier);
 }

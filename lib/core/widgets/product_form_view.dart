@@ -95,14 +95,13 @@ class _ProductFormViewState extends State<ProductFormView> {
                 isEditing ? "تم تعديل المنتج بنجاح" : "تم إضافة المنتج بنجاح",
                 color: AppColors.success,
               );
-            } else if (state is ProductInsertError ||
-                state is ProductInsertError) {
+            } else if (state is ProductInsertError) {
               showSnackBar(context, state.message, color: AppColors.error);
             } else if (state is ProductErrorState) {
               showSnackBar(
                 context,
                 isEditing ? "فشل في تعديل المنتج" : "فشل في إضافة المنتج",
-                color: AppColors.success,
+                color: AppColors.error,
               );
             }
           },

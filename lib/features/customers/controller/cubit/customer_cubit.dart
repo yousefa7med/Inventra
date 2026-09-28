@@ -2,7 +2,6 @@ import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit_interface.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'customer_state.dart';
 
@@ -47,7 +46,7 @@ class CustomerCubit extends Cubit<CustomerState>
   }
 
   @override
-  void insertCustomer(CustomerModel customer)  {
+  bool insertCustomer(CustomerModel customer) {
     try {
       _repository.insertCustomer(customer);
 
@@ -68,9 +67,11 @@ class CustomerCubit extends Cubit<CustomerState>
       }
 
       // ignore: prefer_const_constructors
-      emit(CustomerUpdated("تم تعديل بيانات العميل بنجاح"));
+      emit(CustomerInserted());
+      return true;
     } catch (e) {
       emit(CustomerLoadingError(e.toString()));
+      return false;
     }
   }
 }

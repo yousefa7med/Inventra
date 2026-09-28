@@ -58,107 +58,120 @@ class _SupplierFormViewState extends State<SupplierFormView> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        appBar: CustomAppBar(title: isEditing ? 'تعديل المورد' : "اضافة مورد"),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0.w),
-            child: Form(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: _formKey,
-              child: Column(
-                children: [
-                  Gap(24.h),
-                  AppTextField(
-                    prefixIcon: const Icon(
-                      Icons.person_outline,
-                      color: AppColors.primary,
+      child: BlocListener<SupplierCubit, SupplierState>(
+        listenWhen: (previous, current) =>
+            current is SupplierInserted || current is SupplierLoadingError,
+        listener: (context, state) {
+          if (state is SupplierInserted) {
+            showSnackBar(
+              context,
+              isEditing ? 'تم تعديل المورد بنجاح' : "تم اضافة المورد بنجاح",
+              color: AppColors.success,
+            );
+          } else if (state is SupplierLoadingError) {
+            showSnackBar(context, state.message, color: AppColors.error);
+          }
+        },
+        child: Scaffold(
+          appBar: CustomAppBar(
+            title: isEditing ? 'تعديل المورد' : "اضافة مورد",
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0.w),
+              child: Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Gap(24.h),
+                    AppTextField(
+                      prefixIcon: const Icon(
+                        Icons.person_outline,
+                        color: AppColors.primary,
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller: nameController,
+                      label: 'اسم المورد',
+                      textInputAction: TextInputAction.next,
+                      validator: Validator.validateName(),
                     ),
-                    keyboardType: TextInputType.text,
-                    controller: nameController,
-                    label: 'اسم المورد',
-                    textInputAction: TextInputAction.next,
-                    validator: Validator.validateName(),
-                  ),
-                  Gap(16.h),
-                  AppTextField(
-                    controller: storeNameController,
-                    keyboardType: TextInputType.text,
-                    label: 'اسم المتجر / الشركة',
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: const Icon(
-                      Icons.storefront_outlined,
-                      color: AppColors.primary,
+                    Gap(16.h),
+                    AppTextField(
+                      controller: storeNameController,
+                      keyboardType: TextInputType.text,
+                      label: 'اسم المتجر / الشركة',
+                      textInputAction: TextInputAction.next,
+                      prefixIcon: const Icon(
+                        Icons.storefront_outlined,
+                        color: AppColors.primary,
+                      ),
+                      validator: Validator.validateStoreName(),
                     ),
-                    validator: Validator.validateStoreName(),
-                  ),
-                  Gap(16.h),
-                  AppTextField(
-                    controller: storeAddressController,
-                    keyboardType: TextInputType.streetAddress,
-                    label: 'عنوان المتجر',
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: const Icon(
-                      Icons.location_on_outlined,
-                      color: AppColors.primary,
+                    Gap(16.h),
+                    AppTextField(
+                      controller: storeAddressController,
+                      keyboardType: TextInputType.streetAddress,
+                      label: 'عنوان المتجر',
+                      textInputAction: TextInputAction.next,
+                      prefixIcon: const Icon(
+                        Icons.location_on_outlined,
+                        color: AppColors.primary,
+                      ),
                     ),
-                  ),
-                  Gap(16.h),
-                  AppTextField(
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    label: 'رقم الهاتف',
-                    textInputAction: TextInputAction.done,
-                    prefixIcon: const Icon(
-                      Icons.phone_android_outlined,
-                      color: AppColors.primary,
+                    Gap(16.h),
+                    AppTextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      label: 'رقم الهاتف',
+                      textInputAction: TextInputAction.done,
+                      prefixIcon: const Icon(
+                        Icons.phone_android_outlined,
+                        color: AppColors.primary,
+                      ),
+                      validator: Validator.validatePhone(),
                     ),
-                    validator: Validator.validatePhone(),
-                  ),
 
-                  Gap(32.h),
+                    Gap(32.h),
 
-                  AppButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        late final SupplierModel supplier;
-                        if (isEditing) {
-                          supplier = widget.supplier!.copyWith(
-                            name: nameController.text.trim(),
-                            storeName: storeNameController.text.trim(),
-                            storeAdd: storeAddressController.text.trim(),
-                            phoneNum: phoneController.text.trim(),
-                          );
-                          showSnackBar(
-                            context,
-                            'تم تعديل المورد بنجاح',
-                            color: AppColors.success,
-                          );
-                        } else {
-                          supplier = SupplierModel(
-                            name: nameController.text.trim(),
-                            storeName: storeNameController.text.trim(),
-                            storeAdd: storeAddressController.text.trim(),
-                            phoneNum: phoneController.text.trim(),
-                          );
-                          showSnackBar(
-                            context,
-                            "تم اضافة المورد بنجاح",
-                            color: AppColors.success,
-                          );
+                    AppButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          late final SupplierModel supplier;
+                          if (isEditing) {
+                            supplier = widget.supplier!.copyWith(
+                              name: nameController.text.trim(),
+                              storeName: storeNameController.text.trim(),
+                              storeAdd: storeAddressController.text.trim(),
+                              phoneNum: phoneController.text.trim(),
+                            );
+                          } else {
+                            supplier = SupplierModel(
+                              name: nameController.text.trim(),
+                              storeName: storeNameController.text.trim(),
+                              storeAdd: storeAddressController.text.trim(),
+                              phoneNum: phoneController.text.trim(),
+                            );
+                          }
+
+                          final isSupplierInserted = context
+                              .read<SupplierCubit>()
+                              .insertSupplier(supplier);
+
+                          if (isSupplierInserted) {
+                            return;
+                          }
+
+                          AppNavigation.pop(context);
                         }
-
-                        context.read<SupplierCubit>().insertSupplier(supplier);
-
-                        AppNavigation.pop(context);
-                      }
-                    },
-                    child: Text(
-                      isEditing ? 'تعديل المورد' : "اضافة مورد",
-                      style: AppTextStyle.medium16,
+                      },
+                      child: Text(
+                        isEditing ? 'تعديل المورد' : "اضافة مورد",
+                        style: AppTextStyle.medium16,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

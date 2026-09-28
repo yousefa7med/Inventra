@@ -6,5 +6,5 @@ abstract class CustomerCubitInterface {
 
 void loadCustomers();
   void searchCustomers(String query);
-  void insertCustomer(CustomerModel customer);
+  bool insertCustomer(CustomerModel customer);
 }

@@ -61,7 +61,7 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                   current is SupplierLoading ||
                   current is SupplierLoadingSuccessed ||
                   current is SupplierLoadingError ||
-                  current is SupplierUpdated,
+                  current is SupplierInserted,
               builder: (context, state) {
                 if (state is SupplierLoading) {
                   return const SliverFillRemaining(
@@ -82,7 +82,7 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                 }
 
                 if (state is SupplierLoadingSuccessed ||
-                    state is SupplierUpdated) {
+                    state is SupplierInserted) {
                   final suppliers = cubit.filteredSuppliers;
 
                   if (suppliers.isEmpty) {

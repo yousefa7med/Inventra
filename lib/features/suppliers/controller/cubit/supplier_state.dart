@@ -1,6 +1,5 @@
 part of 'supplier_cubit.dart';
 
-@immutable
 sealed class SupplierState {
   const SupplierState();
 }
@@ -23,8 +22,7 @@ final class SupplierLoadingError extends SupplierState {
   const SupplierLoadingError(this.message);
 }
 
-final class SupplierUpdated extends SupplierState {
-  final String message;
+final class SupplierInserted extends SupplierState {
 
-  const SupplierUpdated(this.message);
+  const SupplierInserted();
 }

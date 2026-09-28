@@ -2,7 +2,6 @@ import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit_interface.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'supplier_state.dart';
 
@@ -43,7 +42,7 @@ class SupplierCubit extends Cubit<SupplierState>
   }
 
   @override
-  void insertSupplier(SupplierModel supplier) {
+  bool insertSupplier(SupplierModel supplier) {
     try {
       _repository.insertSupplier(supplier);
 
@@ -65,9 +64,11 @@ class SupplierCubit extends Cubit<SupplierState>
       }
 
       // ignore: prefer_const_constructors
-      emit(SupplierUpdated("تم تعديل بيانات العميل بنجاح"));
+      emit(SupplierInserted());
+      return true;
     } catch (e) {
       emit(SupplierLoadingError(e.toString()));
+      return false;
     }
   }
 }

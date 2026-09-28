@@ -1,6 +1,5 @@
 part of 'customer_cubit.dart';
 
-@immutable
 sealed class CustomerState {
   const CustomerState();
 }
@@ -23,8 +22,6 @@ final class CustomerLoadingError extends CustomerState {
   const CustomerLoadingError(this.message);
 }
 
-final class CustomerUpdated extends CustomerState {
-  final String message;
-
-  const CustomerUpdated(this.message);
+final class CustomerInserted extends CustomerState {
+  const CustomerInserted();
 }
