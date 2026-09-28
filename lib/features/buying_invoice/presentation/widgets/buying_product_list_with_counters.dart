@@ -1,13 +1,10 @@
-import 'package:Inventra/core/utilities/app_colors.dart';
-import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
+import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_state.dart';
 import 'package:Inventra/features/buying_invoice/presentation/widgets/buying_product_card_with_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 class BuyingProductListWithCounters extends StatelessWidget {
   const BuyingProductListWithCounters({super.key});
@@ -28,27 +25,10 @@ class BuyingProductListWithCounters extends StatelessWidget {
         } else if (state is BuyInvoiceProductError) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    state.message,
-                    style: AppTextStyle.medium16.copyWith(
-                      color: AppColors.error,
-                    ),
-                  ),
-                  Gap(16.h),
-                  ElevatedButton(
-                    onPressed: () =>
-                        context.read<BuyInvoiceCubit>().loadProducts(""),
-                    child: const Text(
-                      'إعادة المحاولة',
-                      style: AppTextStyle.navBar,
-                    ),
-                  ),
-                ],
-              ),
+            child: ErrorStateWidget(
+              message: state.message,
+              onPressed: () =>
+                  context.read<BuyInvoiceCubit>().loadProducts(""),
             ),
           );
         } else if (state is BuyInvoiceProductsLoaded) {

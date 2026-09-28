@@ -4,6 +4,7 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
+import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/presentation/widgets/supplier_card.dart';
@@ -72,24 +73,10 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                 if (state is SupplierLoadingError) {
                   return SliverFillRemaining(
                     hasScrollBody: false,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            state.message,
-                            style: AppTextStyle.medium16.copyWith(
-                              color: AppColors.error,
-                            ),
-                          ),
-                          Gap(16.h),
-                          ElevatedButton(
-                            onPressed: () =>
-                                context.read<SupplierCubit>().loadSuppliers(),
-                            child: const Text('إعادة المحاولة'),
-                          ),
-                        ],
-                      ),
+                    child: ErrorStateWidget(
+                      message: state.message,
+                      onPressed: () =>
+                          context.read<SupplierCubit>().loadSuppliers(),
                     ),
                   );
                 }
@@ -141,6 +128,19 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
               },
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            AppNavigation.pushName(
+              context: context,
+              route: AppRoutes.supplierFormView,
+            );
+          },
+          icon: const Icon(Icons.add),
+          label: Text(
+            'إضافة مورد',
+            style: AppTextStyle.medium16.copyWith(color: AppColors.white),
+          ),
         ),
       ),
     );

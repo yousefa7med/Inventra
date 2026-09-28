@@ -1,5 +1,7 @@
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
+import 'package:Inventra/core/utilities/app_colors.dart';
+import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
@@ -118,6 +120,19 @@ class AllCustomersView extends StatelessWidget {
               },
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            AppNavigation.pushName(
+              context: context,
+              route: AppRoutes.customerFormView,
+            );
+          },
+          icon: const Icon(Icons.add),
+          label: Text(
+            'إضافة عميل',
+            style: AppTextStyle.medium16.copyWith(color: AppColors.white),
+          ),
         ),
       ),
     );

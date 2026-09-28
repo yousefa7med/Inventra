@@ -1,16 +1,13 @@
 import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
-import 'package:Inventra/core/utilities/app_colors.dart';
-import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/empty_state_widget.dart';
+import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_state.dart';
 import 'package:Inventra/features/selling_invoice/presentation/widgets/selling_product_card_with_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gap/gap.dart';
 
 class SellingProductListWithCounters extends StatelessWidget {
   const SellingProductListWithCounters({super.key});
@@ -31,27 +28,10 @@ class SellingProductListWithCounters extends StatelessWidget {
         } else if (state is SellInvoiceProductError) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    state.message,
-                    style: AppTextStyle.medium16.copyWith(
-                      color: AppColors.error,
-                    ),
-                  ),
-                  Gap(16.h),
-                  ElevatedButton(
-                    onPressed: () =>
-                        context.read<SellInvoiceCubit>().loadProducts(""),
-                    child: const Text(
-                      'إعادة المحاولة',
-                      style: AppTextStyle.navBar,
-                    ),
-                  ),
-                ],
-              ),
+            child: ErrorStateWidget(
+              message: state.message,
+              onPressed: () =>
+                  context.read<SellInvoiceCubit>().loadProducts(""),
             ),
           );
         } else if (state is SellInvoiceProductSuccessed) {
