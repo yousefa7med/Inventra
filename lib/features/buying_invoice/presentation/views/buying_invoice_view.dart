@@ -37,7 +37,7 @@ class BuyingInvoiceView extends StatelessWidget {
           }
         },
         child: Scaffold(
-          appBar: const CustomAppBar(title: AppStrings.invoiceFormTitle),
+          appBar: const CustomAppBar(title: AppStrings.buyInvoice),
           body: SafeArea(
             child: CustomScrollView(
               slivers: [

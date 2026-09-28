@@ -1,3 +1,4 @@
+import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/invoice_item_model.dart';
@@ -148,7 +149,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
       if (product == null || product.quantity < item.quantity) {
         emit(
           SellInvoiceError(
-            'الكمية غير متوفرة للمنتج: ${product?.name ?? 'غير معروف'}',
+            '${AppStrings.insufficientStock}${product?.name ?? 'غير معروف'}',
           ),
         );
         return false;

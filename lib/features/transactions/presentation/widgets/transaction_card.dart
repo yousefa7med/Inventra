@@ -95,7 +95,7 @@ class TransactionCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                ' ${transaction.id + 1}#',
+                                ' #${transaction.referenceId}',
                                 style: AppTextStyle.regular12.copyWith(
                                   color: AppColors.grey,
                                 ),

@@ -63,18 +63,6 @@ _DrawerItem(
                     },
                   ),
                   const _DrawerDivider(),
-                  _DrawerItem(
-                    icon: Icons.settings_outlined,
-                    title: 'الاعدادات',
-                    onTap: () {
-                      AppNavigation.pushName(
-                        context: context,
-                        route: AppRoutes.settings,
-                      );
-              
-                    },
-                  ),
-                  const _DrawerDivider(),
                   const _FutureFeaturesPlaceholder(),
                 ],
               ),

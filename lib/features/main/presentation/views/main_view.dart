@@ -13,7 +13,6 @@ import 'package:Inventra/features/transactions/presentation/views/transactions_v
 import 'package:Inventra/features/inventory/presentation/views/inventory_view.dart';
 import 'package:Inventra/features/safe/presentation/views/safe_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
-import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -110,18 +109,6 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
     item: ItemConfig(
       icon: const Icon(Icons.account_balance_wallet_outlined),
       title: "الخزنة",
-      activeForegroundColor: AppColors.primary,
-      inactiveForegroundColor: isDark(context)
-          ? AppColors.white70
-          : AppColors.grey,
-      textStyle: AppTextStyle.navBar,
-    ),
-  ),
-  PersistentTabConfig(
-    screen: const SettingsView(),
-    item: ItemConfig(
-      icon: const Icon(Icons.settings_outlined),
-      title: "الاعدادات",
       activeForegroundColor: AppColors.primary,
       inactiveForegroundColor: isDark(context)
           ? AppColors.white70

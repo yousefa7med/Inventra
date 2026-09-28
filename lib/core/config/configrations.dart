@@ -20,7 +20,6 @@ import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart'
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/presentation/views/selling_product_selection_view.dart';
 import 'package:Inventra/features/selling_invoice/presentation/views/selling_invoice_view.dart';
-import 'package:Inventra/features/settings/presentation/views/settings_view.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/presentation/views/all_suppliers_view.dart';
 import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
@@ -150,13 +149,6 @@ class AppRouter {
               ),
         );
 
-      case AppRoutes.settings:
-        return pageRouteBuilderMethod(
-          settings: settings,
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const SettingsView(),
-        );
-
       case AppRoutes.invoiceDetailsView:
         final invoice = settings.arguments as InvoiceDetailsModel;
         return pageRouteBuilderMethod(
@@ -189,7 +181,6 @@ abstract class AppRoutes {
   static const String allSuppliers = '/all-suppliers';
   static const String buyingInvoiceView = '/buying-invoice';
   static const String productSelectionView = '/product-selection';
-  static const String settings = '/settings';
 
   static const String supplierFormView = '/edit-supplier';
   static const String invoiceDetailsView = '/invoice-details';
