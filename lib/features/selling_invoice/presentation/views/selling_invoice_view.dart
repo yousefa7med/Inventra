@@ -64,7 +64,12 @@ class SellingInvoiceView extends StatelessWidget {
                         if (context
                             .read<SellInvoiceCubit>()
                             .validateSellInvoice()) {
-                          context.read<SellInvoiceCubit>().confirmInvoice();
+                          final isConfirmingInvoiceSuccessed = context
+                              .read<SellInvoiceCubit>()
+                              .confirmInvoice();
+                          if (!isConfirmingInvoiceSuccessed) {
+                            return;
+                          }
                           if (context.mounted) {
                             AppNavigation.pop(context);
                           }

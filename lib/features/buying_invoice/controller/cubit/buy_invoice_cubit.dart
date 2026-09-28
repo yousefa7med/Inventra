@@ -134,7 +134,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
   }
 
   @override
-  void confirmInvoice() async {
+  bool confirmInvoice() {
     for (final item in _items) {
       final product = item.product.target;
       if (product == null) {
@@ -143,7 +143,7 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
             'منتج غير صالح: ${item.product.target?.name ?? 'غير معروف'}',
           ),
         );
-        return;
+        return false;
       }
     }
 
@@ -157,10 +157,13 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
       _items.clear();
       _selectedSupplier = null;
       emit(BuyInvoiceConfirmed());
+      return true;
     } on String catch (e) {
       emit(BuyInvoiceError(e));
+      return false;
     } catch (e) {
       emit(BuyInvoiceError('Failed to save invoice: $e'));
+      return false;
     }
   }
 

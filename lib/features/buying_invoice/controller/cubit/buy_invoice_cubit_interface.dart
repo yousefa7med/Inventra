@@ -25,6 +25,6 @@ abstract class BuyInvoiceCubitInterface {
   void removeItem(int index);
 
   // Confirmation
-  void confirmInvoice();
+  bool confirmInvoice();
   bool validateBuyInvoice();
 }

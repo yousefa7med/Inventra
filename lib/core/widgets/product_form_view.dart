@@ -86,7 +86,8 @@ class _ProductFormViewState extends State<ProductFormView> {
         body: BlocListener<ProductCubit, ProductState>(
           listenWhen: (previous, current) =>
               current is ProductInsertedSuccessed ||
-              current is ProductInsertError,
+              current is ProductInsertError ||
+              current is ProductErrorState,
           listener: (context, state) {
             if (state is ProductInsertedSuccessed) {
               showSnackBar(
@@ -94,8 +95,15 @@ class _ProductFormViewState extends State<ProductFormView> {
                 isEditing ? "تم تعديل المنتج بنجاح" : "تم إضافة المنتج بنجاح",
                 color: AppColors.success,
               );
-            } else if (state is ProductInsertError) {
+            } else if (state is ProductInsertError ||
+                state is ProductInsertError) {
               showSnackBar(context, state.message, color: AppColors.error);
+            } else if (state is ProductErrorState) {
+              showSnackBar(
+                context,
+                isEditing ? "فشل في تعديل المنتج" : "فشل في إضافة المنتج",
+                color: AppColors.success,
+              );
             }
           },
           child: SingleChildScrollView(
@@ -203,6 +211,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                           late final ProductModel product;
                           String? oldImagePath = widget.product?.imgPath;
                           String? workingImgPath = imgPath;
+                          final cubit = context.read<ProductCubit>();
 
                           // حفظ الصورة الجديدة أولاً في متغير مؤقت
                           if (image != null) {
@@ -248,7 +257,21 @@ class _ProductFormViewState extends State<ProductFormView> {
 
                           try {
                             // محاولة الحفظ في قاعدة البيانات
-                            context.read<ProductCubit>().updateProduct(product);
+                            final isUpdateSuccessed = cubit.insertProduct(
+                              product,
+                            );
+
+                            // فشل الحفظ: نبقى على النموذج ونعرض رسالة الخطأ
+
+                            if (!isUpdateSuccessed) {
+                              if (image != null && workingImgPath != null) {
+                                await deleteImage(workingImgPath);
+                                if (!context.mounted) return;
+                                setState(() => imgPath = oldImagePath);
+                              }
+
+                              return;
+                            }
 
                             // إذا نجحت عملية الحفظ، نقوم بحذف الصورة القديمة بأمان الآن
                             if (isEditing &&
@@ -257,12 +280,16 @@ class _ProductFormViewState extends State<ProductFormView> {
                               await deleteImage(oldImagePath);
                             }
 
+                            if (!context.mounted) return;
+
                             AppNavigation.pop<ProductModel>(context, product);
                           } catch (e) {
                             if (image != null && workingImgPath != null) {
                               await deleteImage(workingImgPath);
-                              imgPath = oldImagePath;
+                              if (!context.mounted) return;
+                              setState(() => imgPath = oldImagePath);
                             }
+                            if (!context.mounted) return;
                             showSnackBar(
                               context,
                               isEditing

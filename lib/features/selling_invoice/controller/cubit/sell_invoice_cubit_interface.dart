@@ -13,12 +13,12 @@ abstract class SellInvoiceCubitInterface {
   List<ProductModel> get products;
   String searchQuery = "";
   // Customer actions
- void loadCustomers();
+  void loadCustomers();
   void selectCustomer(CustomerModel customer);
   void clearCustomer();
 
   // Product actions
- void loadProducts(String query);
+  void loadProducts(String query);
   void addProductItemLine(ProductModel product, int quantity);
   void updateItemQuantity(int itemIndex, int newQuantity);
   void removeItem(int index);
@@ -27,6 +27,6 @@ abstract class SellInvoiceCubitInterface {
   void setDiscount(double value);
 
   // Confirmation
- void confirmInvoice();
+  bool confirmInvoice();
   bool validateSellInvoice();
 }

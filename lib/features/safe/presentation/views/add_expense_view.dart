@@ -1,3 +1,4 @@
+import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
@@ -31,6 +32,14 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   final _formKey = GlobalKey<FormState>();
   final _valueController = TextEditingController();
   final _noteController = TextEditingController();
+  late final double _safeBalance;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<SafeCubit>().state;
+    _safeBalance = state is SafeLoaded ? state.safeBalance : 0;
+  }
 
   @override
   void dispose() {
@@ -39,14 +48,27 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
     super.dispose();
   }
 
-  void _saveExpense() {
-    if (!_formKey.currentState!.validate()) return;
+  bool _saveExpense() {
+    if (!_formKey.currentState!.validate()) return false;
 
     final cubit = context.read<SafeCubit>();
     cubit.addExpense(
-      value: double.parse(_valueController.text),
+      value: double.parse(_valueController.text.trim()),
       note: _noteController.text.trim(),
     );
+
+    final state = cubit.state;
+    if (state is SafeError) {
+      showSnackBar(context, state.message, color: AppColors.error);
+      return false;
+    }
+
+    showSnackBar(
+      context,
+      'تم اضافة المصروف بنجاح',
+      color: AppColors.success,
+    );
+    return true;
   }
 
   @override
@@ -71,9 +93,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
                   ),
                   textInputAction: TextInputAction.next,
                   label: 'مثال: 150.50',
-                  validator: Validator.validateExpense(
-                    (context.read<SafeCubit>().state as SafeLoaded).safeBalance,
-                  ),
+                  validator: Validator.validateExpense(_safeBalance),
                 ),
                 const Gap(12),
                 Text('الملاحظة', style: AppTextStyle.regular18),
@@ -89,8 +109,9 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
                 const Gap(12),
                 AppButton(
                   onPressed: () {
-                    _saveExpense();
-                    AppNavigation.pop(context);
+                    if (_saveExpense()) {
+                      AppNavigation.pop(context);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,

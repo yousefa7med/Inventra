@@ -50,22 +50,7 @@ class ProductCubit extends Cubit<ProductState>
   }
 
   @override
-  void addProduct(ProductModel product) async {
-    try {
-      _repository.insertProduct(product);
-      _allProducts.add(product);
-      _filteredProducts = List.from(_allProducts);
-      // ignore: prefer_const_constructors
-      emit(ProductInsertedSuccessed());
-    } on ProductBarcodeTakenException {
-      emit(const ProductInsertError("الباركود مستخدم بالفعل"));
-    } catch (e) {
-      emit(ProductErrorState('فشل إضافة المنتج: $e'));
-    }
-  }
-
-  @override
-  void updateProduct(ProductModel product) async {
+  bool insertProduct(ProductModel product) {
     try {
       _repository.insertProduct(product);
 
@@ -87,10 +72,13 @@ class ProductCubit extends Cubit<ProductState>
 
       // ignore: prefer_const_constructors
       emit(ProductInsertedSuccessed());
+      return true;
     } on ProductBarcodeTakenException {
       emit(const ProductInsertError("الباركود مستخدم بالفعل"));
+      return false;
     } catch (e) {
       emit(ProductErrorState('فشل تعديل المنتج: $e'));
+      return false;
     }
   }
 

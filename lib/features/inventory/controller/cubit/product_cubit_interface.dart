@@ -6,7 +6,6 @@ abstract class ProductCubitInterface {
 
   void loadProducts();
   void searchProducts(String query);
-  void addProduct(ProductModel product);
-  void updateProduct(ProductModel product);
+  bool insertProduct(ProductModel product);
   void deleteProduct(ProductModel product);
 }

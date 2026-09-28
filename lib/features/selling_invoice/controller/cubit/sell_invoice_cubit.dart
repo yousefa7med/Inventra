@@ -142,7 +142,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
   }
 
   @override
-  void confirmInvoice() {
+  bool confirmInvoice() {
     for (final item in _items) {
       final product = item.product.target;
       if (product == null || product.quantity < item.quantity) {
@@ -151,7 +151,7 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
             'الكمية غير متوفرة للمنتج: ${product?.name ?? 'غير معروف'}',
           ),
         );
-        return;
+        return false;
       }
     }
 
@@ -167,8 +167,10 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
       _selectedCustomer = null;
       _discount = 0.0;
       emit(const SellInvoiceConfirmed());
+      return true;
     } catch (e) {
       emit(SellInvoiceError('Failed to save invoice: $e'));
+      return false;
     }
   }
 }
