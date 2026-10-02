@@ -63,7 +63,11 @@ class CustomerCubit extends Cubit<CustomerState>
       if (filteredIndex != -1) {
         _filteredCustomers[filteredIndex] = customer;
       } else {
-        _filteredCustomers.add(customer);
+        if (_filteredCustomers.isNotEmpty) {
+          _filteredCustomers.insert(0, customer);
+        } else {
+          _filteredCustomers.add(customer);
+        }
       }
 
       // ignore: prefer_const_constructors

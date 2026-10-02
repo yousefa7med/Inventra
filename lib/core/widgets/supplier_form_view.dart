@@ -158,7 +158,7 @@ class _SupplierFormViewState extends State<SupplierFormView> {
                               .read<SupplierCubit>()
                               .insertSupplier(supplier);
 
-                          if (isSupplierInserted) {
+                          if (!isSupplierInserted) {
                             return;
                           }
 

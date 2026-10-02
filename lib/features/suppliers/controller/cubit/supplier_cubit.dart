@@ -60,7 +60,11 @@ class SupplierCubit extends Cubit<SupplierState>
       if (filteredIndex != -1) {
         _filteredSuppliers[filteredIndex] = supplier;
       } else {
-        _filteredSuppliers.add(supplier);
+        if (_filteredSuppliers.isNotEmpty) {
+          _filteredSuppliers.insert(0, supplier);
+        } else {
+          _filteredSuppliers.add(supplier);
+        }
       }
 
       // ignore: prefer_const_constructors

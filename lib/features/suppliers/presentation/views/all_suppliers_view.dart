@@ -93,11 +93,6 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                         message: cubit.searchQuery.isNotEmpty
                             ? 'لا توجد نتائج للبحث'
                             : 'لا يوجد موردين',
-                        actionText: 'إضافة مورد',
-                        onAction: () => AppNavigation.pushName(
-                          context: context,
-                          route: AppRoutes.supplierFormView,
-                        ),
                       ),
                     );
                   }

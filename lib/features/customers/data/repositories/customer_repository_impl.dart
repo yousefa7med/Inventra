@@ -11,7 +11,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
 
   @override
   List<CustomerModel> getAllCustomers() {
-    return _objectBoxServices.customersBox.getAll();
+    return _objectBoxServices.customersBox.getAll().reversed.toList();
   }
 
   @override
@@ -19,7 +19,6 @@ class CustomerRepositoryImpl implements CustomerRepository {
     _objectBoxServices.customersBox.put(customer);
   }
 
-  
   @override
   List<CustomerModel> searchCustomers(String search) {
     if (search.isEmpty) return getAllCustomers();

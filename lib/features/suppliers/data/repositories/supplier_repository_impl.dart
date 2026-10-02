@@ -11,7 +11,7 @@ class SupplierRepositoryImpl implements SupplierRepository {
 
   @override
   List<SupplierModel> getAllSuppliers() {
-    return _objectBox.suppliersBox.getAll();
+    return _objectBox.suppliersBox.getAll().reversed.toList();
   }
 
   @override
@@ -32,6 +32,4 @@ class SupplierRepositoryImpl implements SupplierRepository {
   void insertSupplier(SupplierModel supplier) {
     _objectBox.suppliersBox.put(supplier);
   }
-
-
 }

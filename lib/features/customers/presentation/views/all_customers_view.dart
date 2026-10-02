@@ -91,11 +91,6 @@ class AllCustomersView extends StatelessWidget {
                         message: cubit.searchQuery.isNotEmpty
                             ? 'لا توجد نتائج للبحث'
                             : 'لا يوجد عملاء',
-                        actionText: 'إضافة عميل',
-                        onAction: () => AppNavigation.pushName(
-                          context: context,
-                          route: AppRoutes.customerFormView,
-                        ),
                       ),
                     );
                   }
