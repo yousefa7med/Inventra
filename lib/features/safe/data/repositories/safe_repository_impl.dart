@@ -13,11 +13,12 @@ class SafeRepositoryImpl implements SafeRepository {
   final ObjectBoxServices _objectBox;
   final TransactionChangeNotifier _transactionChangeNotifier;
 
-  SafeRepositoryImpl(this._objectBox, this._transactionChangeNotifier, );
+  SafeRepositoryImpl(this._objectBox, this._transactionChangeNotifier);
 
   @override
   SafeBalanceModel getBalance() {
     final balance = _objectBox.safeBalanceBox.get(1);
+
     if (balance != null) return balance;
     return SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
   }
@@ -50,8 +51,7 @@ class SafeRepositoryImpl implements SafeRepository {
           description: newBalance.note,
         ),
       );
-         _transactionChangeNotifier.notify(TransactionType.manualAdjustment);
-
+      _transactionChangeNotifier.notify(TransactionType.manualAdjustment);
     });
   }
 
@@ -75,8 +75,7 @@ class SafeRepositoryImpl implements SafeRepository {
           description: expense.note.trim(),
         ),
       );
-   _transactionChangeNotifier.notify(TransactionType.expense);
-
+      _transactionChangeNotifier.notify(TransactionType.expense);
     });
   }
 

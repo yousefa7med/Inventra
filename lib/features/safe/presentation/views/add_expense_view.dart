@@ -37,8 +37,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   @override
   void initState() {
     super.initState();
-    final state = context.read<SafeCubit>().state;
-    _safeBalance = state is SafeLoaded ? state.safeBalance : 0;
+    _safeBalance = context.read<SafeCubit>().currentBalance;
   }
 
   @override
@@ -63,11 +62,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
       return false;
     }
 
-    showSnackBar(
-      context,
-      'تم اضافة المصروف بنجاح',
-      color: AppColors.success,
-    );
+    showSnackBar(context, 'تم اضافة المصروف بنجاح', color: AppColors.success);
     return true;
   }
 
@@ -119,14 +114,10 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child:
-                 
-                      Text(
-                        'حفظ',
-                        style: AppTextStyle.medium20.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
+                  child: Text(
+                    'حفظ',
+                    style: AppTextStyle.medium20.copyWith(color: Colors.white),
+                  ),
                 ),
               ],
             ),

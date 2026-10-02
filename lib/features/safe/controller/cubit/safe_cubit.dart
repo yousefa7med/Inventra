@@ -17,6 +17,8 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
 
   @override
   String? get searchText => _searchText;
+  @override
+  double get currentBalance => _repository.getBalance().currentBalance;
 
   void init() {
     emit(SafeLoading());
