@@ -139,6 +139,10 @@ class SellInvoiceCubit extends Cubit<SellInvoiceState>
       emit(SellInvoiceError('يرجى إضافة منتج واحد على الأقل'));
       return false;
     }
+    if (_discount > subtotal) {
+      emit(const SellInvoiceError(AppStrings.discountExceedsSubtotal));
+      return false;
+    }
     return true;
   }
 

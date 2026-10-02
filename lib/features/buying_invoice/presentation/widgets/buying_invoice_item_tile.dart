@@ -56,6 +56,8 @@ class _BuyingInvoiceItemTileState extends State<BuyingInvoiceItemTile> {
                       Text(
                         product?.name ?? 'منتج غير معروف',
                         style: AppTextStyle.bold14,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       if (product != null)
                         Text(
@@ -81,11 +83,18 @@ class _BuyingInvoiceItemTileState extends State<BuyingInvoiceItemTile> {
             ),
             const Gap(8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Expanded(
+                  child: Text(
+                    AppStrings.total,
+                    style: AppTextStyle.regular12.copyWith(
+                      color: AppColors.grey,
+                    ),
+                  ),
+                ),
                 Text(
-                  '${AppStrings.total}: ${widget.item.lineTotal.toStringAsFixed(2)} ${AppStrings.egp}',
-                  style: AppTextStyle.bold12,
+                  '${widget.item.lineTotal.toStringAsFixed(2)} ${AppStrings.egp}',
+                  style: AppTextStyle.bold14.copyWith(color: AppColors.primary),
                 ),
               ],
             ),

@@ -262,23 +262,37 @@ class _InvoiceItemsCard extends StatelessWidget {
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
+                padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 10.h),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Text(
-                        item.name,
-                        style: AppTextStyle.medium16,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.name,
+                            style: AppTextStyle.medium16,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Gap(4.h),
+                          Text(
+                            '${item.quantity} × ${formatCurrency(item.unitPrice, useCurrencySymbol: true, reduceDecimalDigits: true)}',
+                            style: AppTextStyle.regular12.copyWith(
+                              color: AppColors.greyMedium500,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     Gap(12.w),
                     Text(
-                      '${item.quantity} × ${formatCurrency(item.unitPrice, useCurrencySymbol: true, reduceDecimalDigits: true)}',
-                      style: AppTextStyle.regular14.copyWith(
-                        color: AppColors.greyMedium500,
+                      formatCurrency(
+                        item.lineTotal,
+                        useCurrencySymbol: true,
+                        reduceDecimalDigits: true,
                       ),
+                      style: AppTextStyle.bold14,
                     ),
                   ],
                 ),

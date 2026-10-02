@@ -146,7 +146,7 @@ class _ChangeProductPriceDialogState extends State<ChangeProductPriceDialog> {
             }
           },
           child: Text(
-            AppStrings.addToInvoice,
+            AppStrings.changePrice,
             style: AppTextStyle.regular14.copyWith(color: AppColors.primary),
           ),
         ),
