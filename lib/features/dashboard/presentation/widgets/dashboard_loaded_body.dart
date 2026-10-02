@@ -4,7 +4,7 @@ import 'package:Inventra/features/dashboard/presentation/widgets/chart_section.d
 import 'package:Inventra/features/dashboard/presentation/widgets/safe_balance_section.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/kpis_section.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_period_selector.dart';
-import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_primary_action.dart';
+import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_quick_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -41,8 +41,7 @@ class DashboardLoadedBody extends StatelessWidget {
             const ChartSection(),
             Gap(24.h),
 
-            // Primary Action
-            const DashboardPrimaryAction(),
+            const DashboardQuickActions(),
             Gap(32.h),
           ],
         ),
