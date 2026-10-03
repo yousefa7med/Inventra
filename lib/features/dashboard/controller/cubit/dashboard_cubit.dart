@@ -1,5 +1,5 @@
-import 'dart:developer';
 
+import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
@@ -17,7 +17,6 @@ class DashboardCubit extends Cubit<DashboardState>
   DashboardCubit(this._repository, this._transactionChangeNotifier)
     : super(DashboardInitial()) {
     _transactionChangeNotifier.stream.listen((type) {
-      log("message");
       switch (type) {
         case TransactionType.sellingInvoice:
           loadSafeBalance();
@@ -51,7 +50,7 @@ class DashboardCubit extends Cubit<DashboardState>
   }
 
   void loadSafeBalance() {
-    safeBalance = _repository.getBalance();
+    safeBalance = _repository.getBalance().currentBalance;
     if (state is DashboardLoaded) {
       emit((state as DashboardLoaded).copyWith(safeBalance: safeBalance));
     }
@@ -60,7 +59,7 @@ class DashboardCubit extends Cubit<DashboardState>
   @override
   void loadDashboard() {
     try {
-      safeBalance = _repository.getBalance();
+      safeBalance = _repository.getBalance().currentBalance;
       final snapshot = _repository.getDashboardData(period: _selectedPeriod);
       emit(
         DashboardLoaded(
@@ -100,5 +99,26 @@ class DashboardCubit extends Cubit<DashboardState>
     emit(DashboardLoading());
 
     loadDashboard();
+  }
+
+  @override
+  void addExpense({required double value, required String note}) {
+    try {
+      final expense = ExpenseModel(
+        date: DateTime.now(),
+        value: -value,
+        note: note.trim(),
+      );
+
+      _repository.addExpense(expense);
+      safeBalance -= value;
+      emit(
+        (state as DashboardLoaded).copyWith(
+          safeBalance: safeBalance,
+        ),
+      );
+    } catch (e) {
+      emit(DashboardError('فشل إضافة المصروف: $e'));
+    }
   }
 }

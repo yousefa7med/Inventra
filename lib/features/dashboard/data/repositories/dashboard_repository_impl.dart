@@ -1,10 +1,13 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
- import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
+import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
 import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
 import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
@@ -12,10 +15,12 @@ import 'package:flutter/material.dart';
 
 class DashboardRepositoryImpl implements DashboardRepository {
   final ObjectBoxServices _objectBox;
+  final TransactionChangeNotifier _transactionChangeNotifier;
+
   @override
   late DashboardModel cachedDashboardSnapshot;
 
-  DashboardRepositoryImpl(this._objectBox) {
+  DashboardRepositoryImpl(this._objectBox, this._transactionChangeNotifier) {
     cachedDashboardSnapshot = DashboardModel.initial();
   }
   @override
@@ -311,7 +316,23 @@ class DashboardRepositoryImpl implements DashboardRepository {
   }
 
   @override
-  double getBalance() {
-    return _objectBox.safeBalanceBox.get(1)?.currentBalance ?? 0;
+  SafeBalanceModel getBalance() {
+    final balance = _objectBox.safeBalanceBox.get(1);
+
+    if (balance != null) return balance;
+    return SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
+  }
+
+  @override
+  void addExpense(ExpenseModel expense) {
+    final balance = getBalance();
+    final newBalance = balance.copyWith(
+      currentBalance: balance.currentBalance + expense.value,
+      lastUpdated: DateTime.now(),
+    );
+
+    _objectBox.safeBalanceBox.put(newBalance);
+    _objectBox.expensesBox.put(expense);
+    _transactionChangeNotifier.notify(TransactionType.expense);
   }
 }

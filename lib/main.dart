@@ -137,12 +137,11 @@ Future<void> configureDependencies() async {
     () => buyInvoiceRepository,
   );
 
-
-
-
-
   // Dashboard
-  final dashboardRepository = DashboardRepositoryImpl(objectBoxServices);
+  final dashboardRepository = DashboardRepositoryImpl(
+    objectBoxServices,
+    transactionChangeNotifier,
+  );
   GetIt.instance.registerLazySingleton<DashboardRepository>(
     () => dashboardRepository,
   );
