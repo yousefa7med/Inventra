@@ -12,6 +12,7 @@ import 'package:Inventra/features/safe/presentation/views/safe_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
@@ -59,6 +60,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
           ? AppColors.white70
           : AppColors.grey,
       textStyle: AppTextStyle.navBar,
+      iconSize: 26.r,
     ),
   ),
 
@@ -74,6 +76,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       inactiveForegroundColor: isDark(context)
           ? AppColors.white70
           : AppColors.grey,
+      iconSize: 26.r,
       textStyle: AppTextStyle.navBar,
     ),
   ),
@@ -89,6 +92,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
       inactiveForegroundColor: isDark(context)
           ? AppColors.white70
           : AppColors.grey,
+      iconSize: 26.r,
       textStyle: AppTextStyle.navBar,
     ),
   ),

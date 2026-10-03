@@ -29,9 +29,11 @@ class DashboardLoadedBody extends StatelessWidget {
           children: [
             const SafeBalanceSection(),
             Gap(12.h),
-            const KpisSection(),
+            const DashboardQuickActions(),
 
             Gap(12.h),
+            const KpisSection(),
+            Gap(16.h),
             DashboardPeriodSelector(
               selectedPeriod: context.read<DashboardCubit>().selectedPeriod,
               onPeriodChanged: (period) =>
@@ -39,10 +41,8 @@ class DashboardLoadedBody extends StatelessWidget {
             ),
             Gap(16.h),
             const ChartSection(),
-            Gap(24.h),
 
-            const DashboardQuickActions(),
-            Gap(32.h),
+            Gap(16.h),
           ],
         ),
       ),

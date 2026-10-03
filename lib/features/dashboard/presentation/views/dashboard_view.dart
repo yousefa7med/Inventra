@@ -12,40 +12,32 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DashboardCubit, DashboardState>(
-      buildWhen: (previous, current) {
-        return current is DashboardLoading ||
-            current is DashboardError ||
-            (previous is! DashboardLoaded && current is DashboardLoaded);
-      },
-      builder: (context, state) {
-        return Scaffold(
-          appBar: const CustomAppBar(
-            title: 'لوحة التحكم',
-            showDrawerButton: true,
-          ),
-          body: _buildBody(context, state),
-        );
-      },
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'لوحة التحكم', showDrawerButton: true),
+      body: BlocBuilder<DashboardCubit, DashboardState>(
+        buildWhen: (previous, current) {
+          return current is DashboardLoading ||
+              current is DashboardError ||
+              (previous is! DashboardLoaded && current is DashboardLoaded);
+        },
+        builder: (context, state) {
+          switch (state) {
+            case DashboardLoading():
+              return const DashboardLoadingSkeleton();
+
+            case DashboardLoaded():
+              return const DashboardLoadedBody();
+
+            case DashboardError():
+              return ErrorStateWidget(
+                message: state.message,
+                onPressed: () => context.read<DashboardCubit>().refresh(),
+              );
+            default:
+              return const SizedBox.shrink();
+          }
+        },
+      ),
     );
-  }
-
-  Widget _buildBody(BuildContext context, DashboardState state) {
-    if (state is DashboardLoading) {
-      return const DashboardLoadingSkeleton();
-    }
-
-    if (state is DashboardError) {
-      return ErrorStateWidget(
-        message: state.message,
-        onPressed: () => context.read<DashboardCubit>().refresh(),
-      );
-    }
-
-    if (state is DashboardLoaded) {
-      return const DashboardLoadedBody();
-    }
-
-    return const SizedBox.shrink();
   }
 }

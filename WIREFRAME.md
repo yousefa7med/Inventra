@@ -1,9 +1,9 @@
 # Inventra — UI Wireframes & Interaction Map
 
-> **Scope**: Documentation of the *current* Flutter implementation only. Every screen, widget, string, state and route below was read from source on 2026-10-03. Nothing here is a redesign proposal — where the code is a placeholder, unreachable, or inconsistent, it is marked as such and collected in **§11 Implementation Discrepancies**.
+> **Scope**: Documentation of the *current* Flutter implementation only. Every screen, widget, string, state and route below was read from source on 2026-10-03 (post-`36ac143`, transactions feature merged into Safe). Nothing here is a redesign proposal — where the code is a placeholder, unreachable, or inconsistent, it is marked as such and collected in **§11 Implementation Discrepancies**.
 >
 > **Conventions used in this document**
-> - Screens are listed with a stable ID (`S1`…`S18`), dialogs with `D1`…`D6`.
+> - Screens are listed with a stable ID (`S1`…`S18`), dialogs with `D1`…`D5` (+ D6 removed).
 > - `Implemented` = reachable and functional · `Placeholder` = reachable but stub · `Unreachable` = implemented but never referenced · `Missing` = referenced but no implementation found.
 > - ASCII wireframes are **low-fidelity**. The app is **Arabic-only, RTL**: the leading (right) edge is the "start" side; all titles in the diagrams are the exact Arabic strings from `lib/core/constants/app_strings.dart` and inline literals.
 > - Colors/styles are referenced by name only (`AppColors.*`, `AppTextStyle.*`), never invented.
@@ -20,7 +20,7 @@
 | Design base | `flutter_screenutil`, design size `360 × 690` |
 | Entry | `main.dart` → `AppRoutes.mainView` (`'/'`) → `MainView` |
 | Splash / onboarding / auth | **None exist** |
-| Shell | `MainView`: `PersistentTabView` (package `persistent_bottom_nav_bar_v2`), `Style8BottomNavBar`, **4 tabs** (Dashboard, Operations, Inventory, Safe), bar height `58`, white, `handleAndroidBackButtonPress: true`, plus a `Drawer` on `AppGlobalKeys.mainScaffold` |
+| Shell | `MainView`: `PersistentTabView` (package `persistent_bottom_nav_bar_v2`), `Style8BottomNavBar`, **3 tabs** (Dashboard, Inventory, Safe), bar height `58`, white, `handleAndroidBackButtonPress: true`, plus a `Drawer` on `AppGlobalKeys.mainScaffold` |
 | State | `flutter_bloc` Cubits, one per feature, injected via `GetIt` |
 | Dialogs | `showDialog` only — **there is no `showModalBottomSheet` anywhere in `lib/`** |
 | Feedback | `showSnackBar(context, message, {color})` — floating, 2 s, rounded, from `core/helper/functions.dart` |
@@ -34,23 +34,23 @@
 | ID | Screen | File | Reachable from | Status |
 |----|--------|------|----------------|--------|
 | S1 | Main shell (tabs + drawer) | `features/main/presentation/views/main_view.dart` | initial route `/` | Implemented |
-| S2 | Drawer | `core/widgets/app_drawer.dart` | menu button on S3/S4/S5/S6 | Implemented |
+| S2 | Drawer | `core/widgets/app_drawer.dart` | menu button on S3/S5/S6 | Implemented |
 | S3 | Dashboard (tab 0) | `features/dashboard/.../dashboard_view.dart` | tab «لوحة التحكم» | Implemented |
-| S4 | Operations / Transactions (tab 1) | `features/transactions/.../transactions_view.dart` | tab «عمليات» | Implemented |
-| S5 | Inventory (tab 2) | `features/inventory/.../inventory_view.dart` | tab «المخزن» | Implemented |
-| S6 | Safe (tab 3) | `features/safe/.../safe_view.dart` | tab «الخزنة» | Implemented |
+| S4 | Operations / Transactions | — | **Removed** — merged into S6 (`SafeView`), feature folder deleted | — |
+| S5 | Inventory (tab 1) | `features/inventory/.../inventory_view.dart` | tab «المخزن» | Implemented |
+| S6 | Safe (tab 2) | `features/safe/.../safe_view.dart` | tab «الخزنة» | Implemented — now also hosts the old S4 transaction history/filter |
 | S7 | Settings | `features/settings/.../settings_view.dart` | — | **Removed** (route, tab, drawer item and folder deleted) |
 | S8 | All customers | `features/customers/.../all_customers_view.dart` | drawer «جميع العملاء» | Implemented (now with extended FAB «إضافة عميل») |
 | S9 | All suppliers | `features/suppliers/.../all_suppliers_view.dart` | drawer «جميع الموردين» | Implemented (now with extended FAB «إضافة مورد») |
 | S10 | Customer form (add/edit) | `core/widgets/customer_form_view.dart` | S8 empty-state button, `CustomerCard` edit | Implemented |
 | S11 | Supplier form (add/edit) | `core/widgets/supplier_form_view.dart` | S9 empty-state button, `SupplierCard` edit | Implemented |
 | S12 | Product form (add/edit) | `core/widgets/product_form_view.dart` | S5 FAB/empty state/`ProductCard` edit, S14 empty state, S16 FAB | Implemented |
-| S13 | Sell invoice | `features/selling_invoice/.../selling_invoice_view.dart` | S3 primary action, (any `sellingInvoiceView` push) | Implemented |
+| S13 | Sell invoice | `features/selling_invoice/.../selling_invoice_view.dart` | S3 quick action «فاتورة بيع» | Implemented |
 | S14 | Sell invoice product picker | `features/selling_invoice/.../selling_product_selection_view.dart` | S13 FAB `+` | Implemented |
 | S15 | Buy invoice | `features/buying_invoice/.../buying_invoice_view.dart` | drawer «فواتير المشتريات» | Implemented (title fixed to «فاتورة شراء») |
 | S16 | Buy invoice product picker | `features/buying_invoice/.../buying_product_selection_view.dart` | S15 FAB `+` | Implemented |
-| S17 | Add expense | `features/safe/.../add_expense_view.dart` | S6 FAB «مصروف» | Implemented (`_saveExpense()` now gates the pop — §11-X6 fixed) |
-| S18 | Invoice details | `features/transactions/.../invoice_details_view.dart` | tap sell/buy/return card on S4 | Implemented |
+| S17 | Add expense | `features/safe/.../add_expense_view.dart` | **S3 quick-action card «مصروف»** (S6 FAB removed) | Implemented (`_saveExpense()` gates the pop — §11-X6 fixed) |
+| S18 | Invoice details | `features/safe/.../invoice_details_view.dart` (moved from deleted transactions feature) | tap sell/buy/return card on S6 | Implemented |
 | — | `AppRoutes.addInvoiceView` (`'/addInvoiceView'`) | `core/config/configrations.dart:180` | **no switch case, no callers** | **Missing** → default route returns empty `Scaffold` (§11-X1) |
 
 Unreachable widgets: `DashboardListCard` (`dashboard_list_card.dart`), `DashboardEmptyState` (`dashboard_empty_state.dart`) — defined, never referenced (§11-X2).
@@ -74,7 +74,7 @@ Unreachable widgets: `DashboardListCard` (`dashboard_list_card.dart`), `Dashboar
 | `allSuppliers` | `/all-suppliers` | `AllSuppliersView` | — | `SupplierCubit..loadSuppliers()` |
 | `buyingInvoiceView` | `/buying-invoice` | `BuyingInvoiceView` | — | `BuyInvoiceCubit..loadSuppliers()` |
 | `productSelectionView` | `/product-selection` | `BuyingProductSelectionView` | — | `BuyInvoiceCubit..loadProducts('')` |
-| `invoiceDetailsView` | `/invoice-details` | `InvoiceDetailsView` | `InvoiceDetailsModel` (required) | — |
+| `invoiceDetailsView` | `/invoice-details` | `InvoiceDetailsView` (`features/safe/...`) | `InvoiceDetailsModel` (required) | — |
 | `addInvoiceView` | `/addInvoiceView` | **no case** → `default` → empty `Scaffold()` | — | — |
 
 (The `settings` route constant and its `case` were removed along with S7.)
@@ -91,7 +91,7 @@ All routes use the custom `pageRouteBuilderMethod` transition (`core/transitions
 | `pop(context, [result])` | `Navigator.pop` |
 | `navigationdelay(...)` | pushes after 4 s (unused) |
 
-`rootNavigator: true` is used for: S3 primary action, S5 FAB, S6 FAB, S4 transaction-card → details, S12 push from S5 FAB.
+`rootNavigator: true` is used for: S3 quick actions, S5 FAB, S6 transaction-card → details, S12 push from S5 FAB.
 
 ### 3.3 Graph
 
@@ -100,34 +100,44 @@ All routes use the custom `pageRouteBuilderMethod` transition (`core/transitions
                                       │                        MainView (S1)                   │
                                       │  PersistentTabView (4 tabs) + Drawer (S2)               │
                                       └─────────────────────────────────────────────────────────┘
-        ┌───────────────┬───────────────┬───────────────┬───────────────┐
-   tab 0│          tab 1│          tab 2│          tab 3│  (drawer S2 is shared)
-        ▼               ▼               ▼               ▼
-   ┌──────────┐   ┌──────────────┐  ┌──────────┐   ┌──────────┐
-   │ S3       │   │ S4           │  │ S5       │   │ S6       │
-   │ Dashboard│   │ Transactions │  │ Inventory│   │ Safe     │
-   └────┬─────┘   └──────┬───────┘  └────┬─────┘   └──┬───┬───┘
-        │ «فاتورة بيع»   │ tap card      │ FAB «منتج» │   │ FAB «مصروف»   drawer items:
-        │ (root nav)     ▼               ▼            │   │               ├─ «جميع العملاء»   → S8
-        │         ┌──────────────┐ ┌────────────┐      │   │               ├─ «جميع الموردين»  → S9
-        │         │ S18          │ │ S12        │      │   │               └─ «فواتير المشتريات»→ S15
-       │         │ Details      │ │ Form       │      │   ▼
-       │         └──────────────┘ └────────────┘      │ ┌────────────────┐
-       ▼                                             │ │ S17            │
-  ┌──────────────┐  FAB '+'  ┌───────────────────┐    │ │ Add Expense    │
-  │ S13          │ ────────▶ │ S14                │    │ └────────────────┘
-  │ Sell Invoice │           │ Sell product picker│    │ «تعديل» on BalanceCard
-  └──────┬───────┘           │  empty → S12       │    ▼
-         │                   └───────────────────┘  ┌────────────────┐
-         │                                          │ D2 Adjust       │
-         │ confirm (pop on success)                 │ Balance dialog  │
-         ▼                                          └────────────────┘
+        ┌───────────────┬───────────────┬───────────────┐
+   tab 0│          tab 1│          tab 2│  (drawer S2 is shared)
+        ▼               ▼               ▼
+   ┌──────────┐   ┌──────────┐   ┌──────────┐
+   │ S3       │   │ S5       │   │ S6       │
+   │ Dashboard│   │ Inventory│   │ Safe     │
+   └────┬─────┘   └────┬─────┘   └──┬───┬───┘
+        │ S3 quick card │ FAB «منتج» │   │ «تعديل» on BalanceCard
+        │ 3 actions     ▼            │   │               ▼
+        │              │ S12         │   │         ┌────────────────┐
+        │              │ Product     │   │         │ D2 Adjust       │
+        │              │ Form        │   │         │ Balance dialog  │
+        │              └─────────────┘   │         └────────────────┘
+        │  actions:                     │
+        │   ├─ «فاتورة بيع»    → S13   │  S6 body: BalanceCard +
+        │   ├─ «فاتورة شراء»   → S15   │  TransactionsFilter +
+        │   └─ «مصروف»         → S17   │  date-grouped TransactionCards
+        │                               │  card tap → S18 / D4 / D5
+        ▼
+   ┌──────────────┐  FAB '+'  ┌───────────────────┐
+   │ S13          │ ────────▶ │ S14                │
+   │ Sell Invoice │           │ Sell product picker│
+   └──────┬───────┘           │  empty → S12       │
+          │                   └───────────────────┘
+          │ confirm (pop on success)
+          ▼
    back to origin
 
-  S15 Buy Invoice ──FAB '+'──▶ S16 Buy product picker ── add ──▶ D3 Price dialog
-        ▲                        empty-state FAB «إضافة منتج» ──▶ S12 (isQuantitiyEditable:false)
-        │
-        └── drawer «فواتير المشتريات»
+   S6 TransactionCard tap:
+     sell/buy/return → S18 · expense → D4 · manualAdjustment → D5
+
+   S15 Buy Invoice ──FAB '+'──▶ S16 Buy product picker ── add ──▶ D3 Price dialog
+         ▲                        empty-state FAB «إضافة منتج» ──▶ S12 (isQuantitiyEditable:false)
+         │
+         ├── drawer «فواتير المشتريات»
+         └── S3 quick action «فاتورة شراء»
+
+   S17 entry: S3 quick action «مصروف» (S6 FAB removed)
 
   S8 All Customers ── empty-state «إضافة عميل» ──▶ S10 ; CustomerCard ✎ ──▶ S10 (arg customer)
   S9 All Suppliers ── empty-state «إضافة مورد» ──▶ S11 ; SupplierCard ✎ ──▶ S11 (arg supplier)
@@ -139,7 +149,6 @@ All routes use the custom `pageRouteBuilderMethod` transition (`core/transitions
 | Screen | App bar | Back | Menu (drawer) |
 |---|---|---|---|
 | S3 Dashboard | `CustomAppBar(showDrawerButton:true)` | — | ✔ |
-| S4 Transactions | `CustomAppBar(showDrawerButton:true)` | — | ✔ |
 | S5 Inventory | `SliverAppBar(automaticallyImplyLeading:false, title: CustomAppBar(showDrawerButton:true))` | ✖ | ✔ |
 | S6 Safe | `CustomAppBar(showDrawerButton:true)` | — | ✔ |
 | S8 / S9 Customers/Suppliers | `SliverAppBar(automaticallyImplyLeading:false, title: CustomAppBar(...))` — **no** `showDrawerButton` | ✖ (system back only) | ✖ |
@@ -147,7 +156,7 @@ All routes use the custom `pageRouteBuilderMethod` transition (`core/transitions
 
 Shell behaviour: `handleAndroidBackButtonPress: true` — Android back on tab 0 exits the app (no exit confirmation dialog exists).
 
-Tab-change side effects (`MainView.onTabChanged`): index 1 → `TransactionsCubit.clearFiltersAndGetTransactions(time:true, type:true)`; index 2 → `ProductCubit.loadProducts()`; index 3 → `SafeCubit.init()`; index 0 → none (Dashboard re-inits via `..init()` in `_tabs`).
+Tab-change side effects (`MainView.onTabChanged`): index 1 → `ProductCubit.loadProducts()`; index 2 → `SafeCubit.init()`; index 0 → none (Dashboard re-inits via `..init()` in `_tabs`).
 
 ---
 
@@ -180,10 +189,12 @@ Drawer → S8/S9 → search «ابحث بالاسم...» (300 ms debounce) → c
 S5 → FAB «منتج» / empty-state «إضافة منتج» / card ✎ → S12 (image via **camera only**, 500×500) → validate → `updateProduct` → `pop(result)`; delete card icon → **D1** confirm «تأكيد الحذف» → «حذف».
 
 ### F7 — Review history
-Tab «عمليات» → S4 → filter chips («الكل»…«تعديل يدوي») and/or date range (Material `showDateRangePicker`, Arabic locale) → grouped list by «اليوم»/«أمس»/Arabic date with «n عملية» pill and day total → tap:
+Tab «الخزنة» → S6 → type filter chips («الكل» … «تعديل يدوي») → grouped list by «اليوم»/«أمس»/Arabic date with «n عملية»-style day headers → tap:
 - sell/buy/return → **S18** invoice details (with «اتصال»),
 - expense → **D4** «تفاصيل المصروف»,
 - manual adjustment → **D5** «تعديل يدوي» (prev → arrow → new balance, delta, note).
+
+(Historical note: this flow used to live in the separate «عمليات» tab with a date-range picker D6; D6 was removed along with the standalone transactions screen.)
 
 ### F8 — Dashboard analysis
 S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الارباح»/«المبيعات»/«المشتريات»/«المصاريف») to switch chart metric → tap period («اليوم»/«الأسبوع»/«الشهر»/«السنة») → chart re-renders or shows no-data state.
@@ -205,7 +216,7 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 │                                              │
 │                                              │
 ├──────────────────────────────────────────────┤
- │ [◫ لوحة التحكم] [◷ عمليات] [▤ المخزن]  [▢ الخزنة]      │  ← bar h=58, active = AppColors.primary
+ │ [◫ لوحة التحكم] [▤ المخزن] [▢ الخزنة]         │  ← bar h=58, active = AppColors.primary
 └──────────────────────────────────────────────┘
         ▲ swipe/right-edge or menu button opens drawer (S2)
 ```
@@ -215,7 +226,7 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 
 ### S2 — Drawer (`AppDrawer`)
 - **Purpose**: secondary navigation + branding/footer.
-- **Entry**: menu button (S3/S4/S5/S6) → `AppGlobalKeys.mainScaffold.currentState?.openDrawer()`.
+- **Entry**: menu button (S3/S5/S6) → `AppGlobalKeys.mainScaffold.currentState?.openDrawer()`.
 - **Layout**: width `75%` of screen.
 
 ```
@@ -265,51 +276,20 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 │ ┌──────────────────────────────────────────┐ │
 │ │            ( line/area chart )           │ │  DashboardChart, colored by metric
 │ └──────────────────────────────────────────┘ │
-│ [ ▣ نقطة بيع  فاتورة بيع ]                    │  AppButton → S13 (root nav)
+ │ [ ▣ فاتورة بيع ] [ ▣ فاتورة شراء ] [ ▣ مصروف ]   │  DashboardQuickActions → S13/S15/S17
 └──────────────────────────────────────────────┘
    ⤶ pull-to-refresh → DashboardCubit.refresh()
 ```
-- **Components**: `SafeBalanceSection`, `KpisSection` (`_DashboardMetricKpi`), `DashboardPeriodSelector`, `ChartSection`/`DashboardChart`, `DashboardPrimaryAction`.
-- **Interactions**: KPI tap → `changeChartMetric`; period tap → `changePeriod`; button → S13; refresh → `refresh()`.
+- **Components**: `SafeBalanceSection`, `KpisSection` (`_DashboardMetricKpi`), `DashboardPeriodSelector`, `ChartSection`/`DashboardChart`, `DashboardQuickActions` (replaces deleted `DashboardPrimaryAction`).
+- **Interactions**: KPI tap → `changeChartMetric`; period tap → `changePeriod`; quick actions → S13/S15/S17; refresh → `refresh()`.
 - **States**:
   - `DashboardLoading` → `DashboardLoadingSkeleton` (shimmer: 100 h card, 4×100 h KPI blocks, 44 h bar, 280 h chart block).
   - `DashboardError` → `ErrorStateWidget` («حدث خطأ» + message + «إعادة المحاولة» → `refresh()`).
   - `DashboardLoaded` with empty series → inline no-data block: circle icon `event_busy_outlined`, «لا توجد {المؤشر}» (e.g. «لا توجد المبيعات»), «خلال {الفترة}».
   - `DashboardListCard`, `DashboardEmptyState` → **unreachable** (§11-X2).
 
-### S4 — Operations / Transactions (`TransactionsView`)
-- **Purpose**: unified, filterable history of every money/stock event.
-- **Entry**: tab «عمليات» (auto `clearFiltersAndGetTransactions(time:true, type:true)` on tab entry).
-- **Layout**: app bar + `RefreshIndicator` + `CustomScrollView`.
-
-```
-┌──────────────────────────────────────────────┐
-│ [☰] ◯ سجل العمليات                           │
-├──────────────────────────────────────────────┤
-│ ┌──────────────────────────────────────────┐ │
-│ │ الفلاتر                                  │ │  filter card
-│ │ (الكل)(فواتير البيع)(فواتير الشراء)       │ │  chips, horizontal scroll
-│ │ (المصروفات)(المرتجعات)(تعديل يدوي)        │ │
-│ │ [📅 فلترة بالتاريخ        ] [✕]         │ │  date range; ✕ only when set
-│ └──────────────────────────────────────────┘ │
-│ │ اليوم                    [3 عملية]  +500  │ │  DateHeader (bar + pill + day total)
-│ ┌──────────────────────────────────────────┐ │
-│ │ [▣] فاتورة بيع #4                        │ │  icon chip colored by type
-│ │     العميل: أحمد محمد                     │ │  subtitle prefix + description
-│ │     2026/09/27 02:14 م                    │ │  formatDateTime
-│ │                                  750      │ │  signedValue (green >0 / red ≤0)
-│ └──────────────────────────────────────────┘ │
-│ │ أمس                     [1 عملية]   -200  │ │
-│ │ ┌──────────────────────────────────────┐   │ │
-│ │ │ [⎘] مصروفات #2   ملحوظة: مصاريف نقل   │   │ │  tap → D4
-│ │ │                        -150           │   │ │
-│ │ └──────────────────────────────────────┘   │ │
-│ ...                                          │
-└──────────────────────────────────────────────┘
-```
-- **Card variants** (`TransactionsLoadedBody`): «فاتورة شراء»/secondary/`inventory_2`, «فاتورة بيع»/success/`shopping_cart_checkout`, «مصروفات»/error/`receipt_long`, «مرتجع»/warning/`swap_horiz`, «تعديل يدوي»/lightBlue/`tune`.
-- **Interactions**: chip tap → `loadTransactions(type:)` (index 0 = clear type); date button → `showDateRangePicker(locale ar, firstDate 2020, lastDate today)` → `loadTransactions(dateRange:)`; ✕ → `clearFiltersAndGetTransactions(time:true)`; card tap → S18 / D4 / D5; ⤶ → `loadTransactions()`.
-- **States**: `TransactionsLoading` → centered `CircularProgressIndicator`; `TransactionsError` → `ErrorStateWidget` + retry `loadTransactions()`; loaded-but-empty → `EmptyStateWidget(«لا يوجد عمليات سابقة», icon history_sharp)`.
+### S4 — Operations / Transactions — **Removed (merged into S6)**
+The standalone tab («عمليات») and its `TransactionsView` were deleted. Its UI — filter chips, date-grouped list, `TransactionCard`, `DateHeader`, `InvoiceDetailsView` — moved into `features/safe/` and now renders inside S6. `TransactionType`/`TransactionsEntry` models and the audit writes in buy/sell/safe repositories remain.
 
 ### S5 — Inventory (`InventoryView`)
 - **Purpose**: browse/search/edit/delete products; entry point for creating products.
@@ -334,9 +314,9 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 - **States**: `ProductLoading` → full-screen spinner; `ProductErrorState` → `ErrorStateWidget` + retry; success-but-empty → `EmptyStateWidget` with icon `inventory_2_outlined`, message «لا يوجد منتجات» or «لا توجد نتائج للبحث», action «إضافة منتج» → S12.
 
 ### S6 — Safe (`SafeView`)
-- **Purpose**: cash balance, expense log, add expense, adjust balance.
+- **Purpose**: cash balance, unified transaction history (sell/buy/return/expense/manual adjustment), filter by type, adjust balance. Add-expense is entered from S3's quick actions.
 - **Entry**: tab «الخزنة» (auto `SafeCubit.init()` on tab entry).
-- **Layout**: `CustomAppBar('الخزنة', showDrawerButton:true)` + `RefreshIndicator` + scroll body + extended FAB.
+- **Layout**: `CustomAppBar('الخزنة', showDrawerButton:true)` + `RefreshIndicator` + `CustomScrollView` (no FAB — S6's «مصروف» FAB was removed).
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -346,17 +326,18 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 │ │ الرصيد الحالي            [✎ تعديل]       │ │  BalanceCard (isNegative always false)
 │ │            12,500 ج.م                     │ │
 │ └──────────────────────────────────────────┘ │
-│ [🔍 ابحث بالملاحظة...                   ✕]   │  SafeSearch
-│ │ اليوم                                     │ │  ExpenseHeader
+│ (الكل)(المبيعات)(المشتريات)(مصروفات)          │  TransactionsFilter chips (no date picker)
+│ (مرتجعات)(تعديل يدوي)                         │
+│ │ اليوم                                     │ │  DateHeader
 │ │ ┌──────────────────────────────────────┐   │ │
-│ │ │ [🧾] مصاريف نقل            02:14 م    │   │ │  ExpenseCard (icon chip lightRed)
-│ │ │                          -150 ج.م    │   │ │  red amount
+│ │ │ [🧾] مصروفات #2  OK?note: مصاريف نقل  │   │ │  TransactionCard (type-colored)
+│ │ │                        -150 ج.م       │   │ │  signedValue (green >0 / red ≤0)
 │ │ └──────────────────────────────────────┘   │ │
 │ ...                                          │
-└───────────────────────────[＋ مصروف]─────────┘  ← FAB.extended (root nav → S17)
+└──────────────────────────────────────────────┘
 ```
-- **Interactions**: «تعديل» → **D2**; search notes (debounced); ⤶ → `init()`.
-- **States**: `SafeInitial` → empty `SizedBox`; `SafeLoading` → centered spinner; `SafeError` → `ErrorStateWidget` + retry `init()`; `SafeLoaded` with no expenses → `EmptyStateWidget(«لا توجد مصروفات», icon receipt_long_outlined)`.
+- **Interactions**: «تعديل» → **D2**; chip tap → `SafeCubit.loadTransactions(type:)` («الكل» clears); card tap → S18 / D4 / D5; ⤶ → `init()`.
+- **States**: `SafeInitial` → empty `SizedBox`; `SafeLoading` → centered spinner; `SafeError` → `ErrorStateWidget` + retry `init()`; `SafeLoaded` with no items → `EmptyStateWidget(«لا توجد عمليات», icon receipt_long_outlined)`.
 
 ### S7 — Settings — **Removed**
 - `SettingsView`, its tab (tab 4), its drawer row «الاعدادات», and the `/settings` route case/constant were deleted. Drawer «قريباً» placeholders remain.
@@ -513,7 +494,7 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 
 ### S17 — Add Expense (`AddExpenseView`)
 - **Purpose**: record a cash expense against the safe balance.
-- **Entry**: S6 FAB «مصروف» (`rootNavigator:true`); route wraps `SafeCubit`.
+- **Entry**: S3 quick-action card «مصروف» (`rootNavigator:true`); route wraps `SafeCubit`. (S6's «مصروف» FAB was removed.)
 - **Layout**: `CustomAppBar('إضافة مصروف')` + padded `Form`.
 
 ```
@@ -533,7 +514,7 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 
 ### S18 — Invoice Details (`InvoiceDetailsView`)
 - **Purpose**: read-only receipt view for a sell/buy (and return) invoice.
-- **Entry**: tap an invoice/return card on S4 (`rootNavigator:true`, argument `InvoiceDetailsModel`).
+- **Entry**: tap an invoice/return card on S6 (`rootNavigator:true`, argument `InvoiceDetailsModel`).
 - **Layout**: `CustomAppBar('فاتورة بيع' | 'فاتورة شراء')`, scroll content, sticky bottom bar.
 
 ```
@@ -576,9 +557,9 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 | **D1** | `appDialog` (generic confirm) | `core/helper/app_dialog.dart` | product delete on S5 | `title`, `content` (max 2 lines), radius 16 | «إلغاء» (primary text) · `msg` destructive (error text) — destructive runs *after* dialog pop |
 | **D2** | `AdjustBalanceDialog` | `features/safe/.../adjust_balance_dialog.dart` | «تعديل» on S6 BalanceCard (provided `SafeCubit` via `BlocProvider.value`) | title «تعديل الرصيد»; «الرصيد الجديد» field (hint «مثال: 5000.00»); «ملاحظة (اختياري)» (hint «مثال: رصيد افتتاحي») | «إلغاء» · «تأكيد» (validates; pops only on success) |
 | **D3** | `ChangeProductPriceDialog` | `features/buying_invoice/.../change_product_price_dialog.dart` | «إضافة للفاتورة» on S16 card | title «هل تريد تعديل السعر»; product name; 3 fields «سعر الشراء» / «سعر الجملة» / «سعر البيع» (suffix «ج.م»); `barrierDismissible:false` | «إلغاء» (error) · **«تغيير السعر»** (primary) — returns `ProductModel` only if a price actually changed, else returns `null` |
-| **D4** | Expense detail | `transaction_card.dart:155` | tap «مصروفات» card on S4 | title «تفاصيل المصروف»; red tinted «المبلغ» block (signed value); optional «ملاحظة» block | «إغلاق» (AppButton) |
-| **D5** | Manual adjustment detail | `transaction_card.dart:257` | tap «تعديل يدوي» card on S4 | title «تعديل يدوي»; «الرصيد السابق» → circle arrow (↑ green / ↓ red) → «الرصيد الجديد»; delta chip «+$x»/«- $x»; optional «ملاحظة» | «إغلاق» (AppButton) |
-| **D6** | Material date-range picker | `transactions_filter.dart:79` | «فلترة بالتاريخ» on S4 | `showDateRangePicker(locale: Locale('ar'), firstDate 2020, lastDate today)`, themed `ColorScheme.light(primary, surface)` + radius 16 | system picker buttons («تحديد»/«إلغاء» semantics of the widget) |
+| **D4** | Expense detail | `features/safe/.../transaction_card.dart` | tap «مصروفات» card on S6 | title «تفاصيل المصروف»; red tinted «المبلغ» block (signed value); optional «ملاحظة» block | «إغلاق» (AppButton) |
+| **D5** | Manual adjustment detail | `features/safe/.../transaction_card.dart` | tap «تعديل يدوي» card on S6 | title «تعديل يدوي»; «الرصيد السابق» → circle arrow (↑ green / ↓ red) → «الرصيد الجديد»; delta chip «+$x»/«- $x»; optional «ملاحظة» | «إغلاق» (AppButton) |
+| D6 | — | — | **Removed** with the standalone transactions screen (no `showDateRangePicker` in `lib/`) | — | — |
 
 **Snackbar overlay** (`showSnackBar`): floating, radius 12, 2 s, margin 30, centered `AppTextStyle.medium14` white text, background `color ?? AppColors.snackBarDefault`. Only helper is used — no raw `ScaffoldMessenger` in views.
 
@@ -646,9 +627,9 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 | Screen | Loading | Empty | Error |
 |---|---|---|---|
 | S3 Dashboard | shimmer skeleton (card/4 KPIs/bar/chart) | chart-area «لا توجد {metric}» + «خلال {period}» | `ErrorStateWidget` → `refresh()` |
-| S4 Transactions | centered spinner | «لا يوجد عمليات سابقة» (`history_sharp`) | `ErrorStateWidget` → `loadTransactions()` |
+| — | S4 Transactions (removed) | — | — | — |
 | S5 Inventory | centered spinner | «لا يوجد منتجات» or «لا توجد نتائج للبحث» + «إضافة منتج» | `ErrorStateWidget` → `loadProducts()` |
-| S6 Safe | centered spinner (initial = empty box) | «لا توجد مصروفات» (`receipt_long_outlined`) | `ErrorStateWidget` → `init()` |
+| S6 Safe | centered spinner (initial = empty box) | «لا توجد عمليات» (`receipt_long_outlined`) | `ErrorStateWidget` → `init()` |
 | S8 Customers | full-screen spinner | «لا يوجد عملاء» / «لا توجد نتائج للبحث» + «إضافة عميل» | `ErrorStateWidget` → `loadCustomers()` |
 | S9 Suppliers | full-screen spinner | «لا يوجد موردين» / «لا توجد نتائج للبحث» + «إضافة مورد» | *inline custom* message + retry (not `ErrorStateWidget`) |
 | S13 Sell invoice | none rendered | «لا توجد منتجات مضافة» (inline text) | snackbar via `BlocListener` |
@@ -667,38 +648,36 @@ S3 → pull-to-refresh (`DashboardCubit.refresh()`) → tap KPI card («الار
 | Target | From |
 |---|---|
 | S1 MainView | initial route `/` (only) |
-| S2 Drawer | ☰ on S3, S4, S5, S6 |
+| S2 Drawer | ☰ on S3, S5, S6 |
 | S3 Dashboard | tab 0 |
-| S4 Transactions | tab 1 |
-| S5 Inventory | tab 2 |
-| S6 Safe | tab 3 |
+| S5 Inventory | tab 1 |
+| S6 Safe | tab 2 |
 | — | S7 Settings | — (removed) |
 | S8 Customers | drawer «جميع العملاء» |
 | S9 Suppliers | drawer «جميع الموردين» |
 | S10 Customer form | S8 empty-state «إضافة عميل» · S8 FAB «إضافة عميل» · `CustomerCard` ✎ (S8) |
 | S11 Supplier form | S9 empty-state «إضافة مورد» · S9 FAB «إضافة مورد» · `SupplierCard` ✎ (S9) |
 | S12 Product form | S5 FAB · S5 empty state · `ProductCard` ✎ (S5) · S14 empty state · S16 FAB (`isQuantitiyEditable:false`) |
-| S13 Sell invoice | S3 «فاتورة بيع» |
+| S13 Sell invoice | S3 quick action «فاتورة بيع» |
 | S14 Sell picker | S13 FAB `+` |
-| S15 Buy invoice | drawer «فواتير المشتريات» |
+| S15 Buy invoice | drawer «فواتير المشتريات» · S3 quick action «فاتورة شراء» |
 | S16 Buy picker | S15 FAB `+` |
-| S17 | Add expense | S6 FAB «مصروف» |
-| S18 Invoice details | S4 card tap (sell/buy/return) |
+| S17 | Add expense | S3 quick-action card «مصروف» |
+| S18 Invoice details | S6 card tap (sell/buy/return) |
 | D1 delete confirm | `ProductCard` 🗑 (S5, also reachable wherever cards render) |
 | D2 adjust balance | S6 BalanceCard «تعديل» |
 | D3 price dialog | S16 card «إضافة للفاتورة» |
-| D4/D5 detail dialogs | S4 card tap (expense / manual adjustment) |
-| D6 date range | S4 «فلترة بالتاريخ» |
+| D4/D5 detail dialogs | S6 card tap (expense / manual adjustment) |
 
 ### 9.2 Return edges (pop targets)
-Every `pop` returns to the exact pusher: S10–S12, S14, S16, S17, S18 and D3 pop to their triggers; S13/S15 pop after confirm to whatever pushed them (S3 CTA, drawer push for S15). D1/D2/D4/D5 pop only the dialog route.
+Every `pop` returns to the exact pusher: S10–S12, S14, S16, S17, S18 and D3 pop to their triggers; S13/S15 pop after confirm to whatever pushed them (S3 quick action, drawer push for S15). D1/D2/D4/D5 pop only the dialog route.
 
 ### 9.3 Cross-feature data coupling
 - S3 reads `SafeBalance` (hero), `TransactionEntry` aggregates (KPIs/charts), `Product`/`SellInvoice`/`BuyInvoice`/`Expense` (via `DashboardCubit`).
-- S4 reads `TransactionEntry` and resolves `InvoiceDetailsModel` / `ManualAdjustmentModel` on tap.
+- S6 reads `TransactionEntry` and resolves `InvoiceDetailsModel` / `ManualAdjustmentModel` on tap.
 - S13/S15 mutate `Product` quantities, `SafeBalance`, `SellInvoice`/`BuyInvoice`, `InvoiceItemModel`, `TransactionEntry`; S16 additionally may update `Product` prices (D3).
 - S17/S6 mutate `ExpenseModel`, `SafeBalance`, `ManualAdjustmentModel`, `TransactionEntry`.
-- Tab entry triggers reloads for S4/S5/S6 (see §3.4) — i.e., **S3 is the only tab that does not auto-refresh on re-entry** (it refreshes via `..init()` on tab construction and pull-to-refresh).
+- Tab entry triggers reloads for S5/S6 (see §3.4) — i.e., **S3 is the only tab that does not auto-refresh on re-entry** (it refreshes via `..init()` on tab construction and pull-to-refresh).
 
 ---
 
@@ -716,10 +695,9 @@ Every `pop` returns to the exact pusher: S10–S12, S14, S16, S17, S18 and D3 po
 | `AddProductImageWidget` / `ProductImage` | `core/widgets/add_image.dart` | circular avatar + floating badge (`+` / ✎), radius 55 r / 150×150 |
 | `ProductCard` | `features/inventory/.../product_card.dart` | see S5 |
 | `CustomerCard` / `SupplierCard` | feature widget folders | see S8/S9 |
-| `TransactionCard` + `DateHeader` | `features/transactions/...` | see S4 |
-| `BalanceCard` / `ExpenseCard` / `ExpenseHeader` | `features/safe/...` | see S6 |
+| `BalanceCard` / `TransactionsFilter` / `TransactionCard` / `DateHeader` | `features/safe/...` | see S6 |
 | `Selling/BuyingInvoiceItemTile`, `...ProductListWithCounters`, `...TotalsCard`, dropdowns | feature folders | see S13–S16 |
-| `TransactionsFilter` | `features/transactions/...` | chips + date range (D6) |
+| `DashboardQuickActions` | `features/dashboard/...` | see S3 |
 | `Dashboard*` widgets | `features/dashboard/...` | see S3 |
 
 ---
@@ -731,7 +709,7 @@ Collected, **marked per current source (2026-10-03)**. Items resolved since the 
 **Routing / reachability**
 - **X1 — `AppRoutes.addInvoiceView` (`'/addInvoiceView'`)** — *still open*: declared (`configrations.dart:172`) but has **no `case`** and **no call sites** → `default` returns an empty `Scaffold`.
 - **X2 — Unreachable widgets** — *still open*: `DashboardListCard` and `DashboardEmptyState` remain implemented but unreferenced.
-- **X3 — Dashboard CTA mismatch** — *still open*: code provides one primary action («فاتورة بيع»), docs describe 4 quick-add cards.
+- **X3 — Dashboard CTA mismatch** — *partially addressed 2026-10-03 (`75d5f08`)*: the dashboard now has `DashboardQuickActions` (sell invoice / buy invoice / expense), but `AGENTS.md` still describes 4 quick-add cards (sell, customer, supplier, product) — customer/supplier/product creation is still only reachable via S5/S8/S9 (and S14/S16 empty states).
 - **X7 — Settings placeholder** — **[FIXED 2026-10-03]**: `SettingsView`, tab 4, drawer row and `/settings` route removed entirely.
 
 **Missing affordances**
@@ -753,11 +731,11 @@ Collected, **marked per current source (2026-10-03)**. Items resolved since the 
 
 **Product / feature gaps visible in the UI**
 - **X16 — Return receipts are read-only**: `TransactionType.returnReceipt` cards render («مرتجع», warning color, opens S18) and `ReturnReceipt` exists as an entity, but **no screen creates one**; the drawer lists «فواتير المرتجعات» under «قريباً» with a «جديد» badge.
-- **X17 — Expense amount sign display**: `SafeCubit.addExpense` stores `value: -value` (balance math is correct), and `ExpenseCard` then prints that negative value via `formatCurrency` in red → the row shows e.g. `-150 ج.م` redundantly marked negative (color + sign). Also `BalanceCard(isNegative: false)` is hard-coded on S6, so the red/negative card branch is dead code.
+- **X17 — Expense amount sign display** *(updated)*: the old `ExpenseCard` (which printed the negative `ExpenseModel.value` with a red color) was removed with the safe/transaction merge; amounts are now rendered via `TransactionCard`/`TransactionEntry.signedValue` (still sign + red color for expenses). `BalanceCard(isNegative: false)` remains hard-coded on S6, so the red/negative branch is still dead code.
 - **X18 — D3 confirm label** — **[FIXED 2026-10-03]**: the price dialog's confirm action now reads **«تغيير السعر»** (`change_product_price_dialog.dart:149`).
 - **X19 — Docs vs code drift**: `AGENTS.md` still states navBar height `65.h` (code: `58`) and still describes a «الاعدادات» tab/drawer entry and dark-theme toggle gotchas that no longer match (settings removed, `ThemeMode.light` hardcoded at `main.dart:80` with the AppCubit binding commented out at `main.dart:79`). `SPECIFICATION.md` §11-I2 (expense sign) should still be read against `SafeCubit.addExpense` (`value: -value`), which makes runtime balance math correct as documented in §4 of that file.
 - **X20 — `DashboardPeriod.formmatTime` typo** (method name) and `productFormView` route path `'/addProductView'` vs constant name `productFormView` — cosmetic inconsistencies that affect greppability only.
 
 ---
 
-*End of document. Generated from source inspection only; re-verified against source on 2026-10-03 (commits through `0febc14`).*
+*End of document. Generated from source inspection only; re-verified against source on 2026-10-03 (commits through `f36994e`).*

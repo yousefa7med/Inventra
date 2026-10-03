@@ -2,6 +2,8 @@ import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
+import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/cubit/dashboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +11,6 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
-import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:gap/gap.dart';
 
 class AddExpenseView extends StatelessWidget {
@@ -37,7 +38,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   @override
   void initState() {
     super.initState();
-    // _safeBalance = context.read<SafeCubit>().currentBalance;
+    _safeBalance = context.read<DashboardCubit>().safeBalance;
   }
 
   @override
@@ -50,14 +51,14 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   bool _saveExpense() {
     if (!_formKey.currentState!.validate()) return false;
 
-    final cubit = context.read<SafeCubit>();
-    // cubit.addExpense(
-    //   value: double.parse(_valueController.text.trim()),
-    //   note: _noteController.text.trim(),
-    // );
+    final cubit = context.read<DashboardCubit>();
+    cubit.addExpense(
+      value: double.parse(_valueController.text.trim()),
+      note: _noteController.text.trim(),
+    );
 
     final state = cubit.state;
-    if (state is SafeError) {
+    if (state is DashboardError) {
       showSnackBar(context, state.message, color: AppColors.error);
       return false;
     }

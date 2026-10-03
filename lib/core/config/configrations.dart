@@ -14,7 +14,7 @@ import 'package:Inventra/features/customers/presentation/views/all_customers_vie
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
-import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart';
+import 'package:Inventra/features/dashboard/presentation/views/add_expense_view.dart';
 import 'package:Inventra/features/safe/presentation/views/invoice_details_view.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/presentation/views/selling_product_selection_view.dart';
