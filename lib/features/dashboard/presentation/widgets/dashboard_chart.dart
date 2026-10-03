@@ -155,28 +155,37 @@ class DashboardChart extends StatelessWidget {
 
     final bars = <LineChartBarData>[];
 
-    int segmentStart = 0;
-    bool isNegative = spots.first.y < 0;
+    var segmentStart = 0;
+    FlSpot? pendingStart;
 
     for (int i = 1; i < spots.length; i++) {
+      final prevNegative = spots[i - 1].y < 0;
       final currentIsNegative = spots[i].y < 0;
 
-      if (currentIsNegative != isNegative) {
+      if (currentIsNegative != prevNegative) {
+        final prev = spots[i - 1];
+        final curr = spots[i];
+        final t = prev.y / (prev.y - curr.y);
+        final crossing = FlSpot(prev.x + (curr.x - prev.x) * t, 0);
+
         bars.add(
           _buildBar(
-            spots: spots.sublist(segmentStart, i),
-            isNegative: isNegative,
+            spots: [?pendingStart, ...spots.sublist(segmentStart, i), crossing],
+            isNegative: prevNegative,
           ),
         );
 
+        pendingStart = crossing;
         segmentStart = i;
-        isNegative = currentIsNegative;
       }
     }
 
-    // Add the last segment
+    final lastNegative = spots.last.y < 0;
     bars.add(
-      _buildBar(spots: spots.sublist(segmentStart), isNegative: isNegative),
+      _buildBar(
+        spots: [?pendingStart, ...spots.sublist(segmentStart)],
+        isNegative: lastNegative,
+      ),
     );
 
     return bars;
@@ -195,9 +204,7 @@ class DashboardChart extends StatelessWidget {
       barWidth: 3,
       isStrokeCapRound: true,
 
-      gradient: LinearGradient(
-        colors: [chartColor, chartColor.withValues(alpha: 0.3)],
-      ),
+      color: chartColor,
 
       dotData: FlDotData(
         show: true,
