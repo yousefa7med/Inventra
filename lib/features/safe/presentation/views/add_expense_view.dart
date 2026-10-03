@@ -37,7 +37,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   @override
   void initState() {
     super.initState();
-    _safeBalance = context.read<SafeCubit>().currentBalance;
+    // _safeBalance = context.read<SafeCubit>().currentBalance;
   }
 
   @override
@@ -51,10 +51,10 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
     if (!_formKey.currentState!.validate()) return false;
 
     final cubit = context.read<SafeCubit>();
-    cubit.addExpense(
-      value: double.parse(_valueController.text.trim()),
-      note: _noteController.text.trim(),
-    );
+    // cubit.addExpense(
+    //   value: double.parse(_valueController.text.trim()),
+    //   note: _noteController.text.trim(),
+    // );
 
     final state = cubit.state;
     if (state is SafeError) {

@@ -1,8 +1,9 @@
-import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/models/buying_invoice_model.dart';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/manual_adjustment_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
+import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/services/Transaction_change_notifier.dart';
@@ -80,20 +81,40 @@ class SafeRepositoryImpl implements SafeRepository {
   }
 
   @override
-  List<ExpenseModel> loadExpenses(String searchQuery) {
-    final searchText = searchQuery.trim().normalizeArabic();
-    Condition<ExpenseModel>? condition;
-    if (searchText.isNotEmpty) {
-      condition = ExpenseModel_.note.contains(searchText);
+  List<TransactionsEntry> getTransactions({TransactionType? type}) {
+    Condition<TransactionsEntry>? condition;
+
+    if (type != null) {
+      condition = TransactionsEntry_.typeIndex.equals(type.index);
     }
 
-    final query = _objectBox.expensesBox
+    final query = _objectBox.transactionsEntryBox
         .query(condition)
-        .order(ExpenseModel_.date, flags: Order.descending)
+        .order(TransactionsEntry_.createdAt, flags: Order.descending)
         .build();
-    final expenses = query.find();
+
+    final results = query.find();
     query.close();
 
-    return expenses;
+    return results;
   }
+
+  @override
+  BuyingInvoiceModel getBuyingInvoice(int id) {
+    return _objectBox.buyInvoicesBox.get(id)!;
+  }
+
+  @override
+  SellingInvoiceModel getSellingInvoice(int id) {
+    return _objectBox.sellingInvoicesBox.get(id)!;
+  }
+
+  @override
+  ManualAdjustmentModel getManualAdjustment(int id) {
+    return _objectBox.manualAdjustmentBox.get(id)!;
+  }
+
+  //  getReturnReciept(int id){
+
+  // }
 }

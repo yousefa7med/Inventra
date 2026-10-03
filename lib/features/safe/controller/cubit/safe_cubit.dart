@@ -1,7 +1,10 @@
-import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit_interface.dart';
-import 'package:Inventra/features/safe/data/models/expense_list_item.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
+import 'package:Inventra/features/safe/data/models/invoice_details_model.dart';
+import 'package:Inventra/features/safe/data/models/list_item_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'safe_state.dart';
@@ -12,58 +15,25 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   SafeCubit(this._repository) : super(SafeInitial());
 
   double _currentBalance = 0;
-
-  String _searchText = '';
+  final List<ListItemModel> _listItems = [];
+  TransactionType? _selectedType;
 
   @override
-  String? get searchText => _searchText;
+  List<ListItemModel> get listItems => _listItems;
+
   @override
-  double get currentBalance => _repository.getBalance().currentBalance;
+  TransactionType? get selectedType => _selectedType;
 
   void init() {
     emit(SafeLoading());
     try {
-      _searchText = '';
       _currentBalance = _repository.getBalance().currentBalance;
-      final expenses = _repository.loadExpenses('');
-      final expenseListItem = generateExpensesListItem(expenses);
-      emit(
-        SafeLoaded(
-          safeBalance: _currentBalance,
-          expenseListItem: expenseListItem,
-        ),
-      );
+      _listItems.clear();
+      final transactions = _repository.getTransactions();
+      _generateListItems(transactions);
+      emit(SafeLoaded(safeBalance: _currentBalance, listItems: _listItems));
     } catch (e) {
       emit(SafeError("فشل في تحميل بايانات الخزنة"));
-    }
-  }
-
-  @override
-  void addExpense({required double value, required String note}) {
-    try {
-      final expense = ExpenseModel(
-        date: DateTime.now(),
-        value: -value,
-        note: note.trim(),
-      );
-      final expenseListItem = (state as SafeLoaded).expenseListItem;
-      if (expenseListItem.isNotEmpty) {
-        expenseListItem.insert(1, ExpenseItem(expense: expense));
-      } else {
-        expenseListItem.add(ExpenseHeaderItem(date: expense.date));
-        expenseListItem.add(ExpenseItem(expense: expense));
-      }
-
-      _repository.addExpense(expense);
-      _currentBalance -= value;
-      emit(
-        (state as SafeLoaded).copyWith(
-          safeBalance: _currentBalance,
-          expenseListItem: expenseListItem,
-        ),
-      );
-    } catch (e) {
-      emit(SafeError('فشل إضافة المصروف: $e'));
     }
   }
 
@@ -81,55 +51,79 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   }
 
   @override
-  void searchForExpenses(String searchText) {
-    _searchText = searchText;
+  void loadTransactions({TransactionType? type}) async {
+    _selectedType = type;
 
+    emit(SafeLoading());
     try {
-      final expenses = _repository.loadExpenses(searchText);
-      final expenseListItem = generateExpensesListItem(expenses);
-      if (state is SafeLoaded) {
-        emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
-      }
+      _listItems.clear();
+      final transactions = _repository.getTransactions(type: type);
+      _generateListItems(transactions);
+
+      emit(SafeLoaded(listItems: _listItems, safeBalance: _currentBalance));
     } catch (e) {
-      emit(SafeError("فشل في تحميل المصاريف"));
+      emit(SafeError(e.toString()));
+    }
+  }
+
+  void _generateListItems(List<TransactionsEntry> transactions) {
+    final Map<DateTime, List<TransactionsEntry>> grouped = {};
+
+    for (final transaction in transactions) {
+      final dateOnly = DateTime(
+        transaction.createdAt.year,
+        transaction.createdAt.month,
+        transaction.createdAt.day,
+      );
+      if (!grouped.containsKey(dateOnly)) {
+        grouped[dateOnly] = [];
+      }
+      grouped[dateOnly]!.add(transaction);
+    }
+
+    for (final item in grouped.entries) {
+      final date = item.key;
+      final dailyTransactions = item.value;
+      final double total = dailyTransactions.fold(
+        0.0,
+        (sum, transaction) => sum + transaction.signedValue,
+      );
+      _listItems.add(
+        HeaderItem(date: date, count: dailyTransactions.length, total: total),
+      );
+
+      for (var transaction in dailyTransactions) {
+        _listItems.add(TransactionItem(transaction: transaction));
+      }
     }
   }
 
   @override
-  void clearSearchFilter() {
-    _searchText = '';
-    try {
-      final expenses = _repository.loadExpenses(_searchText);
-      final expenseListItem = generateExpensesListItem(expenses);
-      if (state is SafeLoaded) {
-        emit((state as SafeLoaded).copyWith(expenseListItem: expenseListItem));
-      }
-    } catch (e) {
-      emit(SafeError("فشل في تحميل المصاريف"));
+  InvoiceDetailsModel getInvoiceDetails({
+    required TransactionType type,
+    required int id,
+  }) {
+    late final InvoiceDetailsModel invoice;
+
+    if (type == TransactionType.buyingInvoice) {
+      final entity = _repository.getBuyingInvoice(id);
+
+      invoice = InvoiceDetailsModel.fromBuyingInvoice(invoice: entity);
+    } else if (type == TransactionType.sellingInvoice) {
+      final entity = _repository.getSellingInvoice(id);
+
+      invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
+    } else {
+      // TODO:
+      // final entity = _repository.getSellingInvoice(id);
+
+      // invoice = InvoiceDetailsModel.fromSellingInvoice(invoice: entity);
     }
+    return invoice;
   }
 
-  List<ExpenseListItem> generateExpensesListItem(List<ExpenseModel> expenses) {
-    Map<DateTime, List<ExpenseModel>> grouped = {};
-    for (var expense in expenses) {
-      final date = DateTime(
-        expense.date.year,
-        expense.date.month,
-        expense.date.day,
-      );
-
-      grouped.putIfAbsent(date, () => []);
-      grouped[date]!.add(expense);
-    }
-    final List<ExpenseListItem> expenseListItem = [];
-    for (var item in grouped.entries) {
-      final date = item.key;
-      final list = item.value;
-      expenseListItem.add(ExpenseHeaderItem(date: date));
-      for (var expense in list) {
-        expenseListItem.add(ExpenseItem(expense: expense));
-      }
-    }
-    return expenseListItem;
+  @override
+  ManualAdjustmentModel getManualAdjustment(int id) {
+    return _repository.getManualAdjustment(id);
   }
 }

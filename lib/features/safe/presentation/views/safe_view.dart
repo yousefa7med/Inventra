@@ -1,6 +1,3 @@
-import 'package:Inventra/core/config/configrations.dart';
-import 'package:Inventra/core/navigations/navigations.dart';
-import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
@@ -18,7 +15,6 @@ class SafeView extends StatelessWidget {
       child: Scaffold(
         appBar: const CustomAppBar(title: 'الخزنة', showDrawerButton: true),
         body: RefreshIndicator(
-          
           onRefresh: () async => context.read<SafeCubit>().init(),
           child: BlocBuilder<SafeCubit, SafeState>(
             builder: (context, state) {
@@ -37,20 +33,6 @@ class SafeView extends StatelessWidget {
                   return SafeLoadedBody(state: state);
               }
             },
-          ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            AppNavigation.pushName(
-              rootNavigator: true,
-              context: context,
-              route: AppRoutes.addExpenseView,
-            );
-          },
-          icon: const Icon(Icons.add),
-          label: Text(
-            'مصروف',
-            style: AppTextStyle.medium16.copyWith(color: Colors.white),
           ),
         ),
       ),

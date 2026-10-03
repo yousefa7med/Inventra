@@ -1,10 +1,20 @@
+import 'package:Inventra/core/models/manual_adjustment_model.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
+import 'package:Inventra/features/safe/data/models/invoice_details_model.dart';
+import 'package:Inventra/features/safe/data/models/list_item_model.dart';
+
 abstract class SafeCubitInterface {
-  String? get searchText;
-  double get currentBalance ;
+  // double get currentBalance;
+  List<ListItemModel> get listItems;
+  TransactionType? get selectedType;
 
-  void addExpense({required double value, required String note});
-  void searchForExpenses(String searchText);
-  void clearSearchFilter();
+  void loadTransactions({TransactionType? type});
 
+
+  InvoiceDetailsModel getInvoiceDetails({
+    required TransactionType type,
+    required int id,
+  });
+  ManualAdjustmentModel getManualAdjustment(int id);
   void adjustBalance({required double newBalance, String? note});
 }

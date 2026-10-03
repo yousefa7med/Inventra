@@ -1,7 +1,7 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utils/formatters.dart';
-import 'package:Inventra/features/transactions/data/models/list_item_model.dart';
+import 'package:Inventra/features/safe/data/models/list_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
