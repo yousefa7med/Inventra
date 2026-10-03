@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/services/Transaction_change_notifier.dart';
@@ -12,10 +14,10 @@ class DashboardCubit extends Cubit<DashboardState>
     implements DashboardCubitInterface {
   final DashboardRepository _repository;
   final TransactionChangeNotifier _transactionChangeNotifier;
-
+  late final StreamSubscription<TransactionType> _transactionSubscription;
   DashboardCubit(this._repository, this._transactionChangeNotifier)
     : super(DashboardInitial()) {
-    _transactionChangeNotifier.stream.listen((type) {
+    _transactionSubscription = _transactionChangeNotifier.stream.listen((type) {
       switch (type) {
         case TransactionType.sellingInvoice:
           loadSafeBalance();
@@ -50,6 +52,12 @@ class DashboardCubit extends Cubit<DashboardState>
     emit(DashboardLoading());
 
     loadDashboard();
+  }
+
+  @override
+  Future<void> close() {
+    _transactionSubscription.cancel();
+    return super.close();
   }
 
   void loadSafeBalance() {
@@ -115,7 +123,6 @@ class DashboardCubit extends Cubit<DashboardState>
 
       _repository.addExpense(expense);
       safeBalance -= value;
-      emit((state as DashboardLoaded).copyWith(safeBalance: safeBalance));
     } catch (e) {
       emit(DashboardError('فشل إضافة المصروف: $e'));
     }

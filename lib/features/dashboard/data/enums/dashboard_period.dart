@@ -30,7 +30,8 @@ extension DashboardPeriodExtension on DashboardPeriod {
         ];
         return days[(timestamp.weekday + 1) % 7];
       case DashboardPeriod.month:
-        return '${timestamp.day}';
+        final week = ((timestamp.day - 1) ~/ 7) + 1;
+        return 'أسبوع $week';
       case DashboardPeriod.year:
         const months = [
           'يناير',
