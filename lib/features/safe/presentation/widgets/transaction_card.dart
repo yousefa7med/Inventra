@@ -7,7 +7,7 @@ import 'package:Inventra/core/utils/formatters.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
-import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
+import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +28,7 @@ class TransactionCard extends StatelessWidget {
     required this.subTitle,
     required this.icon,
   });
+  
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +44,10 @@ class TransactionCard extends StatelessWidget {
             if (transaction.type == TransactionType.sellingInvoice ||
                 transaction.type == TransactionType.buyingInvoice ||
                 transaction.type == TransactionType.returnReceipt) {
-              final invoice = context
-                  .read<TransactionsCubit>()
-                  .getInvoiceDetails(
-                    type: transaction.type,
-                    id: transaction.referenceId,
-                  );
+              final invoice = context.read<SafeCubit>().getInvoiceDetails(
+                type: transaction.type,
+                id: transaction.referenceId,
+              );
               AppNavigation.pushName(
                 rootNavigator: true,
                 context: context,
@@ -56,9 +55,9 @@ class TransactionCard extends StatelessWidget {
                 argument: invoice,
               );
             } else if (transaction.type == TransactionType.manualAdjustment) {
-              final adjustment = context
-                  .read<TransactionsCubit>()
-                  .getManualAdjustment(transaction.referenceId);
+              final adjustment = context.read<SafeCubit>().getManualAdjustment(
+                transaction.referenceId,
+              );
               _showManualAdjustmentDialog(context, adjustment);
             } else if (transaction.type == TransactionType.expense) {
               _showExpenseDialog(context, transaction);

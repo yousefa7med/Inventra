@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/models/customer_model.dart';
 import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
@@ -16,13 +15,13 @@ import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart'
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/safe/presentation/views/add_expense_view.dart';
+import 'package:Inventra/features/safe/presentation/views/invoice_details_view.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
 import 'package:Inventra/features/selling_invoice/presentation/views/selling_product_selection_view.dart';
 import 'package:Inventra/features/selling_invoice/presentation/views/selling_invoice_view.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/presentation/views/all_suppliers_view.dart';
-import 'package:Inventra/features/transactions/data/models/invoice_details_model.dart';
-import 'package:Inventra/features/transactions/presentation/views/invoice_details_view.dart';
+import 'package:Inventra/features/safe/data/models/invoice_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';

@@ -8,16 +8,16 @@ class SafeLoading extends SafeState {}
 
 class SafeLoaded extends SafeState {
   final double safeBalance;
-  final List<ExpenseListItem> expenseListItem;
+  final List<ListItemModel> listItems;
 
-  SafeLoaded({required this.safeBalance, required this.expenseListItem});
+  SafeLoaded({required this.safeBalance, required this.listItems});
 
   SafeLoaded copyWith({
     double? safeBalance,
-    List<ExpenseListItem>? expenseListItem,
+    final List<ListItemModel>? listItems,
   }) => SafeLoaded(
     safeBalance: safeBalance ?? this.safeBalance,
-    expenseListItem: expenseListItem ?? this.expenseListItem,
+    listItems: listItems ?? this.listItems,
   );
 }
 

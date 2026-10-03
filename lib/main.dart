@@ -22,9 +22,6 @@ import 'package:Inventra/features/safe/data/repositories/safe_repository_impl.da
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository_impl.dart';
-import 'package:Inventra/features/transactions/data/repositories/transactions_repository_impl.dart';
-import 'package:Inventra/features/transactions/data/repositories/transactions_repository.dart';
-import 'package:Inventra/features/transactions/controller/cubit/transactions_cubit.dart';
 import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
 import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository_impl.dart';
 import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
@@ -140,16 +137,9 @@ Future<void> configureDependencies() async {
     () => buyInvoiceRepository,
   );
 
-  final transactionsRepository = TransactionsRepositoryImpl(
-    objectBox: objectBoxServices,
-  );
-  GetIt.instance.registerLazySingleton<TransactionsRepository>(
-    () => transactionsRepository,
-  );
 
-  GetIt.instance.registerLazySingleton<TransactionsCubit>(
-    () => TransactionsCubit(GetIt.instance<TransactionsRepository>()),
-  );
+
+
 
   // Dashboard
   final dashboardRepository = DashboardRepositoryImpl(objectBoxServices);
