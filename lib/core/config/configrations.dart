@@ -11,9 +11,9 @@ import 'package:Inventra/features/buying_invoice/presentation/views/buying_invoi
 import 'package:Inventra/features/buying_invoice/presentation/views/buying_product_selection_view.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
+import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
-import 'package:Inventra/features/safe/controller/cubit/safe_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_expense_view.dart';
 import 'package:Inventra/features/safe/presentation/views/invoice_details_view.dart';
 import 'package:Inventra/features/selling_invoice/controller/cubit/sell_invoice_cubit.dart';
@@ -79,7 +79,7 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
-                value: GetIt.instance<SafeCubit>(),
+                value: GetIt.instance<DashboardCubit>(),
                 child: const AddExpenseView(),
               ),
         );

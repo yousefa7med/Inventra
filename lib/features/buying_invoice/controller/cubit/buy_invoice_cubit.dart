@@ -5,6 +5,7 @@ import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit_interface.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_state.dart';
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
+import 'package:Inventra/features/buying_invoice/exceptions/safe_balance_not_enough_exception.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
@@ -158,8 +159,8 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
       _selectedSupplier = null;
       emit(BuyInvoiceConfirmed());
       return true;
-    } on String catch (e) {
-      emit(BuyInvoiceError(e));
+    } on SafeBalanceNotEnoughException {
+      emit(BuyInvoiceError('رصيد الخزنة لا يكفي'));
       return false;
     } catch (e) {
       emit(BuyInvoiceError('Failed to save invoice: $e'));

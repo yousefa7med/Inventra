@@ -29,6 +29,8 @@ class DashboardChart extends StatelessWidget {
 
     final scale = _calculateScale(minValue: minValue, maxValue: maxValue);
 
+    final labelStep = (points.length / 6).ceil().clamp(1, points.length);
+
     final spots = points.asMap().entries.map((entry) {
       return FlSpot(entry.key.toDouble(), entry.value.value);
     }).toList();
@@ -69,10 +71,17 @@ class DashboardChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   interval: 1,
-                  reservedSize: 32.h,
+                  reservedSize: 36.h,
                   getTitlesWidget: (value, meta) {
-                    final index = value.toInt();
+                    final index = value.round();
                     if (index < 0 || index >= points.length) {
+                      return const SizedBox.shrink();
+                    }
+                    if (selectedPeriod == DashboardPeriod.today) {
+                      if (index % 2 != 0) {
+                        return const SizedBox.shrink();
+                      }
+                    } else if (index % labelStep != 0) {
                       return const SizedBox.shrink();
                     }
                     return _BottomTitleWidget(
@@ -101,10 +110,17 @@ class DashboardChart extends StatelessWidget {
                 tooltipRoundedRadius: 12.r,
                 tooltipPadding: EdgeInsets.all(12.w),
                 getTooltipItems: (touchedSpots) {
-                  return touchedSpots.map((spot) {
+                  return touchedSpots.asMap().entries.map((entry) {
+                    final listIndex = entry.key;
+                    final spot = entry.value;
+
+                    if (listIndex > 0) return null;
+
                     final index = spot.x.toInt();
                     if (index < 0 || index >= points.length) return null;
+
                     final point = points[index];
+
                     return LineTooltipItem(
                       '',
                       const TextStyle(),
@@ -155,28 +171,37 @@ class DashboardChart extends StatelessWidget {
 
     final bars = <LineChartBarData>[];
 
-    int segmentStart = 0;
-    bool isNegative = spots.first.y < 0;
+    var segmentStart = 0;
+    FlSpot? pendingStart;
 
     for (int i = 1; i < spots.length; i++) {
+      final prevNegative = spots[i - 1].y < 0;
       final currentIsNegative = spots[i].y < 0;
 
-      if (currentIsNegative != isNegative) {
+      if (currentIsNegative != prevNegative) {
+        final prev = spots[i - 1];
+        final curr = spots[i];
+        final t = prev.y / (prev.y - curr.y);
+        final crossing = FlSpot(prev.x + (curr.x - prev.x) * t, 0);
+
         bars.add(
           _buildBar(
-            spots: spots.sublist(segmentStart, i),
-            isNegative: isNegative,
+            spots: [?pendingStart, ...spots.sublist(segmentStart, i), crossing],
+            isNegative: prevNegative,
           ),
         );
 
+        pendingStart = crossing;
         segmentStart = i;
-        isNegative = currentIsNegative;
       }
     }
 
-    // Add the last segment
+    final lastNegative = spots.last.y < 0;
     bars.add(
-      _buildBar(spots: spots.sublist(segmentStart), isNegative: isNegative),
+      _buildBar(
+        spots: [?pendingStart, ...spots.sublist(segmentStart)],
+        isNegative: lastNegative,
+      ),
     );
 
     return bars;
@@ -195,9 +220,7 @@ class DashboardChart extends StatelessWidget {
       barWidth: 3,
       isStrokeCapRound: true,
 
-      gradient: LinearGradient(
-        colors: [chartColor, chartColor.withValues(alpha: 0.3)],
-      ),
+      color: chartColor,
 
       dotData: FlDotData(
         show: true,
@@ -238,7 +261,7 @@ class _BottomTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 8.h),
+      padding: EdgeInsets.only(top: 8.h, left: 4.w, right: 4.w),
       child: Text(
         period.formmatTime(timestamp),
         style: AppTextStyle.regular12.copyWith(color: AppColors.grey),

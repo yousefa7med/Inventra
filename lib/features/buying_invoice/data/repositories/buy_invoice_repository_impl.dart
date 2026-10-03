@@ -10,6 +10,7 @@ import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/services/Transaction_change_notifier.dart';
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
+import 'package:Inventra/features/buying_invoice/exceptions/safe_balance_not_enough_exception.dart';
 import 'package:Inventra/objectbox.g.dart';
 
 class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
@@ -94,7 +95,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
           _objectBox.safeBalanceBox.get(1) ??
           SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
       if (totalPrice > balance.currentBalance) {
-        throw "رصيد الخزنة لا يكفي";
+        throw const SafeBalanceNotEnoughException();
       }
 
       invoice.items.addAll(items);
@@ -135,4 +136,6 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
       query.close();
     }
   }
+
+
 }

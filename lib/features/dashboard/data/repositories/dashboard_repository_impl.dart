@@ -61,7 +61,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
     final bucketCount = _getBucketCount(period, dateRange.start.month);
 
-    DateTime currentDateTime = _getNextBucket(dateRange.start, period);
+    DateTime currentDateTime = period == DashboardPeriod.today
+        ? dateRange.start
+        : _getNextBucket(dateRange.start, period);
 
     double salesKpi = 0;
     double purchasesKpi = 0;
@@ -82,7 +84,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
       while (entry.createdAt.isAfter(currentDateTime)) {
         _addChartPoints(
           charts: charts,
-          timestamp: currentDateTime,
+          timestamp: period == DashboardPeriod.today
+              ? currentDateTime
+              : _getPreviousBucket(currentDateTime, period),
           sales: bucketSales,
           purchases: bucketPurchases,
           expenses: bucketExpenses,
@@ -141,7 +145,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
 
     _addChartPoints(
       charts: charts,
-      timestamp: currentDateTime,
+      timestamp: period == DashboardPeriod.today
+          ? currentDateTime
+          : _getPreviousBucket(currentDateTime, period),
       sales: bucketSales,
       purchases: bucketPurchases,
       expenses: bucketExpenses,
@@ -152,7 +158,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
       bucketNetProfitCount: bucketNetProfitCount,
     );
 
-    currentDateTime = _getNextBucket(currentDateTime, period);
+    var time = period == DashboardPeriod.today
+        ? _getNextBucket(currentDateTime, period)
+        : currentDateTime;
 
     for (var metric in DashboardMetric.values) {
       final points = charts[metric]!;
@@ -162,10 +170,10 @@ class DashboardRepositoryImpl implements DashboardRepository {
         continue;
       }
 
-      var time = currentDateTime;
+      var paddingTime = time;
       while (points.length < bucketCount) {
-        points.add(ChartPoint(timestamp: time, value: 0, count: 0));
-        time = _getNextBucket(time, period);
+        points.add(ChartPoint(timestamp: paddingTime, value: 0, count: 0));
+        paddingTime = _getNextBucket(paddingTime, period);
       }
     }
 
@@ -208,7 +216,9 @@ class DashboardRepositoryImpl implements DashboardRepository {
         start = DateTime(now.year, now.month, now.day, 0, 0, 0);
         end = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
       case DashboardPeriod.week:
-        int daysToSubtract = (now.weekday + 1) % 7;
+        int daysToSubtract = now.weekday == DateTime.saturday
+            ? 0
+            : (now.weekday % 7) + 1;
 
         start = DateTime(
           now.year,
@@ -237,6 +247,22 @@ class DashboardRepositoryImpl implements DashboardRepository {
     return DateTimeRange(start: start, end: end);
   }
 
+  DateTime _getPreviousBucket(DateTime current, DashboardPeriod period) {
+    switch (period) {
+      case DashboardPeriod.today:
+        return current.subtract(const Duration(hours: 3));
+
+      case DashboardPeriod.week:
+        return current.subtract(const Duration(days: 1));
+
+      case DashboardPeriod.month:
+        return current.subtract(const Duration(days: 7));
+
+      case DashboardPeriod.year:
+        return DateTime(current.year, current.month - 1, 1);
+    }
+  }
+
   DateTime _getNextBucket(DateTime current, DashboardPeriod period) {
     switch (period) {
       case DashboardPeriod.today:
@@ -245,7 +271,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       case DashboardPeriod.week:
         return current.add(const Duration(days: 1));
       case DashboardPeriod.month:
-        return current.add(const Duration(days: 1));
+        return current.add(const Duration(days: 7));
 
       case DashboardPeriod.year:
         return DateTime(current.year, current.month + 1, 1);
@@ -261,13 +287,13 @@ class DashboardRepositoryImpl implements DashboardRepository {
   int _getBucketCount(DashboardPeriod period, int month) {
     switch (period) {
       case DashboardPeriod.today:
-        return 8;
+        return 9;
 
       case DashboardPeriod.week:
         return 7;
 
       case DashboardPeriod.month:
-        return _daysInMonth(month);
+        return _daysInMonth(month) >= 29 ? 5 : 4;
       case DashboardPeriod.year:
         return 12;
     }
@@ -331,8 +357,19 @@ class DashboardRepositoryImpl implements DashboardRepository {
       lastUpdated: DateTime.now(),
     );
 
-    _objectBox.safeBalanceBox.put(newBalance);
-    _objectBox.expensesBox.put(expense);
-    _transactionChangeNotifier.notify(TransactionType.expense);
+    _objectBox.store.runInTransaction(TxMode.write, () {
+      _objectBox.safeBalanceBox.put(newBalance);
+      final expenseId = _objectBox.expensesBox.put(expense);
+      _objectBox.transactionsEntryBox.put(
+        TransactionsEntry(
+          typeIndex: TransactionType.expense.index,
+          signedValue: expense.value,
+          referenceId: expenseId,
+          createdAt: expense.date,
+          description: expense.note.trim(),
+        ),
+      );
+      _transactionChangeNotifier.notify(TransactionType.expense);
+    });
   }
 }
