@@ -1,4 +1,3 @@
-
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/services/Transaction_change_notifier.dart';
@@ -27,6 +26,10 @@ class DashboardCubit extends Cubit<DashboardState>
           _repository.clearCachedDashboardSnapshot();
           loadDashboard();
 
+        case TransactionType.buyingInvoice:
+          loadSafeBalance();
+          _repository.clearCachedDashboardSnapshot();
+          loadDashboard();
         default:
           loadSafeBalance();
       }
@@ -112,11 +115,7 @@ class DashboardCubit extends Cubit<DashboardState>
 
       _repository.addExpense(expense);
       safeBalance -= value;
-      emit(
-        (state as DashboardLoaded).copyWith(
-          safeBalance: safeBalance,
-        ),
-      );
+      emit((state as DashboardLoaded).copyWith(safeBalance: safeBalance));
     } catch (e) {
       emit(DashboardError('فشل إضافة المصروف: $e'));
     }

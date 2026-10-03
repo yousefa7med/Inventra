@@ -331,8 +331,19 @@ class DashboardRepositoryImpl implements DashboardRepository {
       lastUpdated: DateTime.now(),
     );
 
-    _objectBox.safeBalanceBox.put(newBalance);
-    _objectBox.expensesBox.put(expense);
-    _transactionChangeNotifier.notify(TransactionType.expense);
+    _objectBox.store.runInTransaction(TxMode.write, () {
+      _objectBox.safeBalanceBox.put(newBalance);
+      final expenseId = _objectBox.expensesBox.put(expense);
+      _objectBox.transactionsEntryBox.put(
+        TransactionsEntry(
+          typeIndex: TransactionType.expense.index,
+          signedValue: expense.value,
+          referenceId: expenseId,
+          createdAt: expense.date,
+          description: expense.note.trim(),
+        ),
+      );
+      _transactionChangeNotifier.notify(TransactionType.expense);
+    });
   }
 }
