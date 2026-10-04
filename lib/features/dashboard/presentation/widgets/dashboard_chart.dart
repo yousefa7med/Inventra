@@ -29,6 +29,8 @@ class DashboardChart extends StatelessWidget {
 
     final scale = _calculateScale(minValue: minValue, maxValue: maxValue);
 
+    final labelStep = (points.length / 6).ceil().clamp(1, points.length);
+
     final spots = points.asMap().entries.map((entry) {
       return FlSpot(entry.key.toDouble(), entry.value.value);
     }).toList();
@@ -69,10 +71,17 @@ class DashboardChart extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   interval: 1,
-                  reservedSize: 32.h,
+                  reservedSize: 36.h,
                   getTitlesWidget: (value, meta) {
-                    final index = value.toInt();
+                    final index = value.round();
                     if (index < 0 || index >= points.length) {
+                      return const SizedBox.shrink();
+                    }
+                    if (selectedPeriod == DashboardPeriod.today) {
+                      if (index % 2 != 0) {
+                        return const SizedBox.shrink();
+                      }
+                    } else if (index % labelStep != 0) {
                       return const SizedBox.shrink();
                     }
                     return _BottomTitleWidget(
@@ -101,10 +110,17 @@ class DashboardChart extends StatelessWidget {
                 tooltipRoundedRadius: 12.r,
                 tooltipPadding: EdgeInsets.all(12.w),
                 getTooltipItems: (touchedSpots) {
-                  return touchedSpots.map((spot) {
+                  return touchedSpots.asMap().entries.map((entry) {
+                    final listIndex = entry.key;
+                    final spot = entry.value;
+
+                    if (listIndex > 0) return null;
+
                     final index = spot.x.toInt();
                     if (index < 0 || index >= points.length) return null;
+
                     final point = points[index];
+
                     return LineTooltipItem(
                       '',
                       const TextStyle(),
@@ -245,7 +261,7 @@ class _BottomTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 8.h),
+      padding: EdgeInsets.only(top: 8.h, left: 4.w, right: 4.w),
       child: Text(
         period.formmatTime(timestamp),
         style: AppTextStyle.regular12.copyWith(color: AppColors.grey),
