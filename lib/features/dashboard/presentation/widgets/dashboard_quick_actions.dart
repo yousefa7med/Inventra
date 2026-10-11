@@ -14,44 +14,90 @@ class DashboardQuickActions extends StatelessWidget {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(12.w),
-        child: Row(
-          spacing: 8.w,
+        child: Column(
           children: [
-            Expanded(
-              child: QuickActionItem(
-                label: 'فاتورة بيع',
-                icon: Icons.point_of_sale,
-                color: AppColors.success,
-                onTap: () => AppNavigation.pushName(
-                  context: context,
-                  route: AppRoutes.sellingInvoiceView,
-                  rootNavigator: true,
+            Row(
+              spacing: 8.w,
+              children: [
+                Expanded(
+                  child: QuickActionItem(
+                    label: 'فاتورة بيع',
+                    icon: Icons.shopping_cart_checkout_rounded,
+                    color: AppColors.success,
+                    onTap: () => AppNavigation.pushName(
+                      context: context,
+                      route: AppRoutes.sellingInvoiceView,
+                      rootNavigator: true,
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: QuickActionItem(
+                    label: 'فاتورة شراء',
+                    icon: Icons.add_shopping_cart,
+                    color: AppColors.secondary,
+                    onTap: () => AppNavigation.pushName(
+                      context: context,
+                      route: AppRoutes.buyingInvoiceView,
+                      rootNavigator: true,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: QuickActionItem(
+                    label: 'مصروف',
+                    icon: Icons.receipt_long,
+                    color: AppColors.error,
+                    onTap: () => AppNavigation.pushName(
+                      context: context,
+                      route: AppRoutes.addExpenseView,
+                      rootNavigator: true,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: QuickActionItem(
-                label: 'فاتورة شراء',
-                icon: Icons.add_shopping_cart,
-                color: AppColors.secondary,
-                onTap: () => AppNavigation.pushName(
-                  context: context,
-                  route: AppRoutes.buyingInvoiceView,
-                  rootNavigator: true,
+            Gap(8.h),
+            Row(
+              spacing: 8.w,
+              children: [
+                Expanded(
+                  child: QuickActionItem(
+                    label: 'مورد جديد',
+                    icon: Icons.local_shipping_outlined,
+                    color: AppColors.warning,
+                    onTap: () => AppNavigation.pushName(
+                      context: context,
+                      route: AppRoutes.supplierFormView,
+                      rootNavigator: true,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: QuickActionItem(
-                label: 'مصروف',
-                icon: Icons.receipt_long,
-                color: AppColors.error,
-                onTap: () => AppNavigation.pushName(
-                  context: context,
-                  route: AppRoutes.addExpenseView,
-                  rootNavigator: true,
+                Expanded(
+                  child: QuickActionItem(
+                    label: 'عميل جديد',
+                    icon: Icons.person_add_outlined,
+                    color: AppColors.primary,
+                    onTap: () => AppNavigation.pushName(
+                      context: context,
+                      route: AppRoutes.customerFormView,
+                      rootNavigator: true,
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: QuickActionItem(
+                    label: 'التحليلات',
+                    icon: Icons.analytics_outlined,
+                    color: AppColors.darkBlue,
+                    onTap: () => AppNavigation.pushName(
+                      context: context,
+                      route: AppRoutes.dashboardAnalytics,
+                      rootNavigator: true,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

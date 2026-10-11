@@ -12,6 +12,7 @@ import 'package:Inventra/features/buying_invoice/presentation/views/buying_produ
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
 import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/presentation/views/dashboard_analytics_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_expense_view.dart';
@@ -153,6 +154,15 @@ class AppRouter {
           pageBuilder: (context, animation, secondaryAnimation) =>
               InvoiceDetailsView(invoice: invoice),
         );
+      case AppRoutes.dashboardAnalytics:
+        return pageRouteBuilderMethod(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BlocProvider.value(
+                value: GetIt.instance<DashboardCubit>(),
+                child: const DashboardAnalyticsView(),
+              ),
+        );
 
       default:
         return pageRouteBuilderMethod(
@@ -173,6 +183,7 @@ abstract class AppRoutes {
   static const String addExpenseView = '/addExpenseView';
   static const String sellingInvoiceView = '/selling-invoice';
   static const String addProductToInvoice = '/add-product-to-invoice';
+  static const String dashboardAnalytics = '/DashboardAnalyticsView';
 
   static const String allCustomers = '/all-customers';
   static const String allSuppliers = '/all-suppliers';
