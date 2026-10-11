@@ -1,9 +1,6 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/presentation/widgets/chart_section.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/safe_balance_section.dart';
-import 'package:Inventra/features/dashboard/presentation/widgets/kpis_section.dart';
-import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_period_selector.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_quick_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,19 +27,8 @@ class DashboardLoadedBody extends StatelessWidget {
             const SafeBalanceSection(),
             Gap(12.h),
             const DashboardQuickActions(),
+            Gap(16.h),
 
-            Gap(12.h),
-            const KpisSection(),
-            Gap(16.h),
-            DashboardPeriodSelector(
-              selectedPeriod: context.read<DashboardCubit>().selectedPeriod,
-              onPeriodChanged: (period) =>
-                  context.read<DashboardCubit>().changePeriod(period),
-            ),
-            Gap(16.h),
-            const ChartSection(),
-
-            Gap(16.h),
           ],
         ),
       ),
