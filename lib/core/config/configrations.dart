@@ -3,6 +3,7 @@ import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/transitions/page_route_builder_method.dart';
+import 'package:Inventra/core/widgets/barcode_scanner_view.dart';
 import 'package:Inventra/core/widgets/customer_form_view.dart';
 import 'package:Inventra/core/widgets/product_form_view.dart';
 import 'package:Inventra/core/widgets/supplier_form_view.dart';
@@ -164,6 +165,13 @@ class AppRouter {
               ),
         );
 
+      case AppRoutes.barcodeScannerView:
+        return pageRouteBuilderMethod<String>(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const BarcodeScannerView(),
+        );
+
       default:
         return pageRouteBuilderMethod(
           settings: settings,
@@ -192,4 +200,5 @@ abstract class AppRoutes {
 
   static const String supplierFormView = '/edit-supplier';
   static const String invoiceDetailsView = '/invoice-details';
+  static const String barcodeScannerView = '/barcode-scanner';
 }

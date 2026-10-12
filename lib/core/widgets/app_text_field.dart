@@ -15,7 +15,6 @@ class AppTextField extends StatefulWidget {
     this.prefixIcon,
     this.onChanged,
     this.hintText,
-    this.onSuffixTap,
   });
   final String? label;
   final String? hintText;
@@ -27,7 +26,6 @@ class AppTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final String? suffixText;
   final void Function(String)? onChanged;
-  final VoidCallback? onSuffixTap;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -73,12 +71,7 @@ class _AppTextFieldState extends State<AppTextField> {
       controller: widget.controller,
       focusNode: focusNode,
       decoration: InputDecoration(
-        suffixIcon: (widget.suffixIcon != null || widget.onSuffixTap != null)
-            ? InkWell(
-                onTap: widget.onSuffixTap,
-                child: widget.suffixIcon ?? const Icon(Icons.arrow_drop_down),
-              )
-            : null,
+        suffixIcon: widget.suffixIcon,
         suffixText: widget.suffixText,
         prefixIcon: widget.prefixIcon,
         border: OutlineInputBorder(

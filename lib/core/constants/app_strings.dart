@@ -38,6 +38,16 @@ abstract class AppStrings {
   static const String searchByBarcodeOrName = 'بحث بالباركود أو الاسم';
   static const String outOfStock = 'نفذ من المخزن';
 
+  // Barcode Scanner
+  static const String scanBarcode = 'مسح الباركود';
+  static const String pointCameraAtBarcode = 'وجّه الكاميرا نحو الباركود';
+  static const String cameraPermissionDenied =
+      'تم رفض إذن الكاميرا. فعّلها من الإعدادات للتمكن من المسح';
+  static const String scannerInitError = 'تعذر تشغيل الكاميرا';
+  static const String flashOn = 'تشغيل الفلاش';
+  static const String flashOff = 'إطفاء الفلاش';
+  static const String switchCamera = 'تبديل الكاميرا';
+
   // Invoice Details
   static const String sellInvoiceDetails = 'تفاصيل فاتورة بيع';
   static const String buyInvoiceDetails = 'تفاصيل فاتورة شراء';
@@ -48,8 +58,10 @@ abstract class AppStrings {
   static const String supplier = 'المورد';
   static const String unknownCustomer = 'عميل غير معروف';
   static const String unknownSupplier = 'مورد غير معروف';
-  static const String noProductsInSellInvoice = 'لا توجد منتجات في فاتورة البيع';
-  static const String noProductsInBuyInvoice = 'لا توجد منتجات في فاتورة الشراء';
+  static const String noProductsInSellInvoice =
+      'لا توجد منتجات في فاتورة البيع';
+  static const String noProductsInBuyInvoice =
+      'لا توجد منتجات في فاتورة الشراء';
   static const String lineTotal = 'إجمالي السطر';
   static const String items = 'أصناف';
   static const String call = 'اتصال';

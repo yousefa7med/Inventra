@@ -45,6 +45,7 @@ class InventoryView extends StatelessWidget {
                           .searchProducts,
                       clearFunction: context.read<ProductCubit>().loadProducts,
                       hintText: 'ابحث باسم المنتج أو الباركود...',
+                      showScanButton: true,
                     ),
                   ),
                   Gap(16.h),

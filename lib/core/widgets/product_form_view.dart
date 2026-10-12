@@ -1,10 +1,13 @@
 import 'dart:io';
 
+import 'package:Inventra/core/config/configrations.dart';
+import 'package:Inventra/core/constants/app_strings.dart';
 import 'package:Inventra/core/helper/functions.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
+import 'package:Inventra/core/utilities/assets.dart';
 import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
@@ -14,6 +17,7 @@ import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
@@ -141,9 +145,24 @@ class _ProductFormViewState extends State<ProductFormView> {
                       controller: barcodeController,
                       label: "الباركود",
                       textInputAction: TextInputAction.next,
-                      suffixIcon: const Icon(
-                        Icons.qr_code_scanner,
-                        color: AppColors.primary,
+                      suffixIcon: Tooltip(
+                        message: AppStrings.scanBarcode,
+                        child: SizedBox(
+                          width: 8,
+                          height: 8,
+                          child: IconButton(
+                            onPressed: _scanBarcode,
+                            icon: SvgPicture.asset(
+                              Assets.imagesBarcodeScanner,
+                              width: 24.w,
+                              height: 24.h,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.primary,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                       validator: Validator.validateBarcode(),
                     ),
@@ -312,6 +331,17 @@ class _ProductFormViewState extends State<ProductFormView> {
         ),
       ),
     );
+  }
+
+  Future<void> _scanBarcode() async {
+    final code = await AppNavigation.pushName<String>(
+      context: context,
+      route: AppRoutes.barcodeScannerView,
+    );
+    if (!mounted || code == null || code.isEmpty) return;
+    setState(() {
+      barcodeController.text = code;
+    });
   }
 
   Future<void> pickImage() async {

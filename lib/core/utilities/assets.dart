@@ -2,6 +2,10 @@
 class Assets {
   Assets._();
   
+  /// Assets for imagesBarcodeScanner
+  /// assets/images/barcode_scanner.svg
+  static const String imagesBarcodeScanner = "assets/images/barcode_scanner.svg";
+
   /// Assets for imagesLogo
   /// assets/images/logo.png
   static const String imagesLogo = "assets/images/logo.png";
