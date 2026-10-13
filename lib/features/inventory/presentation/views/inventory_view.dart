@@ -2,11 +2,10 @@ import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
-import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
-import 'package:Inventra/features/inventory/presentation/widgets/product_card.dart';
+import 'package:Inventra/features/inventory/presentation/widgets/products_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +16,6 @@ class InventoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ProductCubit>();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -43,7 +41,6 @@ class InventoryView extends StatelessWidget {
                       searchFunction: context
                           .read<ProductCubit>()
                           .searchProducts,
-                      clearFunction: context.read<ProductCubit>().loadProducts,
                       hintText: 'ابحث باسم المنتج أو الباركود...',
                       showScanButton: true,
                     ),
@@ -59,62 +56,29 @@ class InventoryView extends StatelessWidget {
                   current is ProductErrorState ||
                   current is ProductInsertedSuccessed,
               builder: (context, state) {
-                if (state is ProductLoading) {
-                  return const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
+                switch (state) {
+                  case ProductLoading():
+                    return const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  case ProductsLoadingSuccessed():
+                    return ProductsList(products: state.products);
+                  case ProductInsertedSuccessed():
+                    return ProductsList(products: state.products);
 
-                if (state is ProductErrorState) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: ErrorStateWidget(
-                      message: state.message,
-                      onPressed: () =>
-                          context.read<ProductCubit>().loadProducts(),
-                    ),
-                  );
-                }
-
-                if (state is ProductsLoadingSuccessed ||
-                    state is ProductInsertedSuccessed) {
-                  final products = cubit.filteredProducts;
-
-                  if (products.isEmpty) {
+                  case ProductErrorState():
                     return SliverFillRemaining(
                       hasScrollBody: false,
-                      child: EmptyStateWidget(
-                        icon: Icons.inventory_2_outlined,
-                        message: cubit.searchQuery.isNotEmpty
-                            ? 'لا توجد نتائج للبحث'
-                            : 'لا يوجد منتجات',
-                        actionText: 'إضافة منتج',
-                        onAction: () => AppNavigation.pushName(
-                          context: context,
-                          route: AppRoutes.productFormView,
-                        ),
+                      child: ErrorStateWidget(
+                        message: state.message,
+                        onPressed: () =>
+                            context.read<ProductCubit>().loadProducts(),
                       ),
                     );
-                  }
-
-                  return SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
-                    ),
-                    sliver: SliverList.separated(
-                      itemCount: products.length,
-                      separatorBuilder: (context, index) => Gap(12.h),
-                      itemBuilder: (context, index) {
-                        final product = products[index];
-                        return ProductCard(product: product);
-                      },
-                    ),
-                  );
+                  default:
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
-
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
           ],

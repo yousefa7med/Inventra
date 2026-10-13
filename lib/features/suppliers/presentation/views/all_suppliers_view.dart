@@ -3,11 +3,10 @@ import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
-import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
-import 'package:Inventra/features/suppliers/presentation/widgets/supplier_card.dart';
+import 'package:Inventra/features/suppliers/presentation/widgets/supplier_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +22,6 @@ class AllSuppliersView extends StatefulWidget {
 class _AllSuppliersViewState extends State<AllSuppliersView> {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<SupplierCubit>();
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -46,9 +44,7 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                       searchFunction: context
                           .read<SupplierCubit>()
                           .searchSuppliers,
-                      clearFunction: context
-                          .read<SupplierCubit>()
-                          .loadSuppliers,
+
                       hintText: 'ابحث بالاسم...',
                     ),
                   ),
@@ -63,63 +59,28 @@ class _AllSuppliersViewState extends State<AllSuppliersView> {
                   current is SupplierLoadingError ||
                   current is SupplierInserted,
               builder: (context, state) {
-                if (state is SupplierLoading) {
-                  return const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-
-                if (state is SupplierLoadingError) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: ErrorStateWidget(
-                      message: state.message,
-                      onPressed: () =>
-                          context.read<SupplierCubit>().loadSuppliers(),
-                    ),
-                  );
-                }
-
-                if (state is SupplierLoadingSuccessed ||
-                    state is SupplierInserted) {
-                  final suppliers = cubit.filteredSuppliers;
-
-                  if (suppliers.isEmpty) {
+                switch (state) {
+                  case SupplierLoading():
+                    return const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  case SupplierLoadingError():
                     return SliverFillRemaining(
                       hasScrollBody: false,
-                      child: EmptyStateWidget(
-                        icon: Icons.person_off_outlined,
-                        message: cubit.searchQuery.isNotEmpty
-                            ? 'لا توجد نتائج للبحث'
-                            : 'لا يوجد موردين',
+                      child: ErrorStateWidget(
+                        message: state.message,
+                        onPressed: () =>
+                            context.read<SupplierCubit>().loadSuppliers(),
                       ),
                     );
-                  }
-
-                  return SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
-                    ),
-                    sliver: SliverList.builder(
-                      itemCount: suppliers.length,
-                      itemBuilder: (context, index) {
-                        final supplier = suppliers[index];
-                        return SupplierCard(
-                          supplier: supplier,
-                          onEditTap: () => AppNavigation.pushName(
-                            context: context,
-                            route: AppRoutes.supplierFormView,
-                            argument: supplier,
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  case SupplierLoadingSuccessed():
+                    return SupplierList(suppliers: state.suppliers);
+                  case SupplierInserted():
+                    return SupplierList(suppliers: state.suppliers);
+                  default:
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
-
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
           ],

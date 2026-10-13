@@ -14,12 +14,10 @@ class SearchField extends StatefulWidget {
   const SearchField({
     super.key,
     required this.searchFunction,
-    required this.clearFunction,
     required this.hintText,
     this.showScanButton = false,
   });
   final void Function(String q) searchFunction;
-  final void Function() clearFunction;
   final String? hintText;
   final bool showScanButton;
   @override
@@ -61,7 +59,7 @@ class _SearchFieldState extends State<SearchField> {
 
   void _clear() {
     _controller.clear();
-    widget.clearFunction();
+    widget.searchFunction("");
     setState(() {
       prevIsEmpty = true;
     });

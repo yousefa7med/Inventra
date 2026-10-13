@@ -26,7 +26,7 @@ class ProductCubit extends Cubit<ProductState>
     try {
       _allProducts = _repository.getAllProducts();
       _filteredProducts = List.from(_allProducts);
-      emit(const ProductsLoadingSuccessed());
+      emit(ProductsLoadingSuccessed(products: _filteredProducts));
     } catch (e) {
       emit(ProductErrorState('فشل تحميل المنتجات: $e'));
     }
@@ -37,13 +37,13 @@ class ProductCubit extends Cubit<ProductState>
     try {
       if (query.isEmpty) {
         _filteredProducts = List.from(_allProducts);
-        emit(const ProductsLoadingSuccessed());
+        emit(ProductsLoadingSuccessed(products: _filteredProducts));
         return;
       }
       emit(const ProductLoading());
       _filteredProducts = _repository.searchProduct(query);
 
-      emit(const ProductsLoadingSuccessed());
+      emit(ProductsLoadingSuccessed(products: _filteredProducts));
     } catch (e) {
       emit(ProductErrorState('فشل البحث عن المنتج: $e'));
     }
@@ -70,8 +70,7 @@ class ProductCubit extends Cubit<ProductState>
         _filteredProducts.add(product);
       }
 
-      // ignore: prefer_const_constructors
-      emit(ProductInsertedSuccessed());
+      emit(ProductInsertedSuccessed(products: _filteredProducts));
       return true;
     } on ProductBarcodeTakenException {
       emit(const ProductInsertError("الباركود مستخدم بالفعل"));
@@ -88,8 +87,7 @@ class ProductCubit extends Cubit<ProductState>
       _repository.deleteProduct(product.id);
       _allProducts.removeWhere((p) => p.id == product.id);
       _filteredProducts.removeWhere((p) => p.id == product.id);
-      // ignore: prefer_const_constructors
-      emit(ProductsLoadingSuccessed());
+      emit(ProductsLoadingSuccessed(products: _filteredProducts));
     } catch (e) {
       emit(ProductErrorState('فشل حذف المنتج: $e'));
     }

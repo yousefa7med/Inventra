@@ -30,9 +30,7 @@ class BuyingProductSelectionView extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: SearchField(
                   searchFunction: context.read<BuyInvoiceCubit>().loadProducts,
-                  clearFunction: () {
-                    context.read<BuyInvoiceCubit>().loadProducts('');
-                  },
+    
                   hintText: "ابحث باسم المنتج أو الباركود...",
                 ),
               ),

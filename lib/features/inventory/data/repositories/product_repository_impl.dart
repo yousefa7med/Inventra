@@ -23,7 +23,8 @@ class ProductRepositoryImpl implements ProductRepository {
         barcode,
         excludeProductId: product.id == 0 ? null : product.id,
       )) {
-        throw const ProductBarcodeTakenException();
+        // ignore: prefer_const_constructors
+        throw ProductBarcodeTakenException();
       }
     }
     _objectBoxServices.productsBox.put(product);
@@ -36,7 +37,7 @@ class ProductRepositoryImpl implements ProductRepository {
 
   @override
   List<ProductModel> searchProduct(String searchQuery) {
-    final searchText = searchQuery.trim().normalizeArabic();
+    final searchText = searchQuery.trim();
     if (searchText.isEmpty) {
       return getAllProducts();
     }
@@ -51,7 +52,7 @@ class ProductRepositoryImpl implements ProductRepository {
       return products;
     }
     final query = _objectBoxServices.productsBox
-        .query(ProductModel_.name.contains(searchText, caseSensitive: false))
+        .query(ProductModel_.name.contains(searchText.normalizeArabic(), caseSensitive: false))
         .order(ProductModel_.name)
         .build();
     final products = query.find();

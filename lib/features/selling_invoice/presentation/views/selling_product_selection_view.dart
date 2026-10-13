@@ -31,9 +31,7 @@ class _SellingProductSelectionViewState
               sliver: SliverToBoxAdapter(
                 child: SearchField(
                   searchFunction: context.read<SellInvoiceCubit>().loadProducts,
-                  clearFunction: () {
-                    context.read<SellInvoiceCubit>().loadProducts('');
-                  },
+
                   hintText: "ابحث باسم المنتج أو الباركود...",
                 ),
               ),

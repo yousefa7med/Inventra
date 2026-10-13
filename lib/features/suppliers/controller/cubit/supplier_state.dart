@@ -12,17 +12,18 @@ final class SupplierLoading extends SupplierState {
   const SupplierLoading();
 }
 
-final class SupplierLoadingSuccessed extends SupplierState {
-  const SupplierLoadingSuccessed();
-}
-
 final class SupplierLoadingError extends SupplierState {
   final String message;
 
   const SupplierLoadingError(this.message);
 }
 
-final class SupplierInserted extends SupplierState {
+final class SupplierLoadingSuccessed extends SupplierState {
+  const SupplierLoadingSuccessed({required this.suppliers});
+  final List<SupplierModel> suppliers;
+}
 
-  const SupplierInserted();
+final class SupplierInserted extends SupplierState {
+  const SupplierInserted({required this.suppliers});
+  final List<SupplierModel> suppliers;
 }

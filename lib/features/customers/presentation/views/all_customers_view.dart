@@ -3,11 +3,10 @@ import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
-import 'package:Inventra/core/widgets/empty_state_widget.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
-import 'package:Inventra/features/customers/presentation/widgets/customer_card.dart';
+import 'package:Inventra/features/customers/presentation/widgets/customers_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,9 +39,7 @@ class AllCustomersView extends StatelessWidget {
                       searchFunction: context
                           .read<CustomerCubit>()
                           .searchCustomers,
-                      clearFunction: context
-                          .read<CustomerCubit>()
-                          .loadCustomers,
+
                       hintText: 'ابحث بالاسم...',
                     ),
                   ),
@@ -58,60 +55,29 @@ class AllCustomersView extends StatelessWidget {
                   current is CustomerInserted,
 
               builder: (context, state) {
-                final cubit = context.read<CustomerCubit>();
-
-                if (state is CustomerLoading) {
-                  return const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-
-                if (state is CustomerLoadingError) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: ErrorStateWidget(
-                      message: state.message,
-                      onPressed: () {
-                        cubit.loadCustomers();
-                      },
-                    ),
-                  );
-                }
-
-                if (state is CustomerLoadingSuccessed ||
-                    state is CustomerInserted) {
-                  final customers = cubit.filteredCustomers;
-
-                  if (customers.isEmpty) {
+                switch (state) {
+                  case CustomerLoading():
+                    return const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  case CustomerLoadingError():
                     return SliverFillRemaining(
                       hasScrollBody: false,
-                      child: EmptyStateWidget(
-                        icon: Icons.person_off_outlined,
-                        message: cubit.searchQuery.isNotEmpty
-                            ? 'لا توجد نتائج للبحث'
-                            : 'لا يوجد عملاء',
+                      child: ErrorStateWidget(
+                        message: state.message,
+                        onPressed: () {
+                          context.read<CustomerCubit>().loadCustomers();
+                        },
                       ),
                     );
-                  }
-
-                  return SliverPadding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 8.h,
-                    ),
-                    sliver: SliverList.builder(
-                      itemCount: customers.length,
-
-                      itemBuilder: (context, index) {
-                        final customer = customers[index];
-                        return CustomerCard(customer: customer);
-                      },
-                    ),
-                  );
+                  case CustomerLoadingSuccessed():
+                    return CustomersList(customers: state.customers);
+                  case CustomerInserted():
+                    return CustomersList(customers: state.customers);
+                  default:
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
-
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
           ],

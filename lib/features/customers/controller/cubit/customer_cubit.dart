@@ -11,12 +11,6 @@ class CustomerCubit extends Cubit<CustomerState>
 
   CustomerCubit(this._repository) : super(const CustomerInitial());
 
-  @override
-  List<CustomerModel> get customers => _allCustomers;
-
-  @override
-  List<CustomerModel> get filteredCustomers => _filteredCustomers;
-
   List<CustomerModel> _allCustomers = [];
   List<CustomerModel> _filteredCustomers = [];
   String searchQuery = "";
@@ -26,7 +20,7 @@ class CustomerCubit extends Cubit<CustomerState>
     try {
       _allCustomers = _repository.getAllCustomers();
       _filteredCustomers = List.from(_allCustomers);
-      emit(const CustomerLoadingSuccessed());
+      emit(CustomerLoadingSuccessed(customers: _filteredCustomers));
     } catch (e) {
       emit(CustomerLoadingError(e.toString()));
     }
@@ -39,7 +33,7 @@ class CustomerCubit extends Cubit<CustomerState>
 
     try {
       _filteredCustomers = _repository.searchCustomers(query);
-      emit(const CustomerLoadingSuccessed());
+      emit(CustomerLoadingSuccessed(customers: _filteredCustomers));
     } catch (e) {
       emit(CustomerLoadingError(e.toString()));
     }
@@ -70,8 +64,7 @@ class CustomerCubit extends Cubit<CustomerState>
         }
       }
 
-      // ignore: prefer_const_constructors
-      emit(CustomerInserted());
+      emit(CustomerInserted(customers: _filteredCustomers));
       return true;
     } catch (e) {
       emit(CustomerLoadingError(e.toString()));

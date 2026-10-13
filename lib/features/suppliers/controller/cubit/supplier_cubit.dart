@@ -26,7 +26,7 @@ class SupplierCubit extends Cubit<SupplierState>
     try {
       _suppliers = _repository.getAllSuppliers();
       _filteredSuppliers = List.from(_suppliers);
-      emit(const SupplierLoadingSuccessed());
+      emit(SupplierLoadingSuccessed(suppliers: _filteredSuppliers));
     } catch (e) {
       emit(SupplierLoadingError(e.toString()));
     }
@@ -38,7 +38,7 @@ class SupplierCubit extends Cubit<SupplierState>
     emit(const SupplierLoading());
 
     _filteredSuppliers = _repository.searchSuppliers(query);
-    emit(const SupplierLoadingSuccessed());
+    emit(SupplierLoadingSuccessed(suppliers: _filteredSuppliers));
   }
 
   @override
@@ -67,8 +67,7 @@ class SupplierCubit extends Cubit<SupplierState>
         }
       }
 
-      // ignore: prefer_const_constructors
-      emit(SupplierInserted());
+      emit(SupplierInserted(suppliers: _filteredSuppliers));
       return true;
     } catch (e) {
       emit(SupplierLoadingError(e.toString()));

@@ -13,11 +13,13 @@ final class ProductLoading extends ProductState {
 }
 
 final class ProductsLoadingSuccessed extends ProductState {
-  const ProductsLoadingSuccessed();
+  const ProductsLoadingSuccessed({required this.products});
+  final List<ProductModel> products;
 }
 
 final class ProductInsertedSuccessed extends ProductState {
-  const ProductInsertedSuccessed();
+  const ProductInsertedSuccessed({required this.products});
+  final List<ProductModel> products;
 }
 
 final class ProductInsertError extends ProductState {
