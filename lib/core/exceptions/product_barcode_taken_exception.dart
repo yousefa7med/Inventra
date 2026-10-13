@@ -1,3 +1,4 @@
 class ProductBarcodeTakenException implements Exception {
-  const ProductBarcodeTakenException();
+  const ProductBarcodeTakenException({required this.msg});
+  final String msg;
 }

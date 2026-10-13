@@ -251,7 +251,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                               wholesalePrice: double.tryParse(
                                 wPriceController.text,
                               ),
-                              barcode: barcodeController.text,
+                              barcode: barcodeController.text.trim(),
                               imgPath: workingImgPath,
                             );
                           } else {
@@ -268,7 +268,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                                   double.tryParse(sPriceController.text) ?? 0,
                               wholesalePrice:
                                   double.tryParse(wPriceController.text) ?? 0,
-                              barcode: barcodeController.text,
+                              barcode: barcodeController.text.trim(),
                               imgPath: workingImgPath,
                             );
                           }

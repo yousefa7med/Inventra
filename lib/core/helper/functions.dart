@@ -7,20 +7,23 @@ bool isDark(BuildContext context) {
 }
 
 void showSnackBar(BuildContext context, String message, {Color? color}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: color ?? AppColors.snackBarDefault,
-      duration: const Duration(seconds: 2),
-      content: Text(
-        message,
-        style: AppTextStyle.medium14.copyWith(color: AppColors.white),
-        textAlign: TextAlign.center,
-      ),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  final messenger = ScaffoldMessenger.of(context);
+  messenger
+    ..clearSnackBars()
+    ..showSnackBar(
+      SnackBar(
+        backgroundColor: color ?? AppColors.snackBarDefault,
+        duration: const Duration(seconds: 2),
+        content: Text(
+          message,
+          style: AppTextStyle.medium14.copyWith(color: AppColors.white),
+          textAlign: TextAlign.center,
+        ),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 
-      margin: const EdgeInsets.only(right: 30, left: 30, bottom: 30),
-      elevation: 6,
-    ),
-  );
+        margin: const EdgeInsets.only(right: 30, left: 30, bottom: 30),
+        elevation: 6,
+      ),
+    );
 }

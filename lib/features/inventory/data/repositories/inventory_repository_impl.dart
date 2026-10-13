@@ -24,7 +24,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         excludeProductId: product.id == 0 ? null : product.id,
       )) {
         // ignore: prefer_const_constructors
-        throw ProductBarcodeTakenException();
+        throw ProductBarcodeTakenException(msg: "الباركود مستخدم بالفعل");
       }
     }
     _objectBoxServices.productsBox.put(product);

@@ -48,8 +48,8 @@ class BuyInvoiceCubit extends Cubit<BuyInvoiceState>
     try {
       _repository.insertProduct(product);
       emit(BuyInvoiceProductsLoaded());
-    } on ProductBarcodeTakenException {
-      emit(BuyInvoiceProductError('الباركود مستخدم بالفعل'));
+    } on ProductBarcodeTakenException catch (e) {
+      emit(BuyInvoiceProductError(e.msg));
     }
   }
 

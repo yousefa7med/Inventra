@@ -14,11 +14,6 @@ class InventoryCubit extends Cubit<InventoryState>
   List<ProductModel> _allProducts = [];
   List<ProductModel> _filteredProducts = [];
   String searchQuery = '';
-  @override
-  List<ProductModel> get products => _allProducts;
-
-  @override
-  List<ProductModel> get filteredProducts => _filteredProducts;
 
   @override
   void loadProducts() {
@@ -72,11 +67,12 @@ class InventoryCubit extends Cubit<InventoryState>
 
       emit(ProductInsertedSuccessed(products: _filteredProducts));
       return true;
-    } on ProductBarcodeTakenException {
-      emit(const ProductInsertError("الباركود مستخدم بالفعل"));
+    } on ProductBarcodeTakenException catch (e) {
+      emit(ProductInsertError(e.msg));
+
       return false;
     } catch (e) {
-      emit(InventoryErrorState('فشل تعديل المنتج: $e'));
+      emit(ProductInsertError('فشل تعديل المنتج: $e'));
       return false;
     }
   }

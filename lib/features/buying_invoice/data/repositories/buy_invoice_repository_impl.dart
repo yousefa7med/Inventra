@@ -39,7 +39,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
         barcode,
         excludeProductId: product.id == 0 ? null : product.id,
       )) {
-        throw const ProductBarcodeTakenException();
+        throw const ProductBarcodeTakenException(msg: "الباركود مستخدم بالفعل");
       }
     }
     _objectBox.productsBox.put(product);
@@ -136,6 +136,4 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
       query.close();
     }
   }
-
-
 }
