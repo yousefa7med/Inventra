@@ -48,6 +48,7 @@ class _SearchFieldState extends State<SearchField> {
     final code = await AppNavigation.pushName<String>(
       context: context,
       route: AppRoutes.barcodeScannerView,
+      rootNavigator: true,
     );
     if (!mounted || code == null || code.isEmpty) return;
     timer?.cancel();

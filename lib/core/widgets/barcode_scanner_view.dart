@@ -56,16 +56,7 @@ class _BarcodeScannerViewState extends State<BarcodeScannerView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        title: AppStrings.scanBarcode,
-        actions: [
-          IconButton(
-            tooltip: AppStrings.cancel,
-            icon: const Icon(Icons.close, color: AppColors.primary),
-            onPressed: () => AppNavigation.pop(context),
-          ),
-        ],
-      ),
+      appBar: const CustomAppBar(title: AppStrings.scanBarcode),
       body: Stack(
         children: [
           MobileScanner(
@@ -116,14 +107,15 @@ class ScannerControlsBar extends StatelessWidget {
       bottom: 32.h,
       left: 0,
       right: 0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+      child:
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
           ScannerTorchButton(controller: controller),
-          Gap(24.w),
-          ScannerCameraSwitchButton(controller: controller),
-        ],
-      ),
+      //     Gap(24.w),
+      //     ScannerCameraSwitchButton(controller: controller),
+      //   ],
+      // ),
     );
   }
 }
@@ -142,46 +134,50 @@ class ScannerTorchButton extends StatelessWidget {
           return const SizedBox.shrink();
         }
         final isOn = state.torchState == TorchState.on;
-        return IconButton.filled(
-          tooltip: isOn ? AppStrings.flashOff : AppStrings.flashOn,
-          style: IconButton.styleFrom(
-            backgroundColor: AppColors.white,
-            foregroundColor: AppColors.primary,
+        return CircleAvatar(
+          radius: 24.r,
+          child: IconButton(
+            iconSize: 31.r,
+            tooltip: isOn ? AppStrings.flashOff : AppStrings.flashOn,
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.white,
+              foregroundColor: AppColors.primary,
+            ),
+            icon: Icon(isOn ? Icons.flash_off : Icons.flash_on),
+            onPressed: controller.toggleTorch,
           ),
-          icon: Icon(isOn ? Icons.flash_off : Icons.flash_on),
-          onPressed: controller.toggleTorch,
         );
       },
     );
   }
 }
 
-class ScannerCameraSwitchButton extends StatelessWidget {
-  const ScannerCameraSwitchButton({super.key, required this.controller});
+// class ScannerCameraSwitchButton extends StatelessWidget {
+//   const ScannerCameraSwitchButton({super.key, required this.controller});
 
-  final MobileScannerController controller;
+//   final MobileScannerController controller;
 
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<MobileScannerState>(
-      valueListenable: controller,
-      builder: (context, state, _) {
-        if ((state.availableCameras ?? 1) <= 1) {
-          return const SizedBox.shrink();
-        }
-        return IconButton.filled(
-          tooltip: AppStrings.switchCamera,
-          style: IconButton.styleFrom(
-            backgroundColor: AppColors.white,
-            foregroundColor: AppColors.primary,
-          ),
-          icon: const Icon(Icons.cameraswitch),
-          onPressed: controller.switchCamera,
-        );
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<MobileScannerState>(
+//       valueListenable: controller,
+//       builder: (context, state, _) {
+//         if ((state.availableCameras ?? 1) <= 1) {
+//           return const SizedBox.shrink();
+//         }
+//         return IconButton.filled(
+//           tooltip: AppStrings.switchCamera,
+//           style: IconButton.styleFrom(
+//             backgroundColor: AppColors.white,
+//             foregroundColor: AppColors.primary,
+//           ),
+//           icon: const Icon(Icons.cameraswitch),
+//           onPressed: controller.switchCamera,
+//         );
+//       },
+//     );
+//   }
+// }
 
 class ScannerLoadingBody extends StatelessWidget {
   const ScannerLoadingBody({super.key});
