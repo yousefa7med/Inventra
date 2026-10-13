@@ -7,9 +7,9 @@ import 'package:Inventra/core/utilities/app_theme.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository_impl.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
-import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
-import 'package:Inventra/features/inventory/data/repositories/product_repository_impl.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
+import 'package:Inventra/features/inventory/data/repositories/inventory_repository.dart';
+import 'package:Inventra/features/inventory/data/repositories/inventory_repository_impl.dart';
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository_impl.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
@@ -124,8 +124,8 @@ Future<void> configureDependencies() async {
     () => supplierRepository,
   );
 
-  final productRepository = ProductRepositoryImpl(objectBoxServices);
-  GetIt.instance.registerLazySingleton<ProductRepository>(
+  final productRepository = InventoryRepositoryImpl(objectBoxServices);
+  GetIt.instance.registerLazySingleton<InventoryRepository>(
     () => productRepository,
   );
 
@@ -157,8 +157,8 @@ Future<void> configureDependencies() async {
   GetIt.instance.registerLazySingleton<SupplierCubit>(
     () => SupplierCubit(repository: GetIt.instance<SupplierRepository>()),
   );
-  GetIt.instance.registerLazySingleton<ProductCubit>(
-    () => ProductCubit(GetIt.instance<ProductRepository>()),
+  GetIt.instance.registerLazySingleton<InventoryCubit>(
+    () => InventoryCubit(GetIt.instance<InventoryRepository>()),
   );
   GetIt.instance.registerLazySingleton<SafeCubit>(
     () => SafeCubit(safeRepository),

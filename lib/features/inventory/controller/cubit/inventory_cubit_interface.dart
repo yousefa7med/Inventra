@@ -1,6 +1,6 @@
 import 'package:Inventra/core/models/product_model.dart';
 
-abstract class ProductCubitInterface {
+abstract class InventoryCubitInterface {
   List<ProductModel> get products;
   List<ProductModel> get filteredProducts;
 

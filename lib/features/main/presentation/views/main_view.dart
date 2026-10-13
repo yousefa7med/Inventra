@@ -5,7 +5,7 @@ import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_drawer.dart';
 import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 
 import 'package:Inventra/features/inventory/presentation/views/inventory_view.dart';
 import 'package:Inventra/features/safe/presentation/views/safe_view.dart';
@@ -27,7 +27,7 @@ class MainView extends StatelessWidget {
       body: PersistentTabView(
         onTabChanged: (value) {
           if (value == 1) {
-            GetIt.instance<ProductCubit>().loadProducts();
+            GetIt.instance<InventoryCubit>().loadProducts();
           }
           if (value == 2) {
             GetIt.instance<SafeCubit>().init();
@@ -66,7 +66,7 @@ List<PersistentTabConfig> _tabs(BuildContext context) => [
 
   PersistentTabConfig(
     screen: BlocProvider.value(
-      value: GetIt.instance<ProductCubit>(),
+      value: GetIt.instance<InventoryCubit>(),
       child: const InventoryView(),
     ),
     item: ItemConfig(

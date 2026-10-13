@@ -1,16 +1,16 @@
 import 'package:Inventra/core/exceptions/product_barcode_taken_exception.dart';
 import 'package:Inventra/core/models/product_model.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit_interface.dart';
-import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit_interface.dart';
+import 'package:Inventra/features/inventory/data/repositories/inventory_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'product_state.dart';
+part 'inventory_state.dart';
 
-class ProductCubit extends Cubit<ProductState>
-    implements ProductCubitInterface {
-  final ProductRepository _repository;
+class InventoryCubit extends Cubit<InventoryState>
+    implements InventoryCubitInterface {
+  final InventoryRepository _repository;
 
-  ProductCubit(this._repository) : super(const ProductInitial());
+  InventoryCubit(this._repository) : super(const InventoryInitial());
   List<ProductModel> _allProducts = [];
   List<ProductModel> _filteredProducts = [];
   String searchQuery = '';
@@ -22,13 +22,13 @@ class ProductCubit extends Cubit<ProductState>
 
   @override
   void loadProducts() {
-    emit(const ProductLoading());
+    emit(const InventoryLoading());
     try {
       _allProducts = _repository.getAllProducts();
       _filteredProducts = List.from(_allProducts);
-      emit(ProductsLoadingSuccessed(products: _filteredProducts));
+      emit(InventoryLoadingSuccessed(products: _filteredProducts));
     } catch (e) {
-      emit(ProductErrorState('فشل تحميل المنتجات: $e'));
+      emit(InventoryErrorState('فشل تحميل المنتجات: $e'));
     }
   }
 
@@ -37,15 +37,15 @@ class ProductCubit extends Cubit<ProductState>
     try {
       if (query.isEmpty) {
         _filteredProducts = List.from(_allProducts);
-        emit(ProductsLoadingSuccessed(products: _filteredProducts));
+        emit(InventoryLoadingSuccessed(products: _filteredProducts));
         return;
       }
-      emit(const ProductLoading());
+      emit(const InventoryLoading());
       _filteredProducts = _repository.searchProduct(query);
 
-      emit(ProductsLoadingSuccessed(products: _filteredProducts));
+      emit(InventoryLoadingSuccessed(products: _filteredProducts));
     } catch (e) {
-      emit(ProductErrorState('فشل البحث عن المنتج: $e'));
+      emit(InventoryErrorState('فشل البحث عن المنتج: $e'));
     }
   }
 
@@ -76,7 +76,7 @@ class ProductCubit extends Cubit<ProductState>
       emit(const ProductInsertError("الباركود مستخدم بالفعل"));
       return false;
     } catch (e) {
-      emit(ProductErrorState('فشل تعديل المنتج: $e'));
+      emit(InventoryErrorState('فشل تعديل المنتج: $e'));
       return false;
     }
   }
@@ -87,9 +87,9 @@ class ProductCubit extends Cubit<ProductState>
       _repository.deleteProduct(product.id);
       _allProducts.removeWhere((p) => p.id == product.id);
       _filteredProducts.removeWhere((p) => p.id == product.id);
-      emit(ProductsLoadingSuccessed(products: _filteredProducts));
+      emit(InventoryLoadingSuccessed(products: _filteredProducts));
     } catch (e) {
-      emit(ProductErrorState('فشل حذف المنتج: $e'));
+      emit(InventoryErrorState('فشل حذف المنتج: $e'));
     }
   }
 }

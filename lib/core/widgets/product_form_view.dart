@@ -13,7 +13,7 @@ import 'package:Inventra/core/widgets/app_button.dart';
 import 'package:Inventra/core/widgets/app_text_field.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/add_image.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -87,11 +87,11 @@ class _ProductFormViewState extends State<ProductFormView> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: CustomAppBar(title: isEditing ? 'تعديل المنتج' : 'إضافة منتج'),
-        body: BlocListener<ProductCubit, ProductState>(
+        body: BlocListener<InventoryCubit, InventoryState>(
           listenWhen: (previous, current) =>
               current is ProductInsertedSuccessed ||
               current is ProductInsertError ||
-              current is ProductErrorState,
+              current is InventoryErrorState,
           listener: (context, state) {
             if (state is ProductInsertedSuccessed) {
               showSnackBar(
@@ -101,7 +101,7 @@ class _ProductFormViewState extends State<ProductFormView> {
               );
             } else if (state is ProductInsertError) {
               showSnackBar(context, state.message, color: AppColors.error);
-            } else if (state is ProductErrorState) {
+            } else if (state is InventoryErrorState) {
               showSnackBar(
                 context,
                 isEditing ? "فشل في تعديل المنتج" : "فشل في إضافة المنتج",
@@ -229,7 +229,7 @@ class _ProductFormViewState extends State<ProductFormView> {
                           late final ProductModel product;
                           String? oldImagePath = widget.product?.imgPath;
                           String? workingImgPath = imgPath;
-                          final cubit = context.read<ProductCubit>();
+                          final cubit = context.read<InventoryCubit>();
 
                           // حفظ الصورة الجديدة أولاً في متغير مؤقت
                           if (image != null) {

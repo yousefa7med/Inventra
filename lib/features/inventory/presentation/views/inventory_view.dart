@@ -4,7 +4,7 @@ import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/core/widgets/search_field.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:Inventra/features/inventory/presentation/widgets/products_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,7 +39,7 @@ class InventoryView extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: SearchField(
                       searchFunction: context
-                          .read<ProductCubit>()
+                          .read<InventoryCubit>()
                           .searchProducts,
                       hintText: 'ابحث باسم المنتج أو الباركود...',
                       showScanButton: true,
@@ -49,31 +49,31 @@ class InventoryView extends StatelessWidget {
                 ],
               ),
             ),
-            BlocBuilder<ProductCubit, ProductState>(
+            BlocBuilder<InventoryCubit, InventoryState>(
               buildWhen: (previous, current) =>
-                  current is ProductLoading ||
-                  current is ProductsLoadingSuccessed ||
-                  current is ProductErrorState ||
+                  current is InventoryLoading ||
+                  current is InventoryLoadingSuccessed ||
+                  current is InventoryErrorState ||
                   current is ProductInsertedSuccessed,
               builder: (context, state) {
                 switch (state) {
-                  case ProductLoading():
+                  case InventoryLoading():
                     return const SliverFillRemaining(
                       hasScrollBody: false,
                       child: Center(child: CircularProgressIndicator()),
                     );
-                  case ProductsLoadingSuccessed():
+                  case InventoryLoadingSuccessed():
                     return ProductsList(products: state.products);
                   case ProductInsertedSuccessed():
                     return ProductsList(products: state.products);
 
-                  case ProductErrorState():
+                  case InventoryErrorState():
                     return SliverFillRemaining(
                       hasScrollBody: false,
                       child: ErrorStateWidget(
                         message: state.message,
                         onPressed: () =>
-                            context.read<ProductCubit>().loadProducts(),
+                            context.read<InventoryCubit>().loadProducts(),
                       ),
                     );
                   default:

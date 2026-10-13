@@ -7,7 +7,7 @@ import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utils/formatters.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -156,7 +156,7 @@ class ProductCard extends StatelessWidget {
                         content: 'هل أنت متأكد من حذف "${product.name}"؟',
                         msg: 'حذف',
                         action: () {
-                          context.read<ProductCubit>().deleteProduct(product);
+                          context.read<InventoryCubit>().deleteProduct(product);
                         },
                       );
                     },

@@ -1,6 +1,6 @@
 import 'package:Inventra/core/models/product_model.dart';
 
-abstract class ProductRepository {
+abstract class InventoryRepository {
   List<ProductModel> getAllProducts();
   void insertProduct(ProductModel product);
 

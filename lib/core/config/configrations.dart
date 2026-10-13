@@ -14,7 +14,7 @@ import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
 import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_analytics_view.dart';
-import 'package:Inventra/features/inventory/controller/cubit/product_cubit.dart';
+import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
 import 'package:Inventra/features/dashboard/presentation/views/add_expense_view.dart';
 import 'package:Inventra/features/safe/presentation/views/invoice_details_view.dart';
@@ -45,7 +45,7 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
-                value: GetIt.instance<ProductCubit>(),
+                value: GetIt.instance<InventoryCubit>(),
                 child: ProductFormView(
                   product: arguments?.product,
                   isQuantitiyEditable: arguments?.isQuantitiyEditable,

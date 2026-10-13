@@ -2,13 +2,13 @@ import 'package:Inventra/core/exceptions/product_barcode_taken_exception.dart';
 import 'package:Inventra/core/helper/arabic_normalizer.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/models/product_model.dart';
-import 'package:Inventra/features/inventory/data/repositories/product_repository.dart';
+import 'package:Inventra/features/inventory/data/repositories/inventory_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
-class ProductRepositoryImpl implements ProductRepository {
+class InventoryRepositoryImpl implements InventoryRepository {
   final ObjectBoxServices _objectBoxServices;
 
-  ProductRepositoryImpl(this._objectBoxServices);
+  InventoryRepositoryImpl(this._objectBoxServices);
 
   @override
   List<ProductModel> getAllProducts() {
@@ -52,7 +52,12 @@ class ProductRepositoryImpl implements ProductRepository {
       return products;
     }
     final query = _objectBoxServices.productsBox
-        .query(ProductModel_.name.contains(searchText.normalizeArabic(), caseSensitive: false))
+        .query(
+          ProductModel_.name.contains(
+            searchText.normalizeArabic(),
+            caseSensitive: false,
+          ),
+        )
         .order(ProductModel_.name)
         .build();
     final products = query.find();
