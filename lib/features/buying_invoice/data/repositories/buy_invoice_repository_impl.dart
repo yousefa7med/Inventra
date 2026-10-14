@@ -8,7 +8,7 @@ import 'package:Inventra/core/models/invoice_item_model.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
-import 'package:Inventra/core/services/Transaction_change_notifier.dart';
+import 'package:Inventra/core/services/transaction_change_notifier.dart';
 import 'package:Inventra/features/buying_invoice/data/repositories/buy_invoice_repository.dart';
 import 'package:Inventra/features/buying_invoice/exceptions/safe_balance_not_enough_exception.dart';
 import 'package:Inventra/objectbox.g.dart';
@@ -115,7 +115,7 @@ class BuyInvoiceRepositoryImpl implements BuyInvoiceRepository {
         description: supplier.name,
       );
       _objectBox.transactionsEntryBox.put(auditEntry);
-      _transactionChangeNotifier.notify(TransactionType.buyingInvoice);
+      _transactionChangeNotifier.notify(auditEntry);
     });
   }
 

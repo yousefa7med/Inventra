@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:Inventra/core/models/transaction_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
 
 class TransactionChangeNotifier {
-  final StreamController<TransactionType> _controller =
-      StreamController<TransactionType>.broadcast();
+  final StreamController<TransactionsEntry> _controller =
+      StreamController<TransactionsEntry>.broadcast();
 
-  Stream<TransactionType> get stream => _controller.stream;
+  Stream<TransactionsEntry> get stream => _controller.stream;
 
-  void notify(TransactionType type) {
-    _controller.add(type);
+  void notify(TransactionsEntry entry) {
+    _controller.add(entry);
   }
 }

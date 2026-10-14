@@ -6,7 +6,7 @@ import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/selling_invoice_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/services/Transaction_change_notifier.dart';
+import 'package:Inventra/core/services/transaction_change_notifier.dart';
 import 'package:Inventra/features/safe/data/repositories/safe_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 
@@ -43,16 +43,15 @@ class SafeRepositoryImpl implements SafeRepository {
           note: newBalance.note,
         ),
       );
-      _objectBox.transactionsEntryBox.put(
-        TransactionsEntry(
-          typeIndex: TransactionType.manualAdjustment.index,
-          signedValue: newBalance.currentBalance,
-          referenceId: adjustmentId,
-          createdAt: newBalance.lastUpdated,
-          description: newBalance.note,
-        ),
+      final entry = TransactionsEntry(
+        typeIndex: TransactionType.manualAdjustment.index,
+        signedValue: newBalance.currentBalance,
+        referenceId: adjustmentId,
+        createdAt: newBalance.lastUpdated,
+        description: newBalance.note,
       );
-      _transactionChangeNotifier.notify(TransactionType.manualAdjustment);
+      _objectBox.transactionsEntryBox.put(entry);
+      _transactionChangeNotifier.notify(entry);
     });
   }
 
@@ -67,16 +66,16 @@ class SafeRepositoryImpl implements SafeRepository {
       final expenseId = _objectBox.expensesBox.put(expense);
 
       _objectBox.safeBalanceBox.put(newbalance);
-      _objectBox.transactionsEntryBox.put(
-        TransactionsEntry(
-          typeIndex: TransactionType.expense.index,
-          signedValue: expense.value,
-          referenceId: expenseId,
-          createdAt: expense.date,
-          description: expense.note.trim(),
-        ),
+
+      final entry = TransactionsEntry(
+        typeIndex: TransactionType.expense.index,
+        signedValue: expense.value,
+        referenceId: expenseId,
+        createdAt: expense.date,
+        description: expense.note.trim(),
       );
-      _transactionChangeNotifier.notify(TransactionType.expense);
+      _objectBox.transactionsEntryBox.put(entry);
+      _transactionChangeNotifier.notify(entry);
     });
   }
 
