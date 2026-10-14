@@ -1,7 +1,6 @@
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/core/widgets/error_state_widget.dart';
 import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_state.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_loaded_body.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_loading_skeleton.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ class DashboardView extends StatelessWidget {
             case DashboardError():
               return ErrorStateWidget(
                 message: state.message,
-                onPressed: () => context.read<DashboardCubit>().refresh(),
+                onPressed: () => context.read<DashboardCubit>().loadSafeBalance(),
               );
             case DashboardLoaded():
               return const DashboardLoadedBody();

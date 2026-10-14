@@ -1,8 +1,8 @@
+import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utils/formatters.dart';
 import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,24 +13,26 @@ class SafeBalanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return    BlocSelector<DashboardCubit, DashboardState, double>(
-              selector: (state) {
-                if (state is DashboardLoaded) {
-                  return (state).safeBalance;
-                }
-                return 0;
-              },
-              builder: (context, safeBalance) {
-                return _HeroKpiCard(
-                  title: 'الرصيد الحالي',
-                  value: safeBalance,
-                  color: AppColors.primary,
-                );
-              },
-            );
+    return BlocSelector<DashboardCubit, DashboardState, SafeBalanceModel>(
+      selector: (state) {
+        if (state is DashboardLoaded) {
+          return (state).safeBalance;
+        }
+        return SafeBalanceModel(
+          currentBalance: 000,
+          lastUpdated: DateTime.now(),
+        );
+      },
+      builder: (context, safeBalance) {
+        return _HeroKpiCard(
+          title: 'الرصيد الحالي',
+          value: safeBalance.currentBalance,
+          color: AppColors.primary,
+        );
+      },
+    );
   }
 }
-
 
 class _HeroKpiCard extends StatelessWidget {
   const _HeroKpiCard({

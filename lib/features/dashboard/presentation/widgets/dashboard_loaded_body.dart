@@ -1,9 +1,6 @@
-import 'package:Inventra/core/utilities/app_colors.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/safe_balance_section.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_quick_actions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
@@ -12,25 +9,19 @@ class DashboardLoadedBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async => context.read<DashboardCubit>().refresh(),
-
-      color: AppColors.primary,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SafeBalanceSection(),
-            Gap(12.h),
-            const DashboardQuickActions(),
-            Gap(16.h),
-
-          ],
-        ),
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SafeBalanceSection(),
+          Gap(12.h),
+          const DashboardQuickActions(),
+          Gap(16.h),
+        ],
       ),
     );
   }
