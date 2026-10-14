@@ -9,20 +9,24 @@ import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
 import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
 import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
-import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
+import 'package:Inventra/features/dashboard/data/repositories/analytics_repository/analytics_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
-class DashboardRepositoryImpl implements DashboardRepository {
+class AnalyticsRepositoryImpl implements AnalyticsRepository {
   final ObjectBoxServices _objectBox;
   final TransactionChangeNotifier _transactionChangeNotifier;
 
   @override
   late DashboardModel cachedDashboardSnapshot;
 
-  DashboardRepositoryImpl(this._objectBox, this._transactionChangeNotifier) {
+   AnalyticsRepositoryImpl(
+    this._objectBox,
+    this._transactionChangeNotifier,
+  ) {
     cachedDashboardSnapshot = DashboardModel.initial();
   }
+
   @override
   void clearCachedDashboardSnapshot() {
     cachedDashboardSnapshot = DashboardModel.initial();

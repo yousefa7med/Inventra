@@ -3,20 +3,22 @@ import 'dart:async';
 import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/services/Transaction_change_notifier.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit_interface.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
+import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
+import 'package:Inventra/features/dashboard/data/repositories/analytics_repository/analytics_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dashboard_state.dart';
-import 'dashboard_cubit_interface.dart';
-import '../../data/repositories/dashboard_repository.dart';
 
-class DashboardCubit extends Cubit<DashboardState>
-    implements DashboardCubitInterface {
-  final DashboardRepository _repository;
+part 'analytics_state.dart';
+
+class AnalyticsCubit extends Cubit<AnalyticsState>
+    implements AnalyticsCubitInterface {
+  final AnalyticsRepository _repository;
   final TransactionChangeNotifier _transactionChangeNotifier;
   late final StreamSubscription<TransactionType> _transactionSubscription;
-  DashboardCubit(this._repository, this._transactionChangeNotifier)
-    : super(DashboardInitial()) {
+  AnalyticsCubit(this._repository, this._transactionChangeNotifier)
+    : super(AnalyticsInitial()) {
     _transactionSubscription = _transactionChangeNotifier.stream.listen((type) {
       switch (type) {
         case TransactionType.sellingInvoice:
@@ -49,7 +51,7 @@ class DashboardCubit extends Cubit<DashboardState>
 
   @override
   void init() {
-    emit(DashboardLoading());
+    emit(AnalyticsLoading());
 
     loadDashboard();
   }
@@ -62,8 +64,8 @@ class DashboardCubit extends Cubit<DashboardState>
 
   void loadSafeBalance() {
     safeBalance = _repository.getBalance().currentBalance;
-    if (state is DashboardLoaded) {
-      emit((state as DashboardLoaded).copyWith(safeBalance: safeBalance));
+    if (state is AnalyticsLoaded) {
+      emit((state as AnalyticsLoaded).copyWith(safeBalance: safeBalance));
     }
   }
 
@@ -73,7 +75,7 @@ class DashboardCubit extends Cubit<DashboardState>
       safeBalance = _repository.getBalance().currentBalance;
       final snapshot = _repository.getDashboardData(period: _selectedPeriod);
       emit(
-        DashboardLoaded(
+        AnalyticsLoaded(
           snapshot: snapshot,
           selectedMetric: _selectedMetric,
           selectedPeriod: _selectedPeriod,
@@ -81,7 +83,7 @@ class DashboardCubit extends Cubit<DashboardState>
         ),
       );
     } catch (e) {
-      emit(DashboardError('فشل في تحميل بيانات لوحة التحكم: $e'));
+      emit(AnalyticsError('فشل في تحميل بيانات لوحة التحكم: $e'));
     }
   }
 
@@ -99,7 +101,7 @@ class DashboardCubit extends Cubit<DashboardState>
 
     final currentState = state;
 
-    if (currentState is DashboardLoaded) {
+    if (currentState is AnalyticsLoaded) {
       emit(currentState.copyWith(selectedMetric: metric));
     }
   }
@@ -107,7 +109,7 @@ class DashboardCubit extends Cubit<DashboardState>
   @override
   void refresh() {
     _repository.clearCachedDashboardSnapshot();
-    emit(DashboardLoading());
+    emit(AnalyticsLoading());
 
     loadDashboard();
   }
@@ -124,7 +126,7 @@ class DashboardCubit extends Cubit<DashboardState>
       _repository.addExpense(expense);
       safeBalance -= value;
     } catch (e) {
-      emit(DashboardError('فشل إضافة المصروف: $e'));
+      emit(AnalyticsError('فشل إضافة المصروف: $e'));
     }
   }
 }

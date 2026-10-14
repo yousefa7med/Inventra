@@ -1,0 +1,375 @@
+import 'package:Inventra/core/helper/cache_helper.dart';
+import 'package:Inventra/core/models/expense_model.dart';
+import 'package:Inventra/core/models/safe_balance_model.dart';
+import 'package:Inventra/core/models/transaction_type.dart';
+import 'package:Inventra/core/models/transactions_entry.dart';
+import 'package:Inventra/core/services/Transaction_change_notifier.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
+import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
+import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
+import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
+import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
+import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository/dashboard_repository.dart';
+import 'package:Inventra/objectbox.g.dart';
+import 'package:flutter/material.dart';
+
+class DashboardRepositoryImpl implements DashboardRepository {
+  final ObjectBoxServices _objectBox;
+  final TransactionChangeNotifier _transactionChangeNotifier;
+
+  @override
+  late DashboardModel cachedDashboardSnapshot;
+
+  DashboardRepositoryImpl(this._objectBox, this._transactionChangeNotifier) {
+    cachedDashboardSnapshot = DashboardModel.initial();
+  }
+  @override
+  void clearCachedDashboardSnapshot() {
+    cachedDashboardSnapshot = DashboardModel.initial();
+  }
+
+  @override
+  DashboardPeriodSnapshot getDashboardData({required DashboardPeriod period}) {
+    final snapshot = cachedDashboardSnapshot.snapshots[period];
+
+    if (snapshot != null) {
+      return snapshot;
+    }
+
+    final newSnapshot = getDashboardSnapshot(period: period);
+    cachedDashboardSnapshot = cachedDashboardSnapshot.insertSnapshot(
+      snapshot: newSnapshot,
+      period: period,
+    );
+
+    return newSnapshot;
+  }
+
+  @override
+  DashboardPeriodSnapshot getDashboardSnapshot({
+    required DashboardPeriod period,
+  }) {
+    final dateRange = getTimeRange(period);
+    final entries = getEntries(period);
+
+    final charts = <DashboardMetric, List<ChartPoint>>{
+      for (final metric in DashboardMetric.values) metric: <ChartPoint>[],
+    };
+    final hasMetricData = <DashboardMetric, bool>{
+      for (final metric in DashboardMetric.values) metric: false,
+    };
+
+    final bucketCount = _getBucketCount(period, dateRange.start.month);
+
+    DateTime currentDateTime = period == DashboardPeriod.today
+        ? dateRange.start
+        : _getNextBucket(dateRange.start, period);
+
+    double salesKpi = 0;
+    double purchasesKpi = 0;
+    double expensesKpi = 0;
+    double netProfitKpi = 0;
+
+    double bucketSales = 0;
+    double bucketPurchases = 0;
+    double bucketExpenses = 0;
+    double bucketNetProfit = 0;
+
+    int bucketSalesCount = 0;
+    int bucketPurchasesCount = 0;
+    int bucketExpensesCount = 0;
+    int bucketNetProfitCount = 0;
+
+    for (final entry in entries) {
+      while (entry.createdAt.isAfter(currentDateTime)) {
+        _addChartPoints(
+          charts: charts,
+          timestamp: period == DashboardPeriod.today
+              ? currentDateTime
+              : _getPreviousBucket(currentDateTime, period),
+          sales: bucketSales,
+          purchases: bucketPurchases,
+          expenses: bucketExpenses,
+          netProfit: bucketNetProfit,
+          bucketSalesCount: bucketSalesCount,
+          bucketPurchasesCount: bucketPurchasesCount,
+          bucketExpensesCount: bucketExpensesCount,
+          bucketNetProfitCount: bucketNetProfitCount,
+        );
+
+        bucketSales = 0;
+        bucketPurchases = 0;
+        bucketExpenses = 0;
+        bucketNetProfit = 0;
+
+        bucketSalesCount = 0;
+        bucketPurchasesCount = 0;
+        bucketExpensesCount = 0;
+        bucketNetProfitCount = 0;
+        currentDateTime = _getNextBucket(currentDateTime, period);
+      }
+      double entryProfit = 0;
+
+      switch (entry.type) {
+        case TransactionType.sellingInvoice:
+          salesKpi += entry.signedValue;
+          bucketSales += entry.signedValue;
+          entryProfit += entry.profit!;
+          bucketSalesCount++;
+          hasMetricData[DashboardMetric.sales] = true;
+          hasMetricData[DashboardMetric.netProfit] = true;
+          bucketNetProfitCount++;
+          bucketNetProfit += entryProfit;
+          netProfitKpi += entryProfit;
+        case TransactionType.buyingInvoice:
+          purchasesKpi += entry.signedValue.abs();
+          bucketPurchases += entry.signedValue.abs();
+          hasMetricData[DashboardMetric.purchases] = true;
+          bucketPurchasesCount++;
+          bucketNetProfitCount++;
+
+        case TransactionType.expense:
+          expensesKpi += entry.signedValue.abs();
+          bucketExpenses += entry.signedValue.abs();
+          entryProfit += entry.signedValue;
+          hasMetricData[DashboardMetric.expenses] = true;
+          hasMetricData[DashboardMetric.netProfit] = true;
+          bucketExpensesCount++;
+          bucketNetProfitCount++;
+          bucketNetProfit += entryProfit;
+          netProfitKpi += entryProfit;
+        default:
+          break;
+      }
+    }
+
+    _addChartPoints(
+      charts: charts,
+      timestamp: period == DashboardPeriod.today
+          ? currentDateTime
+          : _getPreviousBucket(currentDateTime, period),
+      sales: bucketSales,
+      purchases: bucketPurchases,
+      expenses: bucketExpenses,
+      netProfit: bucketNetProfit,
+      bucketSalesCount: bucketSalesCount,
+      bucketPurchasesCount: bucketPurchasesCount,
+      bucketExpensesCount: bucketExpensesCount,
+      bucketNetProfitCount: bucketNetProfitCount,
+    );
+
+    var time = period == DashboardPeriod.today
+        ? _getNextBucket(currentDateTime, period)
+        : currentDateTime;
+
+    for (var metric in DashboardMetric.values) {
+      final points = charts[metric]!;
+
+      if (!hasMetricData[metric]!) {
+        points.clear();
+        continue;
+      }
+
+      var paddingTime = time;
+      while (points.length < bucketCount) {
+        points.add(ChartPoint(timestamp: paddingTime, value: 0, count: 0));
+        paddingTime = _getNextBucket(paddingTime, period);
+      }
+    }
+
+    return DashboardPeriodSnapshot(
+      kpis: KpiModel(
+        netProfit: netProfitKpi,
+        sales: salesKpi,
+        purchases: purchasesKpi,
+        expenses: expensesKpi,
+      ),
+      charts: charts,
+    );
+  }
+
+  @override
+  List<TransactionsEntry> getEntries(DashboardPeriod period) {
+    final dateRange = getTimeRange(period);
+
+    final Condition<TransactionsEntry> timeCondition = TransactionsEntry_
+        .createdAt
+        .betweenDate(dateRange.start, dateRange.end);
+
+    final query = _objectBox.transactionsEntryBox
+        .query(timeCondition)
+        .order(TransactionsEntry_.createdAt)
+        .build();
+    final entries = query.find();
+
+    query.close();
+    return entries;
+  }
+
+  @override
+  DateTimeRange getTimeRange(DashboardPeriod period) {
+    late final DateTime start;
+    late final DateTime end;
+    final now = DateTime.now();
+    switch (period) {
+      case DashboardPeriod.today:
+        start = DateTime(now.year, now.month, now.day, 0, 0, 0);
+        end = DateTime(now.year, now.month, now.day, 23, 59, 59, 999);
+      case DashboardPeriod.week:
+        int daysToSubtract = now.weekday == DateTime.saturday
+            ? 0
+            : (now.weekday % 7) + 1;
+
+        start = DateTime(
+          now.year,
+          now.month,
+          now.day - daysToSubtract,
+          0,
+          0,
+          0,
+        );
+        end = DateTime(
+          now.year,
+          now.month,
+          (now.day - daysToSubtract) + 6,
+          23,
+          59,
+          59,
+          999,
+        );
+      case DashboardPeriod.month:
+        start = DateTime(now.year, now.month, 1, 0, 0, 0);
+        end = DateTime(now.year, now.month + 1, 0, 23, 59, 59, 999);
+      case DashboardPeriod.year:
+        start = DateTime(now.year, 1, 1, 0, 0, 0);
+        end = DateTime(now.year, 12, 31, 23, 59, 59, 999);
+    }
+    return DateTimeRange(start: start, end: end);
+  }
+
+  DateTime _getPreviousBucket(DateTime current, DashboardPeriod period) {
+    switch (period) {
+      case DashboardPeriod.today:
+        return current.subtract(const Duration(hours: 3));
+
+      case DashboardPeriod.week:
+        return current.subtract(const Duration(days: 1));
+
+      case DashboardPeriod.month:
+        return current.subtract(const Duration(days: 7));
+
+      case DashboardPeriod.year:
+        return DateTime(current.year, current.month - 1, 1);
+    }
+  }
+
+  DateTime _getNextBucket(DateTime current, DashboardPeriod period) {
+    switch (period) {
+      case DashboardPeriod.today:
+        return current.add(const Duration(hours: 3));
+
+      case DashboardPeriod.week:
+        return current.add(const Duration(days: 1));
+      case DashboardPeriod.month:
+        return current.add(const Duration(days: 7));
+
+      case DashboardPeriod.year:
+        return DateTime(current.year, current.month + 1, 1);
+    }
+  }
+
+  int _daysInMonth(int month) {
+    final now = DateTime.now();
+    final date = DateTime(now.year, month);
+    return DateTime(date.year, date.month + 1, 0).day;
+  }
+
+  int _getBucketCount(DashboardPeriod period, int month) {
+    switch (period) {
+      case DashboardPeriod.today:
+        return 9;
+
+      case DashboardPeriod.week:
+        return 7;
+
+      case DashboardPeriod.month:
+        return _daysInMonth(month) >= 29 ? 5 : 4;
+      case DashboardPeriod.year:
+        return 12;
+    }
+  }
+
+  void _addChartPoints({
+    required Map<DashboardMetric, List<ChartPoint>> charts,
+    required DateTime timestamp,
+    required double sales,
+    required double purchases,
+    required double expenses,
+    required double netProfit,
+
+    required int bucketSalesCount,
+    required int bucketPurchasesCount,
+    required int bucketExpensesCount,
+    required int bucketNetProfitCount,
+  }) {
+    charts[DashboardMetric.sales]!.add(
+      ChartPoint(timestamp: timestamp, value: sales, count: bucketSalesCount),
+    );
+
+    charts[DashboardMetric.purchases]!.add(
+      ChartPoint(
+        timestamp: timestamp,
+        value: purchases,
+        count: bucketPurchasesCount,
+      ),
+    );
+
+    charts[DashboardMetric.expenses]!.add(
+      ChartPoint(
+        timestamp: timestamp,
+        value: expenses,
+        count: bucketExpensesCount,
+      ),
+    );
+
+    charts[DashboardMetric.netProfit]!.add(
+      ChartPoint(
+        timestamp: timestamp,
+        value: netProfit,
+        count: bucketNetProfitCount,
+      ),
+    );
+  }
+
+  @override
+  SafeBalanceModel getBalance() {
+    final balance = _objectBox.safeBalanceBox.get(1);
+
+    if (balance != null) return balance;
+    return SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
+  }
+
+  @override
+  void addExpense(ExpenseModel expense) {
+    final balance = getBalance();
+    final newBalance = balance.copyWith(
+      currentBalance: balance.currentBalance + expense.value,
+      lastUpdated: DateTime.now(),
+    );
+
+    _objectBox.store.runInTransaction(TxMode.write, () {
+      _objectBox.safeBalanceBox.put(newBalance);
+      final expenseId = _objectBox.expensesBox.put(expense);
+      _objectBox.transactionsEntryBox.put(
+        TransactionsEntry(
+          typeIndex: TransactionType.expense.index,
+          signedValue: expense.value,
+          referenceId: expenseId,
+          createdAt: expense.date,
+          description: expense.note.trim(),
+        ),
+      );
+      _transactionChangeNotifier.notify(TransactionType.expense);
+    });
+  }
+}

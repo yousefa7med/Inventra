@@ -7,6 +7,9 @@ import 'package:Inventra/core/utilities/app_theme.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository_impl.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit.dart';
+import 'package:Inventra/features/dashboard/data/repositories/analytics_repository/analytics_repository.dart';
+import 'package:Inventra/features/dashboard/data/repositories/analytics_repository/analytics_repository_impl.dart';
 import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:Inventra/features/inventory/data/repositories/inventory_repository.dart';
 import 'package:Inventra/features/inventory/data/repositories/inventory_repository_impl.dart';
@@ -22,9 +25,9 @@ import 'package:Inventra/features/safe/data/repositories/safe_repository_impl.da
 import 'package:Inventra/features/suppliers/controller/cubit/supplier_cubit.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository.dart';
 import 'package:Inventra/features/suppliers/data/repositories/supplier_repository_impl.dart';
-import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
-import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository_impl.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository/dashboard_repository.dart';
+import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository/dashboard_repository_impl.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -137,7 +140,6 @@ Future<void> configureDependencies() async {
     () => buyInvoiceRepository,
   );
 
-  // Dashboard
   final dashboardRepository = DashboardRepositoryImpl(
     objectBoxServices,
     transactionChangeNotifier,
@@ -145,8 +147,12 @@ Future<void> configureDependencies() async {
   GetIt.instance.registerLazySingleton<DashboardRepository>(
     () => dashboardRepository,
   );
-  GetIt.instance.registerLazySingleton<DashboardCubit>(
-    () => DashboardCubit(dashboardRepository, transactionChangeNotifier),
+  final analyticsRepository = AnalyticsRepositoryImpl(
+    objectBoxServices,
+    transactionChangeNotifier,
+  );
+  GetIt.instance.registerLazySingleton<AnalyticsRepository>(
+    () => analyticsRepository,
   );
 
   // 4. Cubits (LazySingletons for app-wide state)
@@ -168,5 +174,11 @@ Future<void> configureDependencies() async {
   );
   GetIt.instance.registerLazySingleton<BuyInvoiceCubit>(
     () => BuyInvoiceCubit(GetIt.instance<BuyInvoiceRepository>()),
+  );
+  GetIt.instance.registerLazySingleton<DashboardCubit>(
+    () => DashboardCubit(dashboardRepository, transactionChangeNotifier),
+  );
+  GetIt.instance.registerLazySingleton<AnalyticsCubit>(
+    () => AnalyticsCubit(analyticsRepository, transactionChangeNotifier),
   );
 }

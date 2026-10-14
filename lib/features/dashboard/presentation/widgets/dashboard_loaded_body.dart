@@ -1,5 +1,5 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/safe_balance_section.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_quick_actions.dart';
 import 'package:flutter/material.dart';

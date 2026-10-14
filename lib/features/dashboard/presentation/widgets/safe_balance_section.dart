@@ -1,8 +1,8 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utils/formatters.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_state.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

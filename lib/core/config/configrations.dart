@@ -12,7 +12,8 @@ import 'package:Inventra/features/buying_invoice/presentation/views/buying_invoi
 import 'package:Inventra/features/buying_invoice/presentation/views/buying_product_selection_view.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_analytics_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
@@ -160,7 +161,7 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
-                value: GetIt.instance<DashboardCubit>(),
+                value: GetIt.instance<AnalyticsCubit>(),
                 child: const DashboardAnalyticsView(),
               ),
         );
