@@ -41,8 +41,8 @@ Future<void> main() async {
   Bloc.observer = AppBlocObserver();
 
   runApp(
-    BlocProvider(
-      create: (context) => AppCubit()..init(),
+    BlocProvider.value(
+      value: GetIt.instance<AppCubit>()..init(),
       child: const Inventra(),
     ),
   );
