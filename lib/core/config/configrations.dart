@@ -3,16 +3,17 @@ import 'package:Inventra/core/config/arguments/product_details_argument.dart';
 import 'package:Inventra/core/models/product_model.dart';
 import 'package:Inventra/core/models/supplier_model.dart';
 import 'package:Inventra/core/transitions/page_route_builder_method.dart';
-import 'package:Inventra/core/widgets/barcode_scanner_view.dart';
-import 'package:Inventra/core/widgets/customer_form_view.dart';
-import 'package:Inventra/core/widgets/product_form_view.dart';
-import 'package:Inventra/core/widgets/supplier_form_view.dart';
+import 'package:Inventra/core/views/barcode_scanner_view.dart';
+import 'package:Inventra/core/views/customer_form_view.dart';
+import 'package:Inventra/core/views/product_form_view.dart';
+import 'package:Inventra/core/views/supplier_form_view.dart';
 import 'package:Inventra/features/buying_invoice/controller/cubit/buy_invoice_cubit.dart';
 import 'package:Inventra/features/buying_invoice/presentation/views/buying_invoice_view.dart';
 import 'package:Inventra/features/buying_invoice/presentation/views/buying_product_selection_view.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/presentation/views/all_customers_view.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_analytics_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 import 'package:Inventra/features/main/presentation/views/main_view.dart';
@@ -160,7 +161,7 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
-                value: GetIt.instance<DashboardCubit>(),
+                value: GetIt.instance<AnalyticsCubit>()..loadDashboard(),
                 child: const DashboardAnalyticsView(),
               ),
         );

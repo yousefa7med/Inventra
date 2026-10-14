@@ -3,7 +3,7 @@ import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_global_keys.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/widgets/app_drawer.dart';
-import 'package:Inventra/features/dashboard/controller/cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/views/dashboard_view.dart';
 import 'package:Inventra/features/inventory/controller/cubit/inventory_cubit.dart';
 
@@ -49,9 +49,10 @@ class MainView extends StatelessWidget {
 List<PersistentTabConfig> _tabs(BuildContext context) => [
   PersistentTabConfig(
     screen: BlocProvider.value(
-      value: GetIt.instance<DashboardCubit>()..init(),
+      value: GetIt.instance<DashboardCubit>()..loadSafeBalance(),
       child: const DashboardView(),
     ),
+
     item: ItemConfig(
       icon: const Icon(Icons.dashboard_outlined),
       title: "لوحة التحكم",

@@ -1,28 +1,29 @@
 import 'package:Inventra/core/helper/cache_helper.dart';
-import 'package:Inventra/core/models/expense_model.dart';
-import 'package:Inventra/core/models/safe_balance_model.dart';
+// import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/transaction_type.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
-import 'package:Inventra/core/services/Transaction_change_notifier.dart';
+// import 'package:Inventra/core/services/transaction_change_notifier.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
 import 'package:Inventra/features/dashboard/data/models/dashboard_model.dart';
 import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
-import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository.dart';
+import 'package:Inventra/features/dashboard/data/repositories/analytics_repository/analytics_repository.dart';
 import 'package:Inventra/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
-class DashboardRepositoryImpl implements DashboardRepository {
+class AnalyticsRepositoryImpl implements AnalyticsRepository {
   final ObjectBoxServices _objectBox;
-  final TransactionChangeNotifier _transactionChangeNotifier;
 
   @override
   late DashboardModel cachedDashboardSnapshot;
 
-  DashboardRepositoryImpl(this._objectBox, this._transactionChangeNotifier) {
+  AnalyticsRepositoryImpl(
+    this._objectBox,
+  ) {
     cachedDashboardSnapshot = DashboardModel.initial();
   }
+
   @override
   void clearCachedDashboardSnapshot() {
     cachedDashboardSnapshot = DashboardModel.initial();
@@ -36,7 +37,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
       return snapshot;
     }
 
-    final newSnapshot = getDashboardSnapshot(period: period);
+    final newSnapshot = _getDashboardSnapshot(period: period);
     cachedDashboardSnapshot = cachedDashboardSnapshot.insertSnapshot(
       snapshot: newSnapshot,
       period: period,
@@ -45,8 +46,7 @@ class DashboardRepositoryImpl implements DashboardRepository {
     return newSnapshot;
   }
 
-  @override
-  DashboardPeriodSnapshot getDashboardSnapshot({
+  DashboardPeriodSnapshot _getDashboardSnapshot({
     required DashboardPeriod period,
   }) {
     final dateRange = getTimeRange(period);
@@ -188,7 +188,6 @@ class DashboardRepositoryImpl implements DashboardRepository {
     );
   }
 
-  @override
   List<TransactionsEntry> getEntries(DashboardPeriod period) {
     final dateRange = getTimeRange(period);
 
@@ -206,7 +205,6 @@ class DashboardRepositoryImpl implements DashboardRepository {
     return entries;
   }
 
-  @override
   DateTimeRange getTimeRange(DashboardPeriod period) {
     late final DateTime start;
     late final DateTime end;
@@ -339,37 +337,5 @@ class DashboardRepositoryImpl implements DashboardRepository {
         count: bucketNetProfitCount,
       ),
     );
-  }
-
-  @override
-  SafeBalanceModel getBalance() {
-    final balance = _objectBox.safeBalanceBox.get(1);
-
-    if (balance != null) return balance;
-    return SafeBalanceModel(currentBalance: 0, lastUpdated: DateTime.now());
-  }
-
-  @override
-  void addExpense(ExpenseModel expense) {
-    final balance = getBalance();
-    final newBalance = balance.copyWith(
-      currentBalance: balance.currentBalance + expense.value,
-      lastUpdated: DateTime.now(),
-    );
-
-    _objectBox.store.runInTransaction(TxMode.write, () {
-      _objectBox.safeBalanceBox.put(newBalance);
-      final expenseId = _objectBox.expensesBox.put(expense);
-      _objectBox.transactionsEntryBox.put(
-        TransactionsEntry(
-          typeIndex: TransactionType.expense.index,
-          signedValue: expense.value,
-          referenceId: expenseId,
-          createdAt: expense.date,
-          description: expense.note.trim(),
-        ),
-      );
-      _transactionChangeNotifier.notify(TransactionType.expense);
-    });
   }
 }

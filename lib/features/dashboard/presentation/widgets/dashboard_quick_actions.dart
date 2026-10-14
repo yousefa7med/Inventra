@@ -87,7 +87,7 @@ class DashboardQuickActions extends StatelessWidget {
                 ),
                 Expanded(
                   child: QuickActionItem(
-                    label: 'التحليلات',
+                    label: 'التقارير',
                     icon: Icons.analytics_outlined,
                     color: AppColors.darkBlue,
                     onTap: () => AppNavigation.pushName(
