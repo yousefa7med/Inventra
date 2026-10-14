@@ -1,10 +1,9 @@
 import 'dart:async';
-
+import 'package:Inventra/core/models/expense_model.dart';
 import 'package:Inventra/core/models/safe_balance_model.dart';
 import 'package:Inventra/core/models/transactions_entry.dart';
 import 'package:Inventra/core/services/transaction_change_notifier.dart';
 import 'package:Inventra/features/dashboard/data/repositories/dashboard_repository/dashboard_repository.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dashboard_cubit_interface.dart';
 
@@ -31,6 +30,9 @@ class DashboardCubit extends Cubit<DashboardState>
   late SafeBalanceModel _safeBalance;
 
   @override
+  double get balance => _safeBalance.currentBalance;
+
+  @override
   void loadSafeBalance() {
     emit(DashboardLoading());
     try {
@@ -41,21 +43,29 @@ class DashboardCubit extends Cubit<DashboardState>
     }
   }
 
-  // @override
-  // void addExpense({required double value, required String note}) {
-  //   try {
-  //     final expense = ExpenseModel(
-  //       date: DateTime.now(),
-  //       value: -value,
-  //       note: note.trim(),
-  //     );
+  @override
+  bool addExpense({required double value, required String note}) {
+    try {
+      final expense = ExpenseModel(
+        date: DateTime.now(),
+        value: -value,
+        note: note.trim(),
+      );
 
-  //     _repository.addExpense(expense);
-  //     safeBalance -= value;
-  //   } catch (e) {
-  //     emit(DashboardError('فشل إضافة المصروف: $e'));
-  //   }
-  // }
+      _repository.addExpense(expense);
+      _safeBalance = _safeBalance.copyWith(
+        currentBalance: _safeBalance.currentBalance + expense.value,
+        lastUpdated: expense.date,
+      );
+
+      emit(DashboardLoaded(safeBalance: _safeBalance));
+      return true;
+    } catch (e) {
+      emit(DashboardError('فشل إضافة المصروف: $e'));
+      return false;
+    }
+  }
+
   @override
   Future<void> close() {
     _transactionSubscription.cancel();

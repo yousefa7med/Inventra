@@ -3,7 +3,6 @@ import 'package:Inventra/core/navigations/navigations.dart';
 import 'package:Inventra/core/utils/validators.dart';
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
 import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +37,7 @@ class _AddExpenseViewBodyState extends State<_AddExpenseViewBody> {
   @override
   void initState() {
     super.initState();
-    _safeBalance = context.read<DashboardCubit>().safeBalance;
+    _safeBalance = context.read<DashboardCubit>().balance;
   }
 
   @override
