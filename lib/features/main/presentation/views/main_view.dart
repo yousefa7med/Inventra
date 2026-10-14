@@ -49,7 +49,7 @@ class MainView extends StatelessWidget {
 List<PersistentTabConfig> _tabs(BuildContext context) => [
   PersistentTabConfig(
     screen: BlocProvider.value(
-      value: GetIt.instance<DashboardCubit>(),
+      value: GetIt.instance<DashboardCubit>()..loadSafeBalance(),
       child: const DashboardView(),
     ),
 

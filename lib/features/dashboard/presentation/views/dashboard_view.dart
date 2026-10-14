@@ -26,7 +26,8 @@ class DashboardView extends StatelessWidget {
             case DashboardError():
               return ErrorStateWidget(
                 message: state.message,
-                onPressed: () => context.read<DashboardCubit>().loadSafeBalance(),
+                onPressed: () =>
+                    context.read<DashboardCubit>().loadSafeBalance(),
               );
             case DashboardLoaded():
               return const DashboardLoadedBody();
