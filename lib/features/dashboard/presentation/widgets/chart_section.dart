@@ -1,7 +1,6 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_state.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_period.dart';
 import 'package:Inventra/features/dashboard/data/models/chart_point.dart';
@@ -15,9 +14,9 @@ class ChartSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<DashboardCubit, DashboardState, _ChartSectionData>(
+    return BlocSelector<AnalyticsCubit, AnalyticsState, _ChartSectionData>(
       selector: (state) {
-        if (state is DashboardLoaded) {
+        if (state is AnalyticsLoaded) {
           final metric = state.selectedMetric;
 
           return _ChartSectionData(

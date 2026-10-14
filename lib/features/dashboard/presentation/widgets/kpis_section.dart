@@ -1,8 +1,7 @@
 import 'package:Inventra/core/utilities/app_colors.dart';
 import 'package:Inventra/core/utilities/app_text_style.dart';
 import 'package:Inventra/core/utils/formatters.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_state.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit.dart';
 import 'package:Inventra/features/dashboard/data/enums/dashboard_metric.dart';
 import 'package:Inventra/features/dashboard/data/models/kpi_model.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,9 @@ class KpisSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<DashboardCubit, DashboardState, _KpiSectionData>(
+    return BlocSelector<AnalyticsCubit, AnalyticsState, _KpiSectionData>(
       selector: (state) {
-        if (state is DashboardLoaded) {
+        if (state is AnalyticsLoaded) {
           return _KpiSectionData(
             kpis: state.snapshot.kpis,
             selectedMetric: state.selectedMetric,
@@ -84,7 +83,7 @@ class _DashboardMetricKpi extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<DashboardCubit>().changeChartMetric(metric);
+        context.read<AnalyticsCubit>().changeChartMetric(metric);
       },
       borderRadius: BorderRadius.circular(16.r),
       child: AnimatedContainer(

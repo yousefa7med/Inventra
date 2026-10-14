@@ -1,5 +1,5 @@
 import 'package:Inventra/core/widgets/custom_app_bar.dart';
-import 'package:Inventra/features/dashboard/controller/dashboard_cubit/dashboard_cubit.dart';
+import 'package:Inventra/features/dashboard/controller/analytics_cubit/analytics_cubit.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/chart_section.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/dashboard_period_selector.dart';
 import 'package:Inventra/features/dashboard/presentation/widgets/kpis_section.dart';
@@ -24,9 +24,9 @@ class DashboardAnalyticsView extends StatelessWidget {
             const KpisSection(),
             Gap(16.h),
             DashboardPeriodSelector(
-              selectedPeriod: context.read<DashboardCubit>().selectedPeriod,
+              selectedPeriod: context.read<AnalyticsCubit>().selectedPeriod,
               onPeriodChanged: (period) =>
-                  context.read<DashboardCubit>().changePeriod(period),
+                  context.read<AnalyticsCubit>().changePeriod(period),
             ),
             Gap(16.h),
             const ChartSection(),

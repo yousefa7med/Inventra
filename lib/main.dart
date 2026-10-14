@@ -2,7 +2,7 @@ import 'package:Inventra/core/config/configrations.dart';
 import 'package:Inventra/core/controller/controllers/app_cubit/app_cubit.dart';
 import 'package:Inventra/core/helper/cache_helper.dart';
 import 'package:Inventra/core/observer.dart';
-import 'package:Inventra/core/services/Transaction_change_notifier.dart';
+import 'package:Inventra/core/services/transaction_change_notifier.dart';
 import 'package:Inventra/core/utilities/app_theme.dart';
 import 'package:Inventra/features/customers/controller/cubit/customer_cubit.dart';
 import 'package:Inventra/features/customers/data/repositories/customer_repository.dart';
@@ -147,10 +147,7 @@ Future<void> configureDependencies() async {
   GetIt.instance.registerLazySingleton<DashboardRepository>(
     () => dashboardRepository,
   );
-  final analyticsRepository = AnalyticsRepositoryImpl(
-    objectBoxServices,
-    transactionChangeNotifier,
-  );
+  final analyticsRepository = AnalyticsRepositoryImpl(objectBoxServices);
   GetIt.instance.registerLazySingleton<AnalyticsRepository>(
     () => analyticsRepository,
   );
@@ -179,6 +176,6 @@ Future<void> configureDependencies() async {
     () => DashboardCubit(dashboardRepository, transactionChangeNotifier),
   );
   GetIt.instance.registerLazySingleton<AnalyticsCubit>(
-    () => AnalyticsCubit(analyticsRepository, transactionChangeNotifier),
+    () => AnalyticsCubit(analyticsRepository),
   );
 }

@@ -5,9 +5,7 @@ abstract class AnalyticsCubitInterface {
   DashboardMetric get selectedMetric;
   DashboardPeriod get selectedPeriod;
 
-  void init();
   void loadDashboard();
   void changePeriod(DashboardPeriod period);
   void changeChartMetric(DashboardMetric metric);
-  void refresh();
 }

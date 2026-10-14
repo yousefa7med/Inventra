@@ -161,7 +161,7 @@ class AppRouter {
           settings: settings,
           pageBuilder: (context, animation, secondaryAnimation) =>
               BlocProvider.value(
-                value: GetIt.instance<AnalyticsCubit>(),
+                value: GetIt.instance<AnalyticsCubit>()..loadDashboard(),
                 child: const DashboardAnalyticsView(),
               ),
         );
