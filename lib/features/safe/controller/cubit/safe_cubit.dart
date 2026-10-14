@@ -19,9 +19,6 @@ class SafeCubit extends Cubit<SafeState> implements SafeCubitInterface {
   TransactionType? _selectedType;
 
   @override
-  List<ListItemModel> get listItems => _listItems;
-
-  @override
   TransactionType? get selectedType => _selectedType;
 
   void init() {
